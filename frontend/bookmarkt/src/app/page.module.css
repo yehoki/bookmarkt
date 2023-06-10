@@ -1,0 +1,10 @@
+.nav {
+    padding: 0.25rem 0.5rem;
+    border: solid black 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-title {
+    text-align: center;
+}
