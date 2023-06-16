@@ -5,6 +5,10 @@
     justify-content: space-between;
 }
 
+.book-display {
+    /* height: 100dvh; */
+}
+
 .nav-title {
     text-align: center;
 }
