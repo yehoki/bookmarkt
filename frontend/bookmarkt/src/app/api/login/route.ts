@@ -1,6 +1,8 @@
 import dbConnect from '@/lib/dbConnect';
 import UserModel, { UserType } from '@/models/user';
 import { NextResponse } from 'next/server';
+import jsonwebtoken from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 export async function POST(req: Request) {
   await dbConnect();
@@ -13,8 +15,16 @@ export async function POST(req: Request) {
   }
   try {
     const user = await UserModel.findOne({ username });
-    if (password !== user.password) {
-      return NextResponse.json({ message: 'Incorrect password' });
+    const checkPassword =
+      user === null ? false : await bcrypt.compare(password, user.passwordHash);
+    if (!(user && checkPassword)) {
+      return new NextResponse(null, {
+        status: 401,
+        statusText: 'Invalid username or password',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+      });
     }
     return NextResponse.json(user);
   } catch (err) {

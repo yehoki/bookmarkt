@@ -23,11 +23,15 @@ const LoginForm = (props: Props) => {
 
   const handleLoginSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const login = await userLogin({ username: username, password: password });
-    console.log(login);
-    setUsername('');
-    setPassword('');
-    router.push('/');
+    try {
+      const login = await userLogin({ username: username, password: password });
+      console.log(login);
+      setUsername('');
+      setPassword('');
+      router.push('/');
+    } catch (exc) {
+      console.log('error', exc);
+    }
   };
 
   return (

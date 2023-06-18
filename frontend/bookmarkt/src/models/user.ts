@@ -17,10 +17,8 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide a username'],
     minLength: [3, 'Username must be at least 4 characters long'],
   },
-  password: {
+  passwordHash: {
     type: String,
-    required: [true, 'Password cannot be empty'],
-    minLength: [4, 'Password must be at least 4 characters long'],
   },
 });
 
@@ -29,7 +27,7 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-    delete returnedObject.password;
+    delete returnedObject.passwordHash;
   },
 });
 
