@@ -15,9 +15,21 @@ const Navbar = (props: Props) => {
         <Link href={'/books'}>
           <button>Books</button>
         </Link>
-        <Link href={'/login'}>
-          <button>Login</button>
-        </Link>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Link href={'/login'}>
+            <button>Login</button>
+          </Link>
+          <Link href={'/register'}>
+            <button>Register</button>
+          </Link>
+        </div>
       </nav>
     </>
   );

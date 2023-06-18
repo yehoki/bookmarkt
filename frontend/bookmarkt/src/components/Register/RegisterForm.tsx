@@ -2,6 +2,7 @@
 
 import { UserType } from '@/models/user';
 import React, { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
 type Props = {};
 
 async function registerUser(user: Partial<UserType>) {
@@ -20,6 +21,7 @@ const RegisterForm = (props: Props) => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleRegisterUser = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,7 +31,10 @@ const RegisterForm = (props: Props) => {
       password: password,
     };
     const register = await registerUser(user);
-    console.log(register);
+    setName('');
+    setUsername('');
+    setPassword('');
+    router.push('/');
   };
 
   return (
