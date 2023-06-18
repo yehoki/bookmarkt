@@ -1,32 +1,30 @@
+import BookForm from '@/components/BookForm';
 import type { BookType } from '@/models/book';
 import Link from 'next/link';
-import { ScriptProps } from 'next/script';
+import { FormEvent, useEffect, useState } from 'react';
+
+// export const dynamic = 'force-dynamic';
+
 async function getBooks() {
-  const res = await fetch('http://localhost:3000/api/books');
-  const data = await res.json();
-  return data;
+  const res = await fetch('http://localhost:3000/api/books', {
+    cache: 'no-store',
+  });
+  const books = await res.json();
+  return books;
 }
 
-export default async function BooksPage() {
+const Page = async () => {
   const books = await getBooks();
-  const dispBooks = books?.map((book: BookType) => {
-    return <Book key={book.title} book={book} />;
-  });
   return (
     <div>
-      <h1>Books</h1>
-      <div>{dispBooks}</div>
+      <BookForm />
+      <ul>
+        {books?.map((book: any) => {
+          return <li key={book._id}>{book.title}</li>;
+        })}
+      </ul>
     </div>
   );
-}
-
-const Book = ({ book }: any) => {
-  return (
-    <Link href={`/books/${book._id}`}>
-      <div>
-        <h2>{book.title}</h2>
-        <h3>{book.author}</h3>
-      </div>
-    </Link>
-  );
 };
+
+export default Page;

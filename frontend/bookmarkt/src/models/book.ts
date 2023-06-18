@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 
-
 export interface BookType {
-  _id: string;
+  id: string;
   title: string;
   author: string;
 }
@@ -15,6 +14,14 @@ const bookSchema = new mongoose.Schema({
   author: {
     type: String,
     required: true,
+  },
+});
+
+bookSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
   },
 });
 
