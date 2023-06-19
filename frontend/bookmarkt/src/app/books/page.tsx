@@ -2,22 +2,16 @@ import BookForm from '@/components/BookForm';
 import Link from 'next/link';
 import { getBooks } from '@/services/books';
 import { BookType } from '@/models/book';
-// export const dynamic = 'force-dynamic';
+import { Suspense } from 'react';
+import DisplayBooks from '@/components/Books/DisplayBooks';
 
 const Page = async () => {
-  // const books = await getBooks();
-  // const books: string[] = [];
-  // const displayBooks = books.map((book: any) => {
-  //   return (
-  //     <li key={book.id}>
-  //       <Link href={`/books/${book.id}`}>{book.title}</Link>
-  //     </li>
-  //   );
-  // });
   return (
     <div className="px-[20%]">
-      {/* <BookForm /> */}
-      {/* <ul>{displayBooks}</ul> */}
+      <BookForm />
+      <Suspense fallback={<p>Loading books...</p>}>
+        <DisplayBooks />
+      </Suspense>
       <div className="py-4">
         <div className=" pb-2 border-b border-b-slate-300 text-goodreads-mybooks-green">
           <h2 className="font-bold text-2xl">My Books</h2>
