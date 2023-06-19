@@ -15,6 +15,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Cannot find any books' });
     }
   } catch (err) {
+    if (err instanceof Error) {
+      return errorHandler(err);
+    }
     return NextResponse.json({ error: err });
   }
 }

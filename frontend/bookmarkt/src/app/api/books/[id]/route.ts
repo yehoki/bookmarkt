@@ -23,7 +23,7 @@ export async function DELETE(req: Request) {
   try {
     const deleteBook = await BookModel.findByIdAndRemove(id);
     return NextResponse.json(deleteBook);
-  } catch (exc) {
+  } catch (err) {
     return NextResponse.json({
       error: `There was an error deleting book with id: ${id} `,
     });

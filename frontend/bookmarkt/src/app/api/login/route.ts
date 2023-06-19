@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '@/utils/config';
+import { errorHandler } from '@/utils/errorHandler';
 export async function POST(req: Request) {
   await dbConnect();
 
@@ -38,7 +39,9 @@ export async function POST(req: Request) {
       token,
     });
   } catch (err) {
-    console.log(err);
+    if (err instanceof Error) {
+      return errorHandler(err);
+    }
     return NextResponse.json({
       error: err,
       message: 'Something went wrong when logging in',
