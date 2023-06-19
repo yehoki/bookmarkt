@@ -1,8 +1,9 @@
+import { MONGODB_URI } from '@/utils/config';
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const DBURL = MONGODB_URI;
 
-if (!MONGODB_URI) {
+if (!DBURL) {
   throw new Error('Oops mongo not working');
 }
 
@@ -13,10 +14,10 @@ if (!cached) {
 }
 
 async function dbConnect() {
-  if (cached.conn) return cached.conn
+  if (cached.conn) return cached.conn;
 
-  if (!cached.promise){
-    cached.promise = mongoose.connect(MONGODB_URI!).then(mongoose => mongoose)
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(DBURL!).then((mongoose) => mongoose);
   }
 
   cached.conn = await cached.promise;
