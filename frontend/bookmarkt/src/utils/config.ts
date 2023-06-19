@@ -4,7 +4,7 @@ const config = dotenv.config();
 const MONGODB_URI =
   process.env.NODE_ENV === 'test'
     ? process.env.TEST_MONGODB_URI
-    : process.env.MONGODB_URI;
+    : process.env.NEXT_PUBLIC_MONGODB_URI;
 
 const SITE_URL =
   process.env.NODE_ENV === 'development'
@@ -12,6 +12,13 @@ const SITE_URL =
     : 'SampleWebsite';
 
 const JWT_SECRET =
-  process.env.JWT_SECRET === undefined ? 'secret' : process.env.JWT_SECRET;
+  process.env.NEXT_PUBLIC_JWT_SECRET === undefined
+    ? 'secret'
+    : process.env.NEXT_PUBLIC_JWT_SECRET;
 
-export { MONGODB_URI, SITE_URL, JWT_SECRET };
+const GOOGLE_API_KEY =
+  process.env.NEXT_PUBLIC_GOOGLE_API !== undefined
+    ? process.env.NEXT_PUBLIC_GOOGLE_API
+    : '';
+
+export { MONGODB_URI, SITE_URL, JWT_SECRET, GOOGLE_API_KEY };
