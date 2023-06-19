@@ -1,6 +1,7 @@
 import dbConnect from '@/lib/dbConnect';
 import { NextResponse } from 'next/server';
 import BookModel from '@/models/book';
+import { errorHandler } from '@/utils/errorHandler';
 
 export async function GET(req: Request) {
   await dbConnect();
@@ -8,8 +9,11 @@ export async function GET(req: Request) {
   try {
     const book = await BookModel.findById(id);
     return NextResponse.json(book);
-  } catch (exc) {
-    return NextResponse.json({ error: 'error' });
+  } catch (err) {
+    if (err instanceof Error) {
+      return errorHandler(err);
+    }
+    return NextResponse.json({ error: err });
   }
 }
 

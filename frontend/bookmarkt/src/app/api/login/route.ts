@@ -1,9 +1,9 @@
 import dbConnect from '@/lib/dbConnect';
 import UserModel, { UserType } from '@/models/user';
 import { NextResponse } from 'next/server';
-import jsonwebtoken from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
+import { JWT_SECRET } from '@/utils/config';
 export async function POST(req: Request) {
   await dbConnect();
 
@@ -26,8 +26,19 @@ export async function POST(req: Request) {
         },
       });
     }
-    return NextResponse.json(user);
+    const userForToken = {
+      username: user.username,
+      id: user._id,
+    };
+    const token = jwt.sign(userForToken, JWT_SECRET, {
+      expiresIn: 4 * 60 * 60,
+    });
+    return NextResponse.json({
+      userForToken,
+      token,
+    });
   } catch (err) {
+    console.log(err);
     return NextResponse.json({
       error: err,
       message: 'Something went wrong when logging in',

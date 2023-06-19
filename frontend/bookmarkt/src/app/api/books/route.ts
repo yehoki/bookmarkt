@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 import BookModel, { BookType } from '@/models/book';
 import { revalidateTag } from 'next/cache';
+import { errorHandler } from '@/utils/errorHandler';
 
 export async function GET(req: NextRequest) {
   await dbConnect();
@@ -14,7 +15,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Cannot find any books' });
     }
   } catch (err) {
-    console.log(err);
     return NextResponse.json({ error: err });
   }
 }
@@ -34,6 +34,9 @@ export async function POST(req: Request) {
     const savedBook = await BookModel.create(book);
     return NextResponse.json(savedBook);
   } catch (err) {
+    if (err instanceof Error) {
+      return errorHandler(err);
+    }
     return NextResponse.json({ error: err });
   }
 }

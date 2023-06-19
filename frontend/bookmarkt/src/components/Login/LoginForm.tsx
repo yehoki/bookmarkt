@@ -35,7 +35,7 @@ const LoginForm = (props: Props) => {
         />
       </div>
       <div>
-        <label htmlFor="pass">Password</label>
+        <label htmlFor="password">Password</label>
         <input
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}

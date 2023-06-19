@@ -11,4 +11,7 @@ const SITE_URL =
     ? 'http://localhost:3000'
     : 'SampleWebsite';
 
-export { MONGODB_URI, SITE_URL };
+const JWT_SECRET =
+  process.env.JWT_SECRET === undefined ? 'secret' : process.env.JWT_SECRET;
+
+export { MONGODB_URI, SITE_URL, JWT_SECRET };

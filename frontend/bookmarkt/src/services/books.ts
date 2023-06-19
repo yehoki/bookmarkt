@@ -14,7 +14,6 @@ export async function addBook(bookData: Partial<BookType>) {
   const data = await res.json();
   return data;
 }
-
 export async function getBooks() {
   const res = await fetch(`${siteUrl}/api/books`, {
     method: 'GET',
