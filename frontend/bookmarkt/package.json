@@ -27,6 +27,9 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.2",
-    "cross-env": "^7.0.3"
+    "autoprefixer": "^10.4.14",
+    "cross-env": "^7.0.3",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2"
   }
 }

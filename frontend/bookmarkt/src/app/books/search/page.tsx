@@ -44,6 +44,7 @@ const Page = (props: Props) => {
   return (
     <div>
       <form
+        className=""
         onSubmit={handleSearchSubmit}
         style={{
           display: 'flex',
@@ -53,6 +54,7 @@ const Page = (props: Props) => {
         }}
       >
         <input
+          className="border outline-black pl-0.5"
           type="search"
           onChange={(e) => setSearchValue(e.currentTarget.value)}
         />
