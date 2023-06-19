@@ -1,23 +1,9 @@
 'use client';
 
-// import { addBook } from '@/app/books/page';
-// import { BookType } from '@/models/book';
 import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookType } from '@/models/book';
+import { addBook } from '@/services/books';
 type Props = {};
-
-async function addBook(bookData: Partial<BookType>) {
-  const res = await fetch('http://localhost:3000/api/books', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(bookData),
-  });
-  const data = await res.json();
-  return data;
-}
 
 const BookForm = (props: Props) => {
   const [title, setTitle] = useState('');

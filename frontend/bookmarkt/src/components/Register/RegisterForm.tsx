@@ -3,19 +3,8 @@
 import { UserType } from '@/models/user';
 import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { registerUser } from '@/services/users';
 type Props = {};
-
-async function registerUser(user: Partial<UserType>) {
-  const res = await fetch('http://localhost:3000/api/users', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  });
-  const data = await res.json();
-  return data;
-}
 
 const RegisterForm = (props: Props) => {
   const [name, setName] = useState('');

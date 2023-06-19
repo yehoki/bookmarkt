@@ -2,19 +2,8 @@
 import { UserType } from '@/models/user';
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
+import { userLogin } from '@/services/users';
 type Props = {};
-
-async function userLogin(credentials: Partial<UserType>) {
-  const res = await fetch('http://localhost:3000/api/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(credentials),
-  });
-  const data = await res.json();
-  return data;
-}
 
 const LoginForm = (props: Props) => {
   const [username, setUsername] = useState('');
