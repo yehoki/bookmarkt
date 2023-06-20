@@ -8,12 +8,8 @@ import DisplayBooks from '@/components/Books/DisplayBooks';
 const Page = async () => {
   return (
     <div className="px-[20%]">
-      <BookForm />
-      <Suspense fallback={<p>Loading books...</p>}>
-        <DisplayBooks />
-      </Suspense>
       <div className="py-4">
-        <div className=" pb-2 border-b border-b-slate-300 text-goodreads-mybooks-green">
+        <div className="pb-2 border-b border-b-slate-300 text-goodreads-mybooks-green">
           <h2 className="font-bold text-2xl">My Books</h2>
         </div>
         {/* below header */}
@@ -43,6 +39,10 @@ const Page = async () => {
           </div>
         </div>
       </div>
+      <BookForm />
+      <Suspense fallback={<p>Loading books...</p>}>
+        <DisplayBooks />
+      </Suspense>
     </div>
   );
 };

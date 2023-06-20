@@ -18,6 +18,12 @@ module.exports = {
       fontFamily: {
         Lato: 'Lato, Helvetica Neue, Helvetica, sans-serif',
       },
+      screens: {
+        desktop: '1240px',
+      },
+      padding: {
+        'min-nav': 'clamp(40px, 10%, 16%)',
+      },
     },
   },
   plugins: [],
