@@ -1,6 +1,12 @@
 import Link from 'next/link';
 
-export default function NavLayout({ children }: { children: React.ReactNode }) {
+export default function NavLayout({
+  children,
+  isLoggedIn,
+}: {
+  children: React.ReactNode;
+  isLoggedIn: boolean;
+}) {
   return (
     <div className="flex bg-goodreads-beige drop-shadow-md font-Lato px-min-nav">
       <div className="flex-1 flex items-center justify-center">
@@ -11,14 +17,14 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
           <Link className="nav-btn" href={'/'}>
             Home
           </Link>
-          <Link className="nav-btn" href={'/books'}>
+          <Link className="nav-btn" href={isLoggedIn ? '/books' : ''}>
             My Books
           </Link>
-          {/* <button className="nav-btn" onClick={() => signIn()}> */}
-          Login
-          {/* </button> */}
+          <Link className="nav-btn" href={'/'}>
+            Browse
+          </Link>
           <Link className="nav-btn" href={'/register'}>
-            Register
+            Community
           </Link>
         </nav>
         <form className="px-4 flex justify-center flex-1 desktop:flex-initial">
