@@ -29,20 +29,13 @@ const Page = async () => {
             <div></div>
           </div>
           <div className="grid grid-cols-5 flex-[1_1_75%]">
-            <div className="border p-2 m-2">Book</div>
-            <div className="border p-2 m-2">Book</div>
-            <div className="border p-2 m-2">Book</div>
-            <div className="border p-2 m-2">Book</div>
-            <div className="border p-2 m-2">Book</div>
-            <div className="border p-2 m-2">Book</div>
-            <div className="border p-2 m-2">Book</div>
+            <Suspense fallback={<p>Loading books...</p>}>
+              <DisplayBooks />
+            </Suspense>
           </div>
         </div>
       </div>
       <BookForm />
-      <Suspense fallback={<p>Loading books...</p>}>
-        <DisplayBooks />
-      </Suspense>
     </div>
   );
 };

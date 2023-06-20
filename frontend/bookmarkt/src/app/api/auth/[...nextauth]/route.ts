@@ -23,8 +23,14 @@ export const authOptions: NextAuthOptions = {
           },
         });
         const user = await res.json();
-        if (res.ok && user) {
-          return user;
+        const testUser = {
+          id: '1',
+          name: '1',
+          username: 'test',
+        };
+        if (res.ok && testUser) {
+          console.log('user', testUser);
+          return testUser;
         }
         return null;
       },
@@ -32,8 +38,8 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: 'secretString',
   session: {
-    strategy:'jwt'
-  }
+    strategy: 'jwt',
+  },
   //   GoogleProvider({
   //     clientId: process.env.GOOGLE_CLIENT_ID ?? '',
   //     clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ''

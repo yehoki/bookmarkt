@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
-import NextAuthProvider from '@/app/providers/provider';
+import NextAuthProvider from '@/providers/provider';
 import CheckLogin from '@/components/CheckLogin';
 import Footer from '@/components/Footer';
 
@@ -22,9 +22,8 @@ export default function RootLayout({ children, session }: Props) {
         <NextAuthProvider>
           <Navbar />
           <div className="px-min-nav">
-            <CheckLogin />
             {children}
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </NextAuthProvider>
       </body>
