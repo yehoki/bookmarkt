@@ -3,6 +3,7 @@ import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 import NextAuthProvider from '@/app/providers/provider';
 import CheckLogin from '@/components/CheckLogin';
+import Footer from '@/components/Footer';
 
 export const metadata = {
   title: 'Bookmarkt',
@@ -20,8 +21,11 @@ export default function RootLayout({ children, session }: Props) {
       <body>
         <NextAuthProvider>
           <Navbar />
-          <CheckLogin />
-          {children}
+          <div className="px-min-nav">
+            <CheckLogin />
+            {children}
+            <Footer />
+          </div>
         </NextAuthProvider>
       </body>
     </html>

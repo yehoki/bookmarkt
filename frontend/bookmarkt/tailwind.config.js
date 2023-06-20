@@ -18,6 +18,9 @@ module.exports = {
       fontFamily: {
         Lato: 'Lato, Helvetica Neue, Helvetica, sans-serif',
       },
+      minHeight: {
+        fulldvh: '100dvh',
+      },
       screens: {
         desktop: '1240px',
       },
