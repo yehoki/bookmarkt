@@ -17,9 +17,9 @@ export async function addBook(bookData: Partial<BookType>) {
 export async function getBooks() {
   const res = await fetch(`${siteUrl}/api/books`, {
     method: 'GET',
-    // next: {
-    // revalidate: 30
-    // },
+    next: {
+      revalidate: 30,
+    },
     cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',

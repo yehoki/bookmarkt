@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       expiresIn: 4 * 60 * 60,
     });
     return NextResponse.json({
-      userForToken,
+      ...userForToken,
       token,
     });
   } catch (err) {

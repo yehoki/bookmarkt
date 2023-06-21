@@ -1,20 +1,25 @@
 'use client';
 
+import Link from 'next/link';
+
 interface MyBookProps {
   title: string;
+  id: string;
+  author: string;
 }
 
-const MyBook: React.FC<MyBookProps> = ({ title }) => {
+const MyBook: React.FC<MyBookProps> = ({ title, id, author }) => {
+  console.log(id);
   return (
-    <div
-      className="
-    w-[110px]
+    <Link
+      href={`/books/${id}`}
+      className="w-[110px]
     h-[150px]
     border-[2px]
     border-black"
     >
       {title}
-    </div>
+    </Link>
   );
 };
 

@@ -6,7 +6,7 @@ const Links = () => {
   return (
     <div className="hidden lg:flex flex-row justify-around">
       <NavLink href="/" label="Home" />
-      <NavLink href="/" label="My Books" />
+      <NavLink href="/books" label="My Books" />
       <NavLink href="/" label="Browse" />
       <NavLink href="/" label="Community" />
     </div>

@@ -26,7 +26,6 @@ export function middleware(req: Request) {
 
   // Token Extractor
   const authorization = req.headers.get('Authorization');
-  console.log(authorization);
   if (authorization && authorization.startsWith('Bearer ')) {
     req.headers.set('token', authorization.replace('Bearer ', ''));
   }
@@ -39,5 +38,5 @@ export function middleware(req: Request) {
 }
 
 export const config = {
-  matcher: '/api/:path*',
+  matcher: ['/api/:path*'],
 };

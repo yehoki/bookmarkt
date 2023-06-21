@@ -23,15 +23,27 @@ export const authOptions: NextAuthOptions = {
           },
         });
         const user = await res.json();
-
+        console.log('user', user);
         if (res.ok && user) {
-          console.log('user', user);
+          console.log('returning user', user);
           return user;
         }
         return null;
       },
     }),
   ],
+  callbacks: {
+    async session({ session, token }) {
+      session.user = token.user;
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+  },
   secret: 'secretString',
   session: {
     strategy: 'jwt',
