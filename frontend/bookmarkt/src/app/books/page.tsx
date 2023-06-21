@@ -4,17 +4,29 @@ import { getBooks } from '@/services/books';
 import { BookType } from '@/models/book';
 import { Suspense } from 'react';
 import DisplayBooks from '@/components/Books/DisplayBooks';
+import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
+import DisplayMyBooks from '@/components/Books/MyBookSection.tsx/DisplayMyBooks';
 
 const Page = async () => {
   return (
-    <div className="px-[20%]">
-      <div className="py-4">
-        <div className="pb-2 border-b border-b-slate-300 text-goodreads-mybooks-green">
-          <h2 className="font-bold text-2xl">My Books</h2>
-        </div>
-        {/* below header */}
-        <div className="flex">
-          <div className="flex flex-col w-1/6">
+    <div className=" pt-20 w-[1000px] mx-auto">
+      <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
+        <h2
+          className="
+        font-bold
+        text-xl
+        text-goodreads-mybooks-green
+        "
+        >
+          My Books
+        </h2>
+        <div>Search</div>
+      </div>
+      {/* below header */}
+      <div>
+        <div className="flex flex-row justify-between">
+          {/* Left col */}
+          <div className="w-[200px]">
             <div className="border-b border-b-slate-300">
               <h3>Bookshelves</h3>
               <ul>
@@ -26,16 +38,24 @@ const Page = async () => {
             <div>
               <h3>Your reading activity</h3>
             </div>
-            <div></div>
+            <div>
+              <h3>Add books</h3>
+            </div>
+            <div>
+              <h3>Tools</h3>
+            </div>
           </div>
-          <div className="grid grid-cols-5 flex-[1_1_75%]">
-            <Suspense fallback={<p>Loading books...</p>}>
-              <DisplayBooks />
-            </Suspense>
+          {/* Right col */}
+          <div className="w-[750px]">
+            <div className="grid grid-cols-6 flex-[1_1_75%] gap-2">
+              <Suspense fallback={<p>Loading books...</p>}>
+                <DisplayMyBooks />
+              </Suspense>
+            </div>
           </div>
         </div>
       </div>
-      <BookForm />
+      {/* <BookForm /> */}
     </div>
   );
 };

@@ -10,8 +10,8 @@ const Logo = () => {
       <Image
         className="cursor-pointer"
         alt="Bookmarkt logo"
-        height={100}
-        width={160}
+        height={50}
+        width={140}
         src="/images/bookmarkt.png"
       />
     </div>

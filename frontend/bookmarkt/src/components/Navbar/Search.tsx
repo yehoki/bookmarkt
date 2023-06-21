@@ -3,6 +3,7 @@
 import { getGoogleBooksByQuery } from '@/services/googleBooks';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { BiSearch } from 'react-icons/bi';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -33,7 +34,22 @@ const Search = () => {
       );
     });
   };
-  return <div>Search</div>;
+  return (
+    <div
+      className="mx-2
+  border-[1px] border-[#999999] 
+  w-full md:w-[70%] lg:w-[25%] px-2 py-1 rounded-[4px] 
+  bg-[#FFFFFF] shadow-sm hover:shadow-md 
+  transition cursor-pointer"
+    >
+      <div className="flex flex-row items-center justify-between gap-3">
+        <div>Search books</div>
+        <div className="px-1 rounded-full">
+          <BiSearch size={18} />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Search;

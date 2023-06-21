@@ -3,7 +3,9 @@ import Link from 'next/link';
 import Container from '../Container';
 import Logo from './Logo';
 import { BiSearch } from 'react-icons/bi';
+import { BsFillBellFill } from 'react-icons/bs';
 import Links from './Links';
+import Search from './Search';
 
 export default function NavLayout({
   children,
@@ -29,43 +31,10 @@ export default function NavLayout({
         >
           <Logo />
           <Links />
-          {/* <nav className="hidden desktop:flex justify-between mx-8">
-            <Link className="nav-btn" href={'/'}>
-              Home
-            </Link>
-            <Link className="nav-btn" href={isLoggedIn ? '/books' : ''}>
-              My Books
-            </Link>
-            <Link className="nav-btn" href={'/'}>
-              Browse
-            </Link>
-            <Link className="nav-btn" href={'/register'}>
-              Community
-            </Link>
-          </nav> */}
-          <div
-            className="
-          border-[1px] border-[#999999] 
-          w-full lg:w-[30%] px-2 py-1 rounded-[4px] 
-          bg-[#FFFFFF] shadow-sm hover:shadow-md 
-          transition cursor-pointer"
-          >
-            <div className="flex flex-row items-center justify-between gap-3">
-              <div>Search books</div>
-              <div className="px-1 rounded-full">
-                <BiSearch size={18} />
-              </div>
-            </div>
+          <Search />
+          <div className="mx-2 p-[7px] rounded-full text-goodreads-beige bg-goodreads-brown/30">
+            <BsFillBellFill size={18} />
           </div>
-          {/* <form className="px-4 flex justify-center flex-1 desktop:flex-initial">
-            <input
-              className="px-2 rounded-sm flex-auto"
-              type="search"
-              name="q"
-              placeholder="Search books"
-            />
-            <button type="submit"></button>
-          </form> */}
           <div>{children}</div>
         </div>
       </Container>

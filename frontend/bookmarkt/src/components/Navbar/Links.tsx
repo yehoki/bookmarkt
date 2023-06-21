@@ -1,12 +1,14 @@
 'use client';
 
+import NavLink from './NavLink';
+
 const Links = () => {
   return (
-    <div className="hidden lg:flex flex-row items-center justify-around">
-      <div className="nav-btn">Home</div>
-      <div className="nav-btn">My Books</div>
-      <div className="nav-btn">Browse</div>
-      <div className="nav-btn">Community</div>
+    <div className="hidden lg:flex flex-row justify-around">
+      <NavLink href="/" label="Home" />
+      <NavLink href="/" label="My Books" />
+      <NavLink href="/" label="Browse" />
+      <NavLink href="/" label="Community" />
     </div>
   );
 };
