@@ -23,14 +23,10 @@ export const authOptions: NextAuthOptions = {
           },
         });
         const user = await res.json();
-        const testUser = {
-          id: '1',
-          name: '1',
-          username: 'test',
-        };
-        if (res.ok && testUser) {
-          console.log('user', testUser);
-          return testUser;
+
+        if (res.ok && user) {
+          console.log('user', user);
+          return user;
         }
         return null;
       },

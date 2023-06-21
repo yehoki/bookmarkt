@@ -10,6 +10,8 @@ const DisplayBooks = async () => {
   // console.log(session, session!.user);
   // console.log(session, session!.user);
   const books = await getBooks();
+  if (!books) return null;
+
   const displayBooks = books.map((book: any) => {
     return (
       <DisplaySingleBook

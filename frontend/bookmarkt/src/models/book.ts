@@ -4,6 +4,7 @@ export interface BookType {
   id: string;
   title: string;
   author: string;
+  userId?: string[];
 }
 
 const bookSchema = new mongoose.Schema({
@@ -15,6 +16,11 @@ const bookSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userId: [
+    {
+      type: String,
+    },
+  ],
 });
 
 bookSchema.set('toJSON', {
@@ -25,6 +31,7 @@ bookSchema.set('toJSON', {
   },
 });
 
-const BookModel = mongoose.models.Book || mongoose.model<BookType>('Book', bookSchema);
+const BookModel =
+  mongoose.models.Book || mongoose.model<BookType>('Book', bookSchema);
 
-export default BookModel
+export default BookModel;

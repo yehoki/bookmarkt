@@ -5,6 +5,7 @@ export interface UserType {
   name: string;
   username: string;
   password: string;
+  books?: string[];
 }
 
 const userSchema = new mongoose.Schema({
@@ -20,6 +21,11 @@ const userSchema = new mongoose.Schema({
   passwordHash: {
     type: String,
   },
+  books: [
+    {
+      type: String,
+    },
+  ],
 });
 
 userSchema.set('toJSON', {
