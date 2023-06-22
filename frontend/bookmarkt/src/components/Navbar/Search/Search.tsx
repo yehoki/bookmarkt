@@ -4,6 +4,7 @@ import { getGoogleBooksByQuery } from '@/services/googleBooks';
 import Image from 'next/image';
 import React, { useCallback, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
+import SearchDropdownTile from './SearchDropdownTile';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -36,31 +37,45 @@ const Search = () => {
     });
   };
   return (
-    <div
-      className="bg-transparent
-  hidden w-full md:flex flex-row items-center mr-2 text-sm"
-    >
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className={`w-full flex flex-row border-[1px]
+    <>
+      <div className="hidden w-full bg-transparent md:flex flex-row relative mr-2 text-sm items-center">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className={`w-full flex flex-row border-[1px]
         border-[#999999]
         bg-[#FFFFFF]
       rounded-[4px]
        transition
        ${searchFocused ? 'shadow-md' : 'shadow-none'}`}
-      >
-        <input
-          className="w-full outline-none py-1 pr-[26px] pl-2 rounded-[4px]"
-          type="text"
-          placeholder="Search books"
-          onFocus={() => setSearchFocused(true)}
-          onBlur={() => setSearchFocused(false)}
-        />
-        <button type="submit">
-          <BiSearch size={18} />
-        </button>
-      </form>
-    </div>
+        >
+          <input
+            className="w-full outline-none py-1 pr-[26px] pl-2 rounded-[4px]"
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.currentTarget.value)}
+            placeholder="Search books"
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+          />
+          <button type="submit">
+            <BiSearch size={18} />
+          </button>
+        </form>
+        <div
+          className={`
+        ${searchValue === '' || !searchFocused ? 'hidden' : 'block'}
+        absolute top-10 bg-white w-full`}
+        >
+          <div className="flex flex-col w-full">
+            <SearchDropdownTile label={searchValue} />
+            <SearchDropdownTile label="2" />
+            <SearchDropdownTile label="2" />
+            <SearchDropdownTile label="2" />
+            <SearchDropdownTile label="2" />
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

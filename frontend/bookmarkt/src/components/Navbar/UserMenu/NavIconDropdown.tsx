@@ -1,14 +1,18 @@
 'use client';
 import { useCallback, useState } from 'react';
 import { IconType } from 'react-icons';
-
+import { signOut } from 'next-auth/react';
+import { User } from '@prisma/client';
 interface NavIconDropdownProps {
   icon: IconType;
+  currentUser: User;
 }
 
-const NavIconDropdown: React.FC<NavIconDropdownProps> = ({ icon: Icon }) => {
+const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
+  icon: Icon,
+  currentUser,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
@@ -16,12 +20,11 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({ icon: Icon }) => {
   return (
     <>
       <div
-        className="flex p-2 items-center
+        className={`flex p-2 items-center
         hover:bg-goodreads-brown
-        active:bg-goodreads-brown outline-none
+        ${isOpen ? 'bg-goodreads-brown' : 'bg-transparent'} outline-none
     cursor-pointer
-        "
-        contentEditable
+        `}
         onClick={toggleOpen}
         onBlur={toggleOpen}
       >
@@ -29,8 +32,10 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({ icon: Icon }) => {
           className="
     p-[5px]
     rounded-full 
-    text-goodreads-beige 
-    bg-goodreads-brown/30
+    text-goodreads-brown/20
+    bg-goodreads-beige
+    border-[1px]
+    border-[#D8D8D8]
     transition
     "
         >
@@ -60,7 +65,7 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({ icon: Icon }) => {
         >
           <div>
             <span className="px-4 font-semibold text-md uppercase">
-              Your Name
+              {currentUser.name !== null ? currentUser.name : 'Name'}
             </span>
           </div>
           <ul>
@@ -68,7 +73,12 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({ icon: Icon }) => {
             <li className="px-4">Friends</li>
             <li className="px-4">Groups</li>
             <li className="px-4">Discussions</li>
-            <li className="px-4 border-t-[1px] border-[#D8D8D8]">Sign out</li>
+            <li
+              className="px-4 border-t-[1px] border-[#D8D8D8] cursor-pointer"
+              onClick={() => signOut()}
+            >
+              Sign out
+            </li>
           </ul>
         </div>
       </div>

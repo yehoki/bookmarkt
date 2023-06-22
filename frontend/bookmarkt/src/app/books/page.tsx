@@ -1,4 +1,3 @@
-'use client';
 import BookForm from '@/components/BookForm';
 import Link from 'next/link';
 import { getBooks } from '@/services/books';
@@ -7,8 +6,11 @@ import { Suspense, useEffect } from 'react';
 import DisplayBooks from '@/components/Books/DisplayBooks';
 import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
 import DisplayMyBooks from '@/components/Books/MyBookSection.tsx/DisplayMyBooks';
+import useUserStore from '@/hooks/useUserStore';
+import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 
 const Page = async () => {
+  const currentUserBooks = await getCurrentUserBooks();
   return (
     <div className=" pt-20 w-[1000px] mx-auto">
       <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
@@ -21,7 +23,10 @@ const Page = async () => {
         >
           My Books
         </h2>
-        <div>Search</div>
+        <div>
+          Search
+          {JSON.stringify(currentUserBooks)}
+        </div>
       </div>
       {/* below header */}
       <div>
@@ -56,7 +61,7 @@ const Page = async () => {
           </div>
         </div>
       </div>
-      {/* <BookForm /> */}
+      <BookForm />
     </div>
   );
 };

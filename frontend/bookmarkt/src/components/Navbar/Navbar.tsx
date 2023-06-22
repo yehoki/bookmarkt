@@ -1,19 +1,17 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { signIn, useSession } from 'next-auth/react';
-import NavbarLoggedIn from './NavbarLoggedIn';
-import NavbarLoggedOut from './NavbarLoggedOut';
-import NavLayout from './NavLayout';
 import { User } from '@prisma/client';
 import Container from '../Container';
-import MobileSearch from './MobileSearch';
+import MobileSearch from './Search/MobileSearch';
 import Logo from './Logo';
-import Links from './Links';
-import Search from './Search';
-import UserMenu from './UserMenu';
-import MobileUserMenu from './MobileUserMenu';
-import useRegisterMode from '@/hooks/registerMode';
+import Links from './LinkTabs/Links';
+import Search from './Search/Search';
+import UserMenu from './UserMenu/UserMenu';
+import MobileUserMenu from './UserMenu/MobileUserMenu';
+import useRegisterMode from '@/hooks/useRegisterMode';
+import useUserStore from '@/hooks/useUserStore';
 
 interface NavbarProps {
   currentUser?: User | null;
@@ -21,6 +19,16 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
   const registerMode = useRegisterMode();
+
+  const userStore = useUserStore();
+  useEffect(() => {
+    if (currentUser?.email) {
+      userStore.setUser(currentUser.email);
+    }
+  }, []);
+  // if (currentUser?.email) {
+  //   userStore.setUser(currentUser.email);
+  // }
   return (
     <div
       className={`

@@ -13,10 +13,6 @@ const BookForm = (props: Props) => {
     e.preventDefault();
     if (!title || !author) return;
     console.log(title, author);
-    await addBook({
-      title: title,
-      author: author,
-    });
     setTitle('');
     setAuthor('');
     router.refresh();

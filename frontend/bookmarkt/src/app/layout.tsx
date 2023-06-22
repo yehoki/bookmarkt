@@ -2,6 +2,7 @@ import getCurrentUser from '@/actions/getCurrentUser';
 import Navbar from '../components/Navbar/Navbar';
 import './globals.css';
 import NextAuthProvider from '@/providers/provider';
+import useUserStore from '@/hooks/useUserStore';
 
 export const metadata = {
   title: 'Bookmarkt',

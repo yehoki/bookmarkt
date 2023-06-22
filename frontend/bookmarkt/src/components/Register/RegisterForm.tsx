@@ -4,7 +4,7 @@ import { UserType } from '@/models/user';
 import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { registerUser } from '@/services/users';
-import useRegisterMode from '@/hooks/registerMode';
+import useRegisterMode from '@/hooks/useRegisterMode';
 type Props = {};
 
 const RegisterForm = (props: Props) => {

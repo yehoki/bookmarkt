@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import BookModel, { BookType } from '@/models/book';
 import { revalidateTag } from 'next/cache';
 import { errorHandler } from '@/utils/errorHandler';
+import prisma from '@/lib/prismadb';
 
 export async function GET(req: NextRequest) {
   await dbConnect();
@@ -23,9 +24,15 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: Request) {
-  await dbConnect();
+
+
+  const body = await req.json();  
   const { title, author }: Partial<BookType> = await req.json();
   console.log(title, author);
+
+
+// const {title, author}
+
   if (!title || !author) {
     return NextResponse.json({ message: 'Missing required data' });
   }

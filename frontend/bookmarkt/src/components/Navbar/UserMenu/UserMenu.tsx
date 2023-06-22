@@ -7,9 +7,9 @@ import { BiConversation } from 'react-icons/bi';
 import { BsFillBellFill, BsFillPeopleFill } from 'react-icons/bs';
 import { IoIosMail } from 'react-icons/io';
 import { HiUser } from 'react-icons/hi';
-import NavLink from './NavLink';
+import NavLink from '../LinkTabs/NavLink';
 import { signIn } from 'next-auth/react';
-import useRegisterMode from '@/hooks/registerMode';
+import useRegisterMode from '@/hooks/useRegisterMode';
 import NavIconDropdown from './NavIconDropdown';
 
 interface UserMenuProps {
@@ -31,7 +31,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             <NavIcon icon={BiConversation} />
             <NavIcon icon={IoIosMail} />
             <NavIcon icon={BsFillPeopleFill} />
-            <NavIconDropdown icon={HiUser} />
+            <NavIconDropdown icon={HiUser} currentUser={currentUser} />
           </>
         ) : (
           <>
