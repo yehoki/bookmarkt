@@ -1,9 +1,6 @@
 import Navbar from '../components/Navbar';
 import './globals.css';
-import { SessionProvider } from 'next-auth/react';
 import NextAuthProvider from '@/providers/provider';
-import CheckLogin from '@/components/CheckLogin';
-import Footer from '@/components/Footer';
 
 export const metadata = {
   title: 'Bookmarkt',
@@ -12,10 +9,9 @@ export const metadata = {
 
 interface Props {
   children: React.ReactNode;
-  session: any;
 }
 
-export default function RootLayout({ children, session }: Props) {
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body>

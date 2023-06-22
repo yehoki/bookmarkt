@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 import DisplaySingleBook from './DisplaySingleBook';
 
 const DisplayBooks = async () => {
-  const { data: session } = useSession();
   // console.log(session, session!.user);
   // console.log(session, session!.user);
   const books = await getBooks();

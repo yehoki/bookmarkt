@@ -11,13 +11,13 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 const Page = async () => {
-  const router = useRouter();
-  const { status } = useSession();
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/');
-    }
-  }, [status]);
+  // const router = useRouter();
+  // const { status } = useSession();
+  // useEffect(() => {
+  //   if (status === 'unauthenticated') {
+  //     router.push('/');
+  //   }
+  // }, [status]);
 
   return (
     <div className=" pt-20 w-[1000px] mx-auto">

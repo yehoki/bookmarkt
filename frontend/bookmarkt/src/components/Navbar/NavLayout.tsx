@@ -2,10 +2,14 @@
 import Link from 'next/link';
 import Container from '../Container';
 import Logo from './Logo';
-import { BiSearch } from 'react-icons/bi';
-import { BsFillBellFill } from 'react-icons/bs';
+import { BiConversation, BiSearch } from 'react-icons/bi';
+import { BsFillBellFill, BsFillPeopleFill } from 'react-icons/bs';
+import { TfiEmail } from 'react-icons/tfi';
+import { IoIosMail } from 'react-icons/io';
+import { HiUser } from 'react-icons/hi';
 import Links from './Links';
 import Search from './Search';
+import NavIcon from './NavIcon';
 
 export default function NavLayout({
   children,
@@ -32,10 +36,16 @@ export default function NavLayout({
           <Logo />
           <Links />
           <Search />
-          <div className="mx-2 p-[7px] rounded-full text-goodreads-beige bg-goodreads-brown/30">
-            <BsFillBellFill size={18} />
+          {/* Rightside Icons && Conditional when logged out */}
+          <div className="flex flex-row">
+            <NavIcon icon={BsFillBellFill} />
+            <NavIcon icon={BiConversation} />
+            <NavIcon icon={IoIosMail} />
+            <NavIcon icon={BsFillPeopleFill} />
+            <NavIcon icon={HiUser} />
           </div>
-          <div>{children}</div>
+
+          {/* <div>{children}</div> */}
         </div>
       </Container>
     </div>
