@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { useCallback, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import SearchDropdownTile from './SearchDropdownTile';
+import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -13,9 +14,20 @@ const Search = () => {
 
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const booksFromQuery = await getGoogleBooksByQuery(searchValue);
-    console.log(booksFromQuery);
-    setSearchResults(booksFromQuery.items);
+    const books = await getBooksFromSearch(searchValue);
+    if (books.items && Array.isArray(books.items)) {
+      setSearchResults(books.items);
+    }
+  };
+
+  const displayBookObjects = () => {
+    return searchResults.map((book: any) => {
+      if (book?.volumeInfo?.title) {
+        return (
+          <SearchDropdownTile key={book.id} label={book.volumeInfo.title} />
+        );
+      }
+    });
   };
 
   const displayBooks = (books: any) => {
@@ -40,7 +52,7 @@ const Search = () => {
     <>
       <div className="hidden w-full bg-transparent md:flex flex-row relative mr-2 text-sm items-center">
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSearchSubmit}
           className={`w-full flex flex-row border-[1px]
         border-[#999999]
         bg-[#FFFFFF]
@@ -67,11 +79,20 @@ const Search = () => {
         absolute top-10 bg-white w-full`}
         >
           <div className="flex flex-col w-full">
-            <SearchDropdownTile label={searchValue} />
-            <SearchDropdownTile label="2" />
-            <SearchDropdownTile label="2" />
-            <SearchDropdownTile label="2" />
-            <SearchDropdownTile label="2" />
+            {searchResults.length === 0 ? (
+              <>
+                <SearchDropdownTile label={searchValue} />
+                <SearchDropdownTile label="2" />
+                <SearchDropdownTile label="2" />
+                <SearchDropdownTile label="2" />
+                <SearchDropdownTile label="2" />
+              </>
+            ) : (
+              <>{displayBookObjects()}</>
+            )}
+            <SearchDropdownTile
+              label={`See all results for '${searchValue}'`}
+            />
           </div>
         </div>
       </div>
