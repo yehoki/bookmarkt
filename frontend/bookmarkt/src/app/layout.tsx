@@ -1,4 +1,5 @@
-import Navbar from '../components/Navbar';
+import getCurrentUser from '@/actions/getCurrentUser';
+import Navbar from '../components/Navbar/Navbar';
 import './globals.css';
 import NextAuthProvider from '@/providers/provider';
 
@@ -11,17 +12,16 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: Props) {
+export default async function RootLayout({ children }: Props) {
+  const currentUser = await getCurrentUser();
   return (
     <html lang="en">
       <body>
-        <NextAuthProvider>
-          <Navbar />
-          <div className="px-min-nav">
-            {children}
-            {/* <Footer /> */}
-          </div>
-        </NextAuthProvider>
+        <Navbar currentUser={currentUser} />
+        <div className="px-min-nav">
+          {children}
+          {/* <Footer /> */}
+        </div>
       </body>
     </html>
   );

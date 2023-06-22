@@ -11,6 +11,8 @@ import Links from './Links';
 import Search from './Search';
 import NavIcon from './NavIcon';
 import UserMenu from './UserMenu';
+import MobileSearch from './MobileSearch';
+import MobileUserMenu from './MobileUserMenu';
 
 export default function NavLayout({
   children,
@@ -31,14 +33,18 @@ export default function NavLayout({
         flex
         flex-row
         lg:w-[1024px]
+        justify-between
+        md:justify-normal
         mx-auto
         gap-3 md:gap-0 text-[14px] font-[450]"
         >
+          <MobileSearch />
           <Logo />
           <Links />
           <Search />
           {/* Rightside Icons && Conditional when logged out */}
           <UserMenu />
+          <MobileUserMenu />
           {/* <div>{children}</div> */}
         </div>
       </Container>

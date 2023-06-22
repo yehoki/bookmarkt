@@ -5,9 +5,10 @@ import Link from 'next/link';
 interface LinkProps {
   href: string;
   label: string;
+  onClick?: () => void;
 }
 
-const NavLink: React.FC<LinkProps> = ({ href, label }) => {
+const NavLink: React.FC<LinkProps> = ({ href, label, onClick }) => {
   return (
     <>
       <Link
@@ -20,6 +21,7 @@ const NavLink: React.FC<LinkProps> = ({ href, label }) => {
       focus:bg-[#382110]
       focus:text-white"
         href={href}
+        onClick={onClick}
       >
         {label}
       </Link>

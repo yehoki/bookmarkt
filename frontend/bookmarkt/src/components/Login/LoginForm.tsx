@@ -3,6 +3,7 @@ import { UserType } from '@/models/user';
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 import { userLogin } from '@/services/users';
+import { signIn } from 'next-auth/react';
 type Props = {};
 
 const LoginForm = (props: Props) => {
@@ -24,27 +25,30 @@ const LoginForm = (props: Props) => {
   };
 
   return (
-    <form onSubmit={handleLoginSubmit}>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.currentTarget.value)}
-          type="text"
-          id="username"
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.currentTarget.value)}
-          type="password"
-          id="password"
-        />
-      </div>
-      <button>Login</button>
-    </form>
+    <>
+      <button onClick={() => signIn()}>test</button>
+      <form onSubmit={handleLoginSubmit}>
+        <div>
+          <label htmlFor="username">Username</label>
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.currentTarget.value)}
+            type="text"
+            id="username"
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
+            type="password"
+            id="password"
+          />
+        </div>
+        <button>Login</button>
+      </form>
+    </>
   );
 };
 

@@ -4,26 +4,45 @@ import { UserType } from '@/models/user';
 import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { registerUser } from '@/services/users';
+import useRegisterMode from '@/hooks/registerMode';
 type Props = {};
 
 const RegisterForm = (props: Props) => {
   const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const registerMode = useRegisterMode();
 
   const handleRegisterUser = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const user: Partial<UserType> = {
-      name: name,
-      username: username,
-      password: password,
-    };
-    const register = await registerUser(user);
-    setName('');
-    setUsername('');
-    setPassword('');
-    router.push('/');
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+        }),
+      });
+      console.log(res);
+      if (res.ok) {
+        return res.json();
+      }
+      throw new Error(
+        `${res.status}: ${res.statusText}, ${res.text}, ${res.ok}`
+      );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setName('');
+      setEmail('');
+      setPassword('');
+      router.push('/');
+      setTimeout(() => {
+        registerMode.onClose();
+      }, 500);
+    }
   };
 
   return (
@@ -38,12 +57,12 @@ const RegisterForm = (props: Props) => {
         />
       </div>
       <div>
-        <label htmlFor="new-username">Username</label>
+        <label htmlFor="new-username">Email</label>
         <input
-          type="text"
+          type="email"
           id="new-username"
-          value={username}
-          onChange={(e) => setUsername(e.currentTarget.value)}
+          value={email}
+          onChange={(e) => setEmail(e.currentTarget.value)}
         />
       </div>
       <div>

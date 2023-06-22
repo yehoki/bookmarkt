@@ -7,18 +7,8 @@ import { Suspense, useEffect } from 'react';
 import DisplayBooks from '@/components/Books/DisplayBooks';
 import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
 import DisplayMyBooks from '@/components/Books/MyBookSection.tsx/DisplayMyBooks';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 const Page = async () => {
-  // const router = useRouter();
-  // const { status } = useSession();
-  // useEffect(() => {
-  //   if (status === 'unauthenticated') {
-  //     router.push('/');
-  //   }
-  // }, [status]);
-
   return (
     <div className=" pt-20 w-[1000px] mx-auto">
       <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">

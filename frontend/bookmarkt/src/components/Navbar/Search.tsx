@@ -38,7 +38,7 @@ const Search = () => {
   return (
     <div
       className="bg-transparent
-  flex-1 navOne:w-full flex flex-row items-center mr-2 text-sm"
+  hidden w-full md:flex flex-row items-center mr-2 text-sm"
     >
       <form
         onSubmit={(e) => e.preventDefault()}
