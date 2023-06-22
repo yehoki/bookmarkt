@@ -4,7 +4,10 @@ import NavLink from './NavLink';
 
 const Links = () => {
   return (
-    <div className="hidden lg:flex flex-row justify-around">
+    <div
+      className="hidden 
+    navOne:flex flex-row min-w-fit mx-[15px]"
+    >
       <NavLink href="/" label="Home" />
       <NavLink href="/books" label="My Books" />
       <NavLink href="/" label="Browse" />

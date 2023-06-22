@@ -1,0 +1,34 @@
+'use client';
+
+import { User } from '@prisma/client';
+import { useCallback, useState } from 'react';
+import NavIcon from './NavIcon';
+import { BiConversation } from 'react-icons/bi';
+import { BsFillBellFill, BsFillPeopleFill } from 'react-icons/bs';
+import { IoIosMail } from 'react-icons/io';
+import { HiUser } from 'react-icons/hi';
+
+interface UserMenuProps {
+  currentUser?: User | null;
+}
+
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleOpen = useCallback(() => {
+    setIsOpen((value) => !value);
+  }, []);
+  return (
+    <div className="relative flex items-center mr-2 min-w-fit">
+      <div className="flex flex-row gap-2">
+        <NavIcon icon={BsFillBellFill} />
+        <NavIcon icon={BiConversation} />
+        <NavIcon icon={IoIosMail} />
+        <NavIcon icon={BsFillPeopleFill} />
+        <NavIcon icon={HiUser} />
+      </div>
+    </div>
+  );
+};
+
+export default UserMenu;

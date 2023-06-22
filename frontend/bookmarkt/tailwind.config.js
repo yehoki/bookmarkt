@@ -23,6 +23,7 @@ module.exports = {
       },
       screens: {
         desktop: '1240px',
+        navOne: '1200px',
       },
       padding: {
         'min-nav': 'clamp(40px, 10%, 16%)',

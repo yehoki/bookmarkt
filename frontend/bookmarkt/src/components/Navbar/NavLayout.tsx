@@ -10,6 +10,7 @@ import { HiUser } from 'react-icons/hi';
 import Links from './Links';
 import Search from './Search';
 import NavIcon from './NavIcon';
+import UserMenu from './UserMenu';
 
 export default function NavLayout({
   children,
@@ -29,22 +30,15 @@ export default function NavLayout({
           className="
         flex
         flex-row
-        lg:w-[1220px]
+        lg:w-[1024px]
         mx-auto
-        items-center gap-3 md:gap-0"
+        gap-3 md:gap-0 text-[14px] font-[450]"
         >
           <Logo />
           <Links />
           <Search />
           {/* Rightside Icons && Conditional when logged out */}
-          <div className="flex flex-row">
-            <NavIcon icon={BsFillBellFill} />
-            <NavIcon icon={BiConversation} />
-            <NavIcon icon={IoIosMail} />
-            <NavIcon icon={BsFillPeopleFill} />
-            <NavIcon icon={HiUser} />
-          </div>
-
+          <UserMenu />
           {/* <div>{children}</div> */}
         </div>
       </Container>

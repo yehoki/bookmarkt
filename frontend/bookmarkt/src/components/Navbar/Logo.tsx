@@ -6,15 +6,21 @@ import { useRouter } from 'next/navigation';
 const Logo = () => {
   const router = useRouter();
   return (
-    <div>
+    // <div className="min-w-fit">
+    <>
       <Image
-        className="cursor-pointer"
+        className="cursor-pointer py-[15px] 
+        mx-4
+        navOne:mx-0 
+        "
         alt="Bookmarkt logo"
-        height={50}
         width={140}
-        src="/images/bookmarkt.png"
+        height={50}
+        src="/images/bookmarkt.svg"
       />
-    </div>
+    </>
+
+    // </div>
   );
 };
 

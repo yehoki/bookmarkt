@@ -2,12 +2,13 @@
 
 import { getGoogleBooksByQuery } from '@/services/googleBooks';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [searchFocused, setSearchFocused] = useState(false);
 
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,18 +37,29 @@ const Search = () => {
   };
   return (
     <div
-      className="mx-2
-  border-[1px] border-[#999999] 
-  w-full md:w-[70%] lg:w-[25%] px-2 py-1 rounded-[4px] 
-  bg-[#FFFFFF] shadow-sm hover:shadow-md 
-  transition cursor-pointer"
+      className="bg-transparent
+  flex-1 navOne:w-full flex flex-row items-center mr-2 text-sm"
     >
-      <div className="flex flex-row items-center justify-between gap-3">
-        <div>Search books</div>
-        <div className="px-1 rounded-full">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className={`w-full flex flex-row border-[1px]
+        border-[#999999]
+        bg-[#FFFFFF]
+      rounded-[4px]
+       transition
+       ${searchFocused ? 'shadow-md' : 'shadow-none'}`}
+      >
+        <input
+          className="w-full outline-none py-1 pr-[26px] pl-2 rounded-[4px]"
+          type="text"
+          placeholder="Search books"
+          onFocus={() => setSearchFocused(true)}
+          onBlur={() => setSearchFocused(false)}
+        />
+        <button type="submit">
           <BiSearch size={18} />
-        </div>
-      </div>
+        </button>
+      </form>
     </div>
   );
 };
