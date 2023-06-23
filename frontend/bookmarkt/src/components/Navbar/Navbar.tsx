@@ -41,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
         <div
           className=" flex
         flex-row
-        lg:w-[1024px]
+        navOne:w-[1200px]
         justify-between
         md:justify-normal
         mx-auto
