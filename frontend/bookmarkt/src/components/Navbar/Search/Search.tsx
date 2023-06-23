@@ -1,18 +1,22 @@
 'use client';
 
-// 1. Make Each result clickable to its actual book page
-// 2. Render out 20 results at first try -> slice to show the first 5 results
+// 1. Make Each result clickable to its actual book page --- DONE
+// 2. Render out 20 results at first try -> slice to show the first 5 results --- DONE
 // 3. Pass in props the result and pass in each individual one to see the page
 import Image from 'next/image';
 import React, { useCallback, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import SearchDropdownTile from './SearchDropdownTile';
 import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
-
+import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
+import useResultsStore from '@/hooks/useResultsStore';
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<
+    GoogleBookItemsInterface[]
+  >([]);
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const searchResultsStore = useResultsStore();
 
   const toggleSearchDropdown = useCallback(() => {
     setIsSearchDropdownOpen((value) => !value);
@@ -20,15 +24,20 @@ const Search = () => {
 
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const books = await getBooksFromSearch(searchValue);
-    console.log(books);
-    if (books.items && Array.isArray(books.items)) {
+    let books = await getBooksFromSearch(searchValue);
+    if (books) {
       setSearchResults(books.items);
     }
   };
 
+  const handleSeeMoreResults = () => {
+    setIsSearchDropdownOpen(false);
+    searchResultsStore.setResults(searchResults);
+    setSearchValue('');
+  };
+
   const displayBookObjects = () => {
-    return searchResults.map((book: any) => {
+    return searchResults.slice(0, 5).map((book: GoogleBookItemsInterface) => {
       if (book?.volumeInfo?.title) {
         return (
           <SearchDropdownTile
@@ -36,13 +45,15 @@ const Search = () => {
             id={book.id}
             title={book.volumeInfo.title}
             subtitle={
-              book.volumeInfo.subtitle ? book.volumeInfo.subtitle : null
+              book.volumeInfo.subtitle ? book.volumeInfo.subtitle : undefined
             }
-            author={book.volumeInfo.authors ? book.volumeInfo.authors[0] : null}
+            author={
+              book.volumeInfo.authors ? book.volumeInfo.authors[0] : undefined
+            }
             imageLink={
               book.volumeInfo.imageLinks
                 ? book.volumeInfo.imageLinks.thumbnail
-                : null
+                : undefined
             }
           />
         );
@@ -98,19 +109,11 @@ const Search = () => {
         absolute top-10 bg-white w-full`}
         >
           <div className="flex flex-col w-full">
-            {searchResults.length === 0 ? (
-              <>
-                <SearchDropdownTile title={searchValue} />
-                <SearchDropdownTile title="2" />
-                <SearchDropdownTile title="2" />
-                <SearchDropdownTile title="2" />
-                <SearchDropdownTile title="2" />
-              </>
-            ) : (
-              <>{displayBookObjects()}</>
-            )}
+            {searchResults.length === 0 ? <></> : <>{displayBookObjects()}</>}
             <SearchDropdownTile
               title={`See all results for '${searchValue}'`}
+              onClick={handleSeeMoreResults}
+              searchValue={searchValue}
             />
           </div>
         </div>

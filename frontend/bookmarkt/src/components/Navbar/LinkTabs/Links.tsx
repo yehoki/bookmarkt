@@ -10,8 +10,8 @@ const Links = () => {
     >
       <NavLink href="/" label="Home" />
       <NavLink href="/books" label="My Books" />
-      <NavLink href="/" label="Browse" />
-      <NavLink href="/" label="Community" />
+      <NavLink href="/" label="Browse" extraPadding="desktop:px-[15px]" />
+      <NavLink href="/" label="Community" extraPadding="desktop:px-[15px]" />
     </div>
   );
 };

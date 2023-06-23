@@ -9,7 +9,8 @@ interface SearchDropdownTileProps {
   author?: string;
   id?: string;
   imageLink?: string;
-  onClickLink?: () => void;
+  searchValue?: string;
+  onClick?: () => void;
 }
 
 const SearchDropdownTile: React.FC<SearchDropdownTileProps> = ({
@@ -18,14 +19,15 @@ const SearchDropdownTile: React.FC<SearchDropdownTileProps> = ({
   author,
   id,
   imageLink,
-  onClickLink,
+  onClick,
+  searchValue,
 }) => {
   return (
     <>
       {id ? (
         <Link
           className="hover:bg-goodreads-beige bg-white border-y-[1px] border-[#D8D8D8]"
-          onClick={onClickLink}
+          onClick={onClick}
           href={`/books/${id}`}
         >
           <div className="flex flex-row">
@@ -55,12 +57,10 @@ const SearchDropdownTile: React.FC<SearchDropdownTileProps> = ({
           </div>
         </Link>
       ) : (
-        <div
-          onClick={onClickLink}
-          className="bg-white border-[1px] w-full leading-8"
-        >
+        <Link onClick={onClick} href={`/search?q=${searchValue}`}>
+          <div className="bg-white border-[1px] w-full leading-8"></div>
           <>{title}</>
-        </div>
+        </Link>
       )}
     </>
   );
