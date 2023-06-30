@@ -7,7 +7,7 @@ interface RegisterModeStore {
 }
 
 const useRegisterMode = create<RegisterModeStore>((set) => ({
-  isOn: false,
+  isOn: true,
   onOpen: () => set({ isOn: true }),
   onClose: () => set({ isOn: false }),
 }));

@@ -9,6 +9,7 @@ import Search from './Search/Search';
 import UserMenu from './UserMenu/UserMenu';
 import MobileUserMenu from './UserMenu/MobileUserMenu';
 import useUserStore from '@/hooks/useUserStore';
+import useRegisterMode from '@/hooks/useRegisterMode';
 
 interface NavbarProps {
   currentUser?: User | null;
@@ -16,17 +17,18 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
   const userStore = useUserStore();
+  const registerModeStore = useRegisterMode();
   useEffect(() => {
     if (currentUser?.email) {
       userStore.setUser(currentUser.email);
     }
   }, []);
-  // if (currentUser?.email) {
-  //   userStore.setUser(currentUser.email);
-  // }
+
   return (
     <div
+      id="top-navbar"
       className={`
+      ${registerModeStore.isOn ? '' : 'hidden'}
     fixed w-full z-10
    bg-goodreads-beige drop-shadow-md font-Lato
    `}

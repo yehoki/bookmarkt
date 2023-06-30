@@ -1,6 +1,7 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import Navbar from '../components/Navbar/Navbar';
 import './globals.css';
+import ConditionalNav from '@/components/ConditionalNav';
 
 export const metadata = {
   title: 'Bookmarkt',
@@ -17,6 +18,7 @@ export default async function RootLayout({ children }: Props) {
     <html lang="en">
       <body>
         <Navbar currentUser={currentUser} />
+        <ConditionalNav navOn />
         <div>{children}</div>
       </body>
     </html>
