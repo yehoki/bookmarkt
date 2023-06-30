@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { IconType } from 'react-icons';
 
 interface LoginButtonProps {
@@ -22,22 +23,25 @@ const LoginButton: React.FC<LoginButtonProps> = ({
   email,
 }) => {
   return (
-    <button
-      className={`
+    <Link href={'/'} className="w-full">
+      <button
+        className={`
       flex items-center justify-center gap-1
       w-full rounded-[3px] text-center py-3
+      hover:opacity-70
       ${bg} ${border} ${text}
   `}
-    >
-      {!email ? (
-        <>
-          {Icon && <Icon color={iconFill} size={24} />}
-          Continue with {provider}
-        </>
-      ) : (
-        <>Sign up with email</>
-      )}
-    </button>
+      >
+        {!email ? (
+          <>
+            {Icon && <Icon color={iconFill} size={24} />}
+            Continue with {provider}
+          </>
+        ) : (
+          <>Sign up with email</>
+        )}
+      </button>
+    </Link>
   );
 };
 

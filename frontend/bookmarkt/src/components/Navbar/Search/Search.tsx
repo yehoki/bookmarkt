@@ -27,11 +27,19 @@ const Search = () => {
     let books = await getBooksFromSearch(searchValue);
     if (books) {
       setSearchResults(books.items);
+      searchResultsStore.setResultSize(books.totalItems);
     }
   };
 
-  const handleSeeMoreResults = () => {
+  const handleSeeMoreResults = async () => {
     setIsSearchDropdownOpen(false);
+    if (searchResults.length === 0) {
+      let books = await getBooksFromSearch(searchValue);
+      if (books) {
+        setSearchResults(books.items);
+        searchResultsStore.setResultSize(books.totalItems);
+      }
+    }
     searchResultsStore.setResults(searchResults);
     setSearchValue('');
   };

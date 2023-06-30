@@ -12,7 +12,7 @@ import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 const Page = async () => {
   const currentUserBooks = await getCurrentUserBooks();
   return (
-    <div className=" pt-20 w-[1000px] mx-auto">
+    <div className="pt-40 md:pt-24 w-[1000px] mx-auto">
       <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
         <h2
           className="
@@ -54,14 +54,26 @@ const Page = async () => {
           {/* Right col */}
           <div className="w-[750px]">
             <div className="grid grid-cols-6 flex-[1_1_75%] gap-2">
-              <Suspense fallback={<p>Loading books...</p>}>
-                <DisplayMyBooks />
-              </Suspense>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
+              <div className="border-[1px] border-black">book</div>
             </div>
           </div>
         </div>
       </div>
-      <BookForm />
     </div>
   );
 };

@@ -5,7 +5,7 @@ type Props = {};
 
 export default function Login({}: Props) {
   return (
-    <div className="pt-20">
+    <div className="pt-40">
       <LoginForm />
     </div>
   );

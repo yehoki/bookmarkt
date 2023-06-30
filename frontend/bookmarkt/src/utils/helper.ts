@@ -2,6 +2,16 @@ export const parseQuery = (query: string): string => {
   return query.toLowerCase().replaceAll(' ', '+');
 };
 
-// https://www.googleapis.com/books/v1/volumes?q=atomic+habits&fields=totalItems,items(id, volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks))&key=AIzaSyAh7ShtHwi3S6y-ArXGGBSU7eWXPZFwLIY
-
-// https://www.googleapis.com/books/v1/volumes?q=the+4-hour+work+week&fields=totalItems,items(id,volumeInfo(title,subtitle,authors,publishedDatedescription,imageLinks))&key=
+export const parseAuthors = (authors: string[] | undefined): string => {
+  if (authors === undefined) {
+    return '';
+  }
+  if (authors.length <= 1) {
+    return authors[0];
+  }
+  let authorList = authors[0];
+  for (let i = 1; i < authors.length; i++) {
+    authorList = `${authorList}, ${authors[i]}`;
+  }
+  return authorList;
+};
