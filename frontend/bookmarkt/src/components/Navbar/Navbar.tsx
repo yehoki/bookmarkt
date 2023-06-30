@@ -1,7 +1,5 @@
 'use client';
 import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { signIn, useSession } from 'next-auth/react';
 import { User } from '@prisma/client';
 import Container from '../Container';
 import MobileSearch from './Search/MobileSearch';
@@ -10,7 +8,6 @@ import Links from './LinkTabs/Links';
 import Search from './Search/Search';
 import UserMenu from './UserMenu/UserMenu';
 import MobileUserMenu from './UserMenu/MobileUserMenu';
-import useRegisterMode from '@/hooks/useRegisterMode';
 import useUserStore from '@/hooks/useUserStore';
 
 interface NavbarProps {
@@ -18,8 +15,6 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
-  const registerMode = useRegisterMode();
-
   const userStore = useUserStore();
   useEffect(() => {
     if (currentUser?.email) {
@@ -32,7 +27,6 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
   return (
     <div
       className={`
-      ${registerMode.isOn ? 'hidden' : 'block'}
     fixed w-full z-10
    bg-goodreads-beige drop-shadow-md font-Lato
    `}

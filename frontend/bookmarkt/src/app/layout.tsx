@@ -1,8 +1,6 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import Navbar from '../components/Navbar/Navbar';
 import './globals.css';
-import NextAuthProvider from '@/providers/provider';
-import useUserStore from '@/hooks/useUserStore';
 
 export const metadata = {
   title: 'Bookmarkt',
@@ -19,10 +17,7 @@ export default async function RootLayout({ children }: Props) {
     <html lang="en">
       <body>
         <Navbar currentUser={currentUser} />
-        <div className="px-min-nav">
-          {children}
-          {/* <Footer /> */}
-        </div>
+        <div>{children}</div>
       </body>
     </html>
   );

@@ -8,7 +8,6 @@ import { BsFillBellFill, BsFillPeopleFill } from 'react-icons/bs';
 import { IoIosMail } from 'react-icons/io';
 import { HiUser } from 'react-icons/hi';
 import NavLink from '../LinkTabs/NavLink';
-import { signIn } from 'next-auth/react';
 import useRegisterMode from '@/hooks/useRegisterMode';
 import NavIconDropdown from './NavIconDropdown';
 
@@ -35,12 +34,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           </>
         ) : (
           <>
-            <button onClick={() => signIn()}>Login</button>
-            <NavLink label="Login" href="/login" />
+            <NavLink label="Sign In" href="/user/sign_in" />
             <NavLink
-              label="Sign up"
-              href="/register"
-              onClick={registerMode.onOpen}
+              label="Join"
+              href="/user/sign_up"
+              // onClick={registerMode.onOpen}
             />
           </>
         )}
