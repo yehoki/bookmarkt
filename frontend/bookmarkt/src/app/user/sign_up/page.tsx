@@ -1,7 +1,8 @@
 'use client';
-
 import ConditionalNav from '@/components/ConditionalNav';
 import Modal, { ModalInput } from '@/components/modals/Modal';
+import UserModal from '@/components/modals/UserModal';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const Page = () => {
@@ -26,12 +27,12 @@ const Page = () => {
     },
   ];
   return (
-    <div>
+    <div className="h-[100dvh] bg-slate-200">
       <ConditionalNav navOn={false} />
-      <Modal
-        mainLabel="Create Account"
-        modalInputs={loginModalInputs}
-        submitLabel="Create Account"
+      <UserModal
+        title="Sign up for Bookmarkt"
+        subtitle="Sign up to see what your friends are reading, get book
+            recommendations, and join the world’s largest community of readers."
         mode="signUp"
       />
     </div>

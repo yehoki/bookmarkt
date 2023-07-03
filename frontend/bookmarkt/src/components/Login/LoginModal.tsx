@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import LoginButton from './LoginButton';
-import { BsApple } from 'react-icons/bs';
+import { BsApple, BsGithub } from 'react-icons/bs';
+import { FcGoogle } from 'react-icons/fc';
 import { AiFillFacebook, AiOutlineAmazon } from 'react-icons/ai';
 
 const LoginModal = () => {
@@ -23,30 +24,24 @@ const LoginModal = () => {
         </div>
         <div className="flex flex-col justify-evenly items-center gap-4 pt-6">
           <LoginButton
-            icon={AiFillFacebook}
-            provider="Facebook"
-            bg="bg-[#3b5998]"
-            border="border-[#3b5998] border-[1px]"
-            text="text-white"
-            iconFill="white"
-          />
-          <LoginButton
-            icon={AiOutlineAmazon}
-            provider="Amazon"
-            bg="bg-[#f5d47a]"
-            border="border-[1px] border-[#B38B22]"
-          />
-          <LoginButton
-            icon={BsApple}
-            provider="Apple"
+            icon={FcGoogle}
+            provider="google"
             bg="bg-white"
             border="border-[1px] border-black"
           />
           <LoginButton
-            provider="Email"
+            icon={BsGithub}
+            provider="github"
+            bg="bg-black"
+            border="border-[1px] border-black"
+            text="text-white"
+          />
+          <LoginButton
+            provider="credentials"
             bg="bg-[#F4F1EA]"
             text="text-[#333333]"
             border="border-[1px] border-[#D6D0C4]"
+            email
           />
 
           <div>Already a member? Sign In</div>

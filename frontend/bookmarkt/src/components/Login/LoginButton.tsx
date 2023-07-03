@@ -1,16 +1,20 @@
 'use client';
 
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { IconType } from 'react-icons';
 
 interface LoginButtonProps {
   icon?: IconType;
-  provider: string;
+  provider: 'credentials' | 'github' | 'google';
   bg: string;
   border: string;
   iconFill?: string;
   text?: string;
   email?: boolean;
+  width?: string;
+  mode?: 'signIn' | 'signUp';
 }
 
 const LoginButton: React.FC<LoginButtonProps> = ({
@@ -21,13 +25,22 @@ const LoginButton: React.FC<LoginButtonProps> = ({
   iconFill,
   text,
   email,
+  width = 'w-full',
+  mode,
 }) => {
+  const router = useRouter();
+  const emailText =
+    mode === 'signIn' ? 'Sign in with email' : 'Sign up with email';
+
+  const handleLogin = async () => {
+    await signIn(provider);
+  };
   return (
-    <Link href={'/'} className="w-full">
+    <div className="w-[300px]" onClick={handleLogin}>
       <button
         className={`
       flex items-center justify-center gap-1
-      w-full rounded-[3px] text-center py-3
+      ${width} rounded-[3px] text-center py-3
       hover:opacity-70
       ${bg} ${border} ${text}
   `}
@@ -35,13 +48,13 @@ const LoginButton: React.FC<LoginButtonProps> = ({
         {!email ? (
           <>
             {Icon && <Icon color={iconFill} size={24} />}
-            Continue with {provider}
+            Continue with <span className="capitalize">{provider}</span>
           </>
         ) : (
-          <>Sign up with email</>
+          <>{emailText}</>
         )}
       </button>
-    </Link>
+    </div>
   );
 };
 

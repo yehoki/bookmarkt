@@ -4,6 +4,9 @@ import Image from 'next/image';
 import RegLogInput from '../Inputs/RegLogInput';
 import Link from 'next/link';
 import { FormEvent } from 'react';
+import LoginButton from '../Login/LoginButton';
+import { FcGoogle } from 'react-icons/fc';
+import { BsGithub } from 'react-icons/bs';
 
 export interface ModalInput {
   label: string;

@@ -17,6 +17,7 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
             src={book.volumeInfo.imageLinks?.thumbnail}
             alt={book.volumeInfo.title}
             fill
+            sizes="(max-width: 1440px) 100vw"
           />
         )}
       </div>
