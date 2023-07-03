@@ -7,6 +7,7 @@ interface LinkProps {
   label: string;
   extraPadding?: string;
   onClick?: () => void;
+  disabledBreakpoint?: string;
 }
 
 const NavLink: React.FC<LinkProps> = ({
@@ -14,20 +15,23 @@ const NavLink: React.FC<LinkProps> = ({
   label,
   onClick,
   extraPadding,
+  disabledBreakpoint = '',
 }) => {
   return (
     <>
       <Link
-        className="
-        flex
-        items-center 
+        className={`
+        ${disabledBreakpoint === '' ? 'flex' : `hidden ${disabledBreakpoint}`}
+        flex-auto md:flex-initial
+        items-center
+        justify-center
       text-[#382110] 
       hover:text-white 
       hover:bg-[#382110]
       focus:bg-[#382110]
       focus:text-white
       px-4
-      "
+      `}
         href={href}
         onClick={onClick}
       >

@@ -2,6 +2,7 @@
 
 import ConditionalNav from '@/components/ConditionalNav';
 import Modal, { ModalInput } from '@/components/modals/Modal';
+import { FormEvent } from 'react';
 
 const Page = () => {
   const loginModalInputs: ModalInput[] = [
@@ -15,6 +16,10 @@ const Page = () => {
     },
   ];
 
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
       <ConditionalNav navOn={false} />
@@ -23,6 +28,7 @@ const Page = () => {
         modalInputs={loginModalInputs}
         submitLabel="Sign in"
         mode="signIn"
+        onFormSubmit={handleLogin}
       />
     </div>
   );

@@ -1,21 +1,21 @@
-'use client';
+import getCurrentUser from '@/actions/getCurrentUser';
 import ConditionalNav from '@/components/ConditionalNav';
 import LoginModal from '@/components/Login/LoginModal';
-import useUserStore from '@/hooks/useUserStore';
 
-export default function Home() {
-  const userStore = useUserStore();
+export default async function Home() {
+  const currentUser = await getCurrentUser();
 
+  if (!currentUser) {
+    return (
+      <>
+        <ConditionalNav />
+        <LoginModal />
+      </>
+    );
+  }
   return (
     <>
       <ConditionalNav />
-      {!userStore.userEmail ? (
-        <>
-          <LoginModal />
-        </>
-      ) : (
-        <></>
-      )}
     </>
   );
 }

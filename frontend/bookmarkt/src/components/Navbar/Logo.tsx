@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const Logo = () => {
@@ -8,16 +9,21 @@ const Logo = () => {
   return (
     // <div className="min-w-fit">
     <>
-      <Image
+      <Link
+        href="/"
         className="cursor-pointer py-[15px] 
         mx-4
-        navOne:mx-0 
+        navOne:mx-0
+        px-16 
+        block
+        relative
+        h-[50px]
+        w-[140px]
+        my-auto
         "
-        alt="Bookmarkt logo"
-        width={140}
-        height={50}
-        src="/images/bookmarkt.svg"
-      />
+      >
+        <Image alt="Bookmarkt logo" fill src="/images/bookmarkt.svg" />
+      </Link>
     </>
 
     // </div>

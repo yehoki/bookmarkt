@@ -10,6 +10,8 @@ import UserMenu from './UserMenu/UserMenu';
 import MobileUserMenu from './UserMenu/MobileUserMenu';
 import useUserStore from '@/hooks/useUserStore';
 import useRegisterMode from '@/hooks/useRegisterMode';
+import MobileDropdown from './MobileDropdown';
+import Link from 'next/link';
 
 interface NavbarProps {
   currentUser?: User | null;
@@ -25,33 +27,46 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
   }, []);
 
   return (
-    <div
-      id="top-navbar"
-      className={`
+    <>
+      <div
+        id="top-navbar"
+        className={`
       ${registerModeStore.isOn ? '' : 'hidden'}
     fixed w-full z-10
    bg-goodreads-beige drop-shadow-md font-Lato
    `}
-    >
-      <Container>
-        <div
-          className=" flex
+      >
+        <Container>
+          <div
+            className=" flex
         flex-row
+        h-[50px]
         navOne:w-[1200px]
         justify-between
         md:justify-normal
         mx-auto
         gap-3 md:gap-0 text-[14px] font-[450]"
-        >
-          <MobileSearch />
-          <Logo />
-          <Links />
-          <Search />
-          <UserMenu currentUser={currentUser} />
-          <MobileUserMenu />
+          >
+            <MobileSearch />
+            <Logo />
+            <Links />
+            <Search />
+            <UserMenu currentUser={currentUser} />
+            <MobileUserMenu />
+          </div>
+        </Container>
+        <div className="navOne:hidden max-h-[50px]">
+          <hr className="border-[1px]" />
+          <div className="">
+            <Container>
+              <div className="">
+                <MobileDropdown />
+              </div>
+            </Container>
+          </div>
         </div>
-      </Container>
-    </div>
+      </div>
+    </>
   );
 };
 

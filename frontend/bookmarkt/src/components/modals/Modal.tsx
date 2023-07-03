@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import RegLogInput from '../Inputs/RegLogInput';
 import Link from 'next/link';
+import { FormEvent } from 'react';
 
 export interface ModalInput {
   label: string;
@@ -15,6 +16,7 @@ interface ModalProps {
   modalInputs: ModalInput[];
   submitLabel: string;
   mode: 'signIn' | 'signUp';
+  onFormSubmit?: (e: FormEvent<HTMLFormElement>) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -22,6 +24,7 @@ const Modal: React.FC<ModalProps> = ({
   modalInputs,
   submitLabel,
   mode,
+  onFormSubmit,
 }) => {
   const inputs = modalInputs.map((modalInput: ModalInput) => {
     return (
@@ -46,7 +49,7 @@ const Modal: React.FC<ModalProps> = ({
         <div className="mx-auto text-4xl font-semibold font-serif mb-2">
           {mainLabel}
         </div>
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={onFormSubmit}>
           <div className="flex flex-col gap-2">{inputs}</div>
           <div className="w-full bg-black rounded-full text-white mt-8 hover:opacity-80">
             <button className="w-full py-2">{submitLabel}</button>
