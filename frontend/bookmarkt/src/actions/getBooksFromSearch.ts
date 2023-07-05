@@ -25,6 +25,7 @@ export interface GoogleBookInterface {
 
 export interface GoogleBookReturnItemsInterface {
   id: string;
+  isOwned?: boolean;
   volumeInfo: {
     authors?: string[];
     description?: string;
@@ -35,7 +36,6 @@ export interface GoogleBookReturnItemsInterface {
     subtitle?: string;
     title: string;
   };
-  userOwns: boolean;
 }
 
 export interface GoogleBookReturnInterface {
@@ -54,10 +54,6 @@ export async function getBooksFromSearch(query: string) {
   if (!res.ok) {
     return null;
   }
-  const books: GoogleBookInterface = await res.json();
-
-  // const user = await getCurrentUser();
-  // Set books into db
-  const userBooks: GoogleBookReturnInterface | null = await getGoogleBooksFromUser(books);
+  const books: GoogleBookReturnInterface = await res.json();
   return books;
 }

@@ -23,7 +23,7 @@ model User {
   reviewIds      String[]  @db.ObjectId
 
   books    Book[]    @relation(fields: [bookIds], references: [id])
-  reviews Review[]
+  reviews  Review[]
   accounts Account[]
 }
 
@@ -46,6 +46,11 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+type ImageLinks {
+  smallThumbnail String?
+  thumbnail      String?
+}
+
 model Book {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   googleId      String
@@ -53,8 +58,8 @@ model Book {
   subtitle      String
   author        String[]
   description   String
-  imageLinks    String[]
-  publishedDate DateTime
+  imageLinks    ImageLinks
+  publishedDate String
   userIds       String[] @db.ObjectId
 
   reviews Review[]

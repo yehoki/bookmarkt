@@ -4,22 +4,24 @@ interface AddBookButtonProps {
   label: string;
   bookId: string;
   isOwned: boolean;
+  onClick: () => void;
 }
 
 const AddBookButton: React.FC<AddBookButtonProps> = ({
   label,
   bookId,
   isOwned,
+  onClick,
 }) => {
   // fetch if book is read
-  const isRead = false;
+  const display = isOwned ? 'Test' : 'Add book';
 
   return (
     <button
-      onClick={() => {}}
+      onClick={onClick}
       className="bg-[#409D69] text-sm text-white rounded-sm px-2 py-1"
     >
-      {label}
+      {display}
     </button>
   );
 };

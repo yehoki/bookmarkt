@@ -1,4 +1,7 @@
-import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
+import {
+  GoogleBookReturnInterface,
+  getBooksFromSearch,
+} from '@/actions/getBooksFromSearch';
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import getUserBooks from '@/actions/getUserBooks';
@@ -12,41 +15,43 @@ interface PageProps {
   };
 }
 
+const getUserBookData = async (query: string, userId: string) => {
+  const userBooks = await getUserBooks(userId);
+  const userGoogleBooks = userBooks.map((book) => book.googleId);
+  const booksFromSearch = await getBooksFromSearch(query);
+  if (booksFromSearch && userId !== '') {
+    const returnBooks = booksFromSearch.items.map((book) => ({
+      ...book,
+      isOwned: userGoogleBooks.includes(book.id),
+    }));
+    const finalBooks: GoogleBookReturnInterface = {
+      items: returnBooks,
+      totalItems: booksFromSearch.totalItems,
+    };
+    return finalBooks;
+  } else if (booksFromSearch && userId === '') {
+    return booksFromSearch;
+  }
+  return {
+    items: [],
+    totalItems: 0,
+  };
+};
+
 const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
   const currentUser = await getCurrentUser();
-  // 1. Take userId
-  // 2. Find all books user currently has
-  // let userBooks: Book[];
-  let finalBooks;
-  if (currentUser) {
-    const userBooks = await getUserBooks(currentUser?.id);
-    const userGoogleBooks = userBooks.map((book) => book.googleId);
-    const booksFromSearch = await getBooksFromSearch('testQuery');
-    if (booksFromSearch) {
-      const returnBooks = booksFromSearch.items.map((book) => ({
-        ...book,
-        isOwned: userGoogleBooks.includes(book.id),
-      }));
-      finalBooks = {
-        items: returnBooks,
-        totalItems: booksFromSearch.totalItems,
-      };
-    }
-  }
-  // 3. Filter them using the current search results
+  const query =
+    searchParams && searchParams.q && typeof searchParams.q === 'string'
+      ? searchParams.q
+      : '';
+  const userId = currentUser ? currentUser.id : '';
 
-  // 4. Return a new object with the books, and showing whether the user has it or not to turn on button
+  const finalBooks = await getUserBookData(query, userId);
+  // FIRST - Move all code to a function
+  // 1. UseEffect -> Rerender everytime the searchparams change
+  // 2. USe query from searchparams
+  // 3. Enables add book button if the book is not owned
 
-  // const booksFromSearch = await getBooksFromSearch('test');
-  // console.log('BOOKS', books, booksFromSearch);
-
-  // const currentUser = await getCurrentUser();
-  // console.log('Current User', currentUser);
-  // let searchResults;
-  // if (searchParams && searchParams.q && typeof searchParams.q === 'string') {
-  //   searchResults = await getBooksFromSearch(searchParams.q);
-  //   console.log('Search', searchResults?.items);
-  // }
   return (
     <div className="pt-32 navOne:pt-24 mx-auto max-w-[970px] text-left">
       <div className="font-semibold text-lg text-goodreads-brown">Search</div>

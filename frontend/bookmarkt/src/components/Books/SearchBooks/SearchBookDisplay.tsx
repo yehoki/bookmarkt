@@ -1,11 +1,14 @@
 'use client';
 
-import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
+import {
+  GoogleBookItemsInterface,
+  GoogleBookReturnItemsInterface,
+} from '@/actions/getBooksFromSearch';
 import Image from 'next/image';
 import DisplaySingleBook from './DisplaySingleBook';
 
 interface SearchBookDisplayProps {
-  books: GoogleBookItemsInterface[];
+  books: GoogleBookReturnItemsInterface[];
   resultSize: number;
 }
 

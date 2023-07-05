@@ -13,7 +13,13 @@ import {
 } from '@/actions/getBooksFromSearch';
 import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import useResultsStore from '@/hooks/useResultsStore';
-const Search = () => {
+import { User } from '@prisma/client';
+
+interface SearchProps {
+  currentUser?: User | null;
+}
+
+const Search: React.FC<SearchProps> = ({ currentUser }) => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState<
     GoogleBookReturnItemsInterface[]
