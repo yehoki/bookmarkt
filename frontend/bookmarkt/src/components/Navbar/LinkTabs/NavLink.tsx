@@ -28,8 +28,6 @@ const NavLink: React.FC<LinkProps> = ({
       text-[#382110] 
       hover:text-white 
       hover:bg-[#382110]
-      focus:bg-[#382110]
-      focus:text-white
       px-4
       `}
         href={href}

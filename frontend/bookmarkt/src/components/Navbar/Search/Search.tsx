@@ -7,13 +7,16 @@ import Image from 'next/image';
 import React, { useCallback, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import SearchDropdownTile from './SearchDropdownTile';
-import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
+import {
+  GoogleBookReturnItemsInterface,
+  getBooksFromSearch,
+} from '@/actions/getBooksFromSearch';
 import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import useResultsStore from '@/hooks/useResultsStore';
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState<
-    GoogleBookItemsInterface[]
+    GoogleBookReturnItemsInterface[]
   >([]);
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const searchResultsStore = useResultsStore();
@@ -26,7 +29,6 @@ const Search = () => {
     e.preventDefault();
     let books = await getBooksFromSearch(searchValue);
     if (books) {
-      setSearchResults(books.items);
       searchResultsStore.setResultSize(books.totalItems);
     }
   };
@@ -36,7 +38,6 @@ const Search = () => {
     if (searchResults.length === 0) {
       let books = await getBooksFromSearch(searchValue);
       if (books) {
-        setSearchResults(books.items);
         searchResultsStore.setResultSize(books.totalItems);
       }
     }

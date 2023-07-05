@@ -1,32 +1,62 @@
-'use client';
-
+import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
+import getCurrentUser from '@/actions/getCurrentUser';
+import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
+import getUserBooks from '@/actions/getUserBooks';
 import SearchBookDisplay from '@/components/Books/SearchBooks/SearchBookDisplay';
-import useResultsStore from '@/hooks/useResultsStore';
-import { useSearchParams } from 'next/navigation';
+import { Book } from '@prisma/client';
 
 interface PageProps {
   params: { search: string };
+  searchParams?: {
+    [key: string]: string | string[] | undefined;
+  };
 }
 
-const Page: React.FC<PageProps> = ({ params }) => {
-  const searchParams = useSearchParams();
-  const searchResultsStore = useResultsStore();
-  console.log(searchResultsStore.searchResults);
-  console.log(searchResultsStore.resultSize);
-  console.log(searchParams?.get('q'));
-  console.log(params);
+const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
+  const currentUser = await getCurrentUser();
+  // 1. Take userId
+  // 2. Find all books user currently has
+  // let userBooks: Book[];
+  let finalBooks;
+  if (currentUser) {
+    const userBooks = await getUserBooks(currentUser?.id);
+    const userGoogleBooks = userBooks.map((book) => book.googleId);
+    const booksFromSearch = await getBooksFromSearch('testQuery');
+    if (booksFromSearch) {
+      const returnBooks = booksFromSearch.items.map((book) => ({
+        ...book,
+        isOwned: userGoogleBooks.includes(book.id),
+      }));
+      finalBooks = {
+        items: returnBooks,
+        totalItems: booksFromSearch.totalItems,
+      };
+    }
+  }
+  // 3. Filter them using the current search results
+
+  // 4. Return a new object with the books, and showing whether the user has it or not to turn on button
+
+  // const booksFromSearch = await getBooksFromSearch('test');
+  // console.log('BOOKS', books, booksFromSearch);
+
+  // const currentUser = await getCurrentUser();
+  // console.log('Current User', currentUser);
+  // let searchResults;
+  // if (searchParams && searchParams.q && typeof searchParams.q === 'string') {
+  //   searchResults = await getBooksFromSearch(searchParams.q);
+  //   console.log('Search', searchResults?.items);
+  // }
   return (
-    <div className="pt-40 md:pt-16 mx-auto max-w-[970px] text-left">
+    <div className="pt-32 navOne:pt-24 mx-auto max-w-[970px] text-left">
       <div className="font-semibold text-lg text-goodreads-brown">Search</div>
       <div>
         <div>
-          <div></div>
           <SearchBookDisplay
-            resultSize={searchResultsStore.resultSize}
-            books={searchResultsStore.searchResults}
+            resultSize={finalBooks?.totalItems ? finalBooks?.totalItems : 0}
+            books={finalBooks?.items ? finalBooks?.items : []}
           />
         </div>
-        <div></div>
       </div>
     </div>
   );

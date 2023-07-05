@@ -1,10 +1,15 @@
+import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
+import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
 import ConditionalNav from '@/components/ConditionalNav';
 
 const Page = async () => {
+  const currentUser = await getCurrentUser();
   const currentUserBooks = await getCurrentUserBooks();
+  console.log(currentUserBooks);
+
   return (
-    <div className="pt-40 md:pt-24 w-[1000px] mx-auto">
+    <div className="pt-32 navOne:pt-24 w-[1000px] mx-auto">
       <ConditionalNav />
       <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
         <h2
@@ -16,10 +21,7 @@ const Page = async () => {
         >
           My Books
         </h2>
-        <div>
-          Search
-          {JSON.stringify(currentUserBooks)}
-        </div>
+        <div>Search</div>
       </div>
       {/* below header */}
       <div>
@@ -47,22 +49,14 @@ const Page = async () => {
           {/* Right col */}
           <div className="w-[750px]">
             <div className="grid grid-cols-6 flex-[1_1_75%] gap-2">
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
-              <div className="border-[1px] border-black">book</div>
+              {currentUserBooks.map((book) => (
+                <MyBook
+                  key={book.id}
+                  title={book.title}
+                  author={book.author[0]}
+                  id={book.id}
+                />
+              ))}
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ const MyBook: React.FC<MyBookProps> = ({ title, id, author }) => {
   return (
     <Link
       href={`/books/${id}`}
-      className="w-[110px]
+      className="w-[100px]
     h-[150px]
     border-[2px]
     border-black"

@@ -42,7 +42,7 @@ const Page = (props: Props) => {
   // If a user is typing and stops for a second, render out the results as a drop down menu
   // Have a submit button/more results button to see 20 results and can then go through based on how many results there are
   return (
-    <div className="py-20">
+    <div className="pt-32 navOne:pt-24">
       <form
         className=""
         onSubmit={handleSearchSubmit}
