@@ -3,6 +3,7 @@
 import ConditionalNav from '@/components/ConditionalNav';
 import Modal, { ModalInput } from '@/components/modals/Modal';
 import UserModal from '@/components/modals/UserModal';
+import { signIn } from 'next-auth/react';
 import { FormEvent } from 'react';
 
 const Page = () => {

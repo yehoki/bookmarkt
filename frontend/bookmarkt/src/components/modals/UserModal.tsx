@@ -54,9 +54,23 @@ const UserModal: React.FC<UserModalInterface> = ({ title, subtitle, mode }) => {
           </div>
           <div className="text-xs mt-[40px]">
             {mode === 'signIn' ? (
-              <>Not a member? Sign up</>
+              <>
+                Not a member?{' '}
+                <Link href={'/user/sign_up'}>
+                  <span className="underline decoration-solid decoration-black">
+                    Sign up
+                  </span>
+                </Link>
+              </>
             ) : (
-              <>Already a member? Sign in</>
+              <>
+                Already a member?{' '}
+                <Link href={'/user/sign_in'} className="">
+                  <span className="underline decoration-solid decoration-black">
+                    Sign in
+                  </span>
+                </Link>
+              </>
             )}
           </div>
         </div>

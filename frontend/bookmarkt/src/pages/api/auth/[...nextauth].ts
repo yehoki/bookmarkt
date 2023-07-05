@@ -51,6 +51,10 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: 'jwt',
   },
+  theme: {
+    logo: '/images/bookmarkt.svg',
+    colorScheme: 'light',
+  },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async redirect({ url, baseUrl }) {

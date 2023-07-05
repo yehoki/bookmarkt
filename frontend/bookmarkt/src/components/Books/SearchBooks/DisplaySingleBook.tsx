@@ -8,6 +8,7 @@ import { parseAuthors } from '@/utils/helper';
 import Image from 'next/image';
 import AddBookButton from './AddBookButton';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface DisplaySingleBookProps {
   book: GoogleBookReturnItemsInterface;
@@ -15,7 +16,7 @@ interface DisplaySingleBookProps {
 
 const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
   const [isOwned, setIsOwned] = useState(book.isOwned ? book.isOwned : false);
-
+  const router = useRouter();
   const handleAddBook = async () => {
     console.log('BOOK', book);
     const test = await fetch('http://localhost:3000/api/users/books', {
@@ -44,6 +45,7 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
         setIsOwned(false);
       }
     }
+    router.refresh();
   };
 
   return (

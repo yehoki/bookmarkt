@@ -1,10 +1,13 @@
-import { Prisma } from '@prisma/client';
+import prisma from '@/lib/prismadb';
 import getCurrentUser from './getCurrentUser';
 
 export default async function getCurrentUserBooks() {
   const session = await getCurrentUser();
+  if (!session) {
+    return [];
+  }
   try {
-    const currentUserBooks = await prisma?.user.findMany({
+    const currentUserBooks = await prisma.user.findMany({
       where: {
         id: session?.id,
       },

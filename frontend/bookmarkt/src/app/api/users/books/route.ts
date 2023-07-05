@@ -89,5 +89,5 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  return NextResponse.json({ message: 'Something went wrong' });
+  return NextResponse.json({ user: '', book: '' });
 }

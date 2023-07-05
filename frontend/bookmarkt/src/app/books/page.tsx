@@ -6,7 +6,6 @@ import ConditionalNav from '@/components/ConditionalNav';
 const Page = async () => {
   const currentUser = await getCurrentUser();
   const currentUserBooks = await getCurrentUserBooks();
-  console.log(currentUserBooks);
 
   return (
     <div className="pt-32 navOne:pt-24 w-[1000px] mx-auto">

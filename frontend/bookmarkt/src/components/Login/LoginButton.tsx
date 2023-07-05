@@ -33,7 +33,11 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     mode === 'signIn' ? 'Sign in with email' : 'Sign up with email';
 
   const handleLogin = async () => {
-    await signIn(provider);
+    if (provider === 'credentials') {
+      router.push('/');
+    } else {
+      await signIn(provider);
+    }
   };
   return (
     <div className="w-[300px]" onClick={handleLogin}>
