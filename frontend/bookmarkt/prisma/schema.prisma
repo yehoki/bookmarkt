@@ -22,6 +22,7 @@ model User {
   bookIds        String[]  @db.ObjectId
 
   books    Book[]    @relation(fields: [bookIds], references: [id])
+  reviews  Review[]
   accounts Account[]
 }
 
@@ -55,5 +56,19 @@ model Book {
   publishedDate DateTime
   userIds       String[] @db.ObjectId
 
-  user User[] @relation(fields: [userIds], references: [id])
+  review Review[] @relation()
+  user   User[]   @relation(fields: [userIds], references: [id])
+}
+
+model Review {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating      Int
+  title       String?
+  description String?
+  bookId      String   @db.ObjectId
+  userId      String   @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  book Book @relation(fields: [bookId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
