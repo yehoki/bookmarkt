@@ -4,21 +4,28 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
-    // const currentUserBooks = await prisma.user.findMany({
-    //   where: {
-    //     id: currentUser.id,
-    //   },
-    //   select: {
-    //     books: true,
-    //   },
-    // });
-    return NextResponse.json([]);
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return NextResponse.error();
+    }
+    const currentUserBooks = await prisma.user.findFirst({
+      where: {
+        id: currentUser.id,
+      },
+      select: {
+        books: true,
+      },
+    });
+    if (currentUserBooks) {
+      return NextResponse.json(currentUserBooks.books);
+    }
+    return NextResponse.error();
   } catch (err: any) {
     throw new Error(err);
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
     return NextResponse.error();

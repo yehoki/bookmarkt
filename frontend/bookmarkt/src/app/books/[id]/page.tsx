@@ -1,5 +1,6 @@
 import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import { getSingleBook } from '@/actions/getSingleBook';
+import SingleBookReviews from '@/components/Books/SingleBook/SingleBookReviews';
 import Image from 'next/image';
 
 interface PageProps {
@@ -14,7 +15,6 @@ const SingleBookPage: React.FC<PageProps> = async ({
   searchParams,
 }) => {
   const bookId = params.id;
-
   const bookInfo = await getSingleBook(bookId);
 
   const getImageSize = () => {
@@ -42,7 +42,7 @@ const SingleBookPage: React.FC<PageProps> = async ({
       relative w-[35%] max-w-[33%] md:max-w-[210px] aspect-[2/3] shadow-lg rounded-tr-md rounded-br-md"
       >
         <Image
-          src={getImageSize() ? getImageSize() : ''}
+          src={getImageSize() ? getImageSize() : '/images/empty-book.png'}
           fill
           sizes="(max-width: 768px) 40vw, 220px"
           className="rounded-tr-lg rounded-br-lg"
@@ -53,12 +53,14 @@ const SingleBookPage: React.FC<PageProps> = async ({
       </div>
       <div className="text-center font-bold text-xl text-neutral-900 pt-2">
         {bookInfo.volumeInfo.title}
-        {bookInfo.volumeInfo.subtitle ? `:${bookInfo.volumeInfo.subtitle}` : ''}
+        {bookInfo.volumeInfo.subtitle
+          ? `: ${bookInfo.volumeInfo.subtitle}`
+          : ''}
       </div>
       <div className="pt-2 text-center text-neutral-500 italic">
         {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
       </div>
-      <div>Ratings Div</div>
+      <SingleBookReviews bookId={bookInfo.id} />
       <div>Add to Reading and buy buttons</div>
       <div>
         {bookInfo.volumeInfo.description ? bookInfo.volumeInfo.description : ''}

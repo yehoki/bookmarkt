@@ -7,7 +7,7 @@ const Page = async () => {
   const currentUserBooks = await getCurrentUserBooks();
 
   return (
-    <div className="pt-32 navOne:pt-24 w-[1000px] mx-auto pb-[25px]">
+    <div className="pt-6 w-[1000px] mx-auto pb-[25px]">
       <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
         <h2
           className="

@@ -49,10 +49,14 @@ model Account {
 type ImageLinks {
   smallThumbnail String?
   thumbnail      String?
+  small          String?
+  medium         String?
+  large          String?
+  extraLarge     String?
 }
 
 model Book {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
   googleId      String
   title         String
   subtitle      String
@@ -60,7 +64,8 @@ model Book {
   description   String
   imageLinks    ImageLinks
   publishedDate String
-  userIds       String[] @db.ObjectId
+  userIds       String[]   @db.ObjectId
+  reviewIds     String[]   @db.ObjectId
 
   reviews Review[]
   user    User[]   @relation(fields: [userIds], references: [id])
@@ -75,6 +80,6 @@ model Review {
   userId      String   @db.ObjectId
   createdAt   DateTime @default(now())
 
+  book Book @relation(fields: [bookId], references: [id])
   user User @relation(fields: [userId], references: [id])
-  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }

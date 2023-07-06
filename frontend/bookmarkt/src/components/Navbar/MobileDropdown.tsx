@@ -12,7 +12,7 @@ const MobileDropdown = () => {
           extraPadding="py-3 px-[15px]"
           disabledBreakpoint="md:flex"
         />
-        <NavLink href="/" label="My books" extraPadding="py-3 px-[15px]" />
+        <NavLink href="/books" label="My books" extraPadding="py-3 px-[15px]" />
         <NavLink href="/" label="Browse" extraPadding="px-[15px]" />
         <NavLink href="/" label="Community" extraPadding="px-[15px]" />
       </div>
