@@ -1,13 +1,17 @@
 'use client';
 
 import { getSingleBook } from '@/actions/getSingleBook';
+import ReviewStar from '@/components/ReviewStar';
 import { Book } from '@prisma/client';
+import { useState } from 'react';
 
 interface SingleBookReviewsProps {
   bookId: string;
 }
 
 const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({ bookId }) => {
+  const [stars, setStars] = useState(0);
+
   const handleAddRating = async () => {
     const getBooks = await fetch('http://localhost:3000/api/users/books');
     if (!getBooks.ok) {
@@ -38,7 +42,6 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({ bookId }) => {
             : '',
         }),
       });
-      console.log('Book has been added');
     }
     const res = await fetch('http://localhost:3000/api/review', {
       method: 'POST',
@@ -53,15 +56,18 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({ bookId }) => {
       return null;
     }
     const reviewData = await res.json();
-    console.log(reviewData, 'Review made');
   };
 
   return (
     <div
-      className="h-[300px] w-full bg-purple-200 text-green-900"
-      onClick={handleAddRating}
+      className="w-full flex justify-center"
+      onMouseLeave={() => setStars(0)}
     >
-      Ratings Div
+      <ReviewStar setRating={setStars} rating={1} currentRating={stars} />
+      <ReviewStar setRating={setStars} rating={2} currentRating={stars} />
+      <ReviewStar setRating={setStars} rating={3} currentRating={stars} />
+      <ReviewStar setRating={setStars} rating={4} currentRating={stars} />
+      <ReviewStar setRating={setStars} rating={5} currentRating={stars} />
     </div>
   );
 };
