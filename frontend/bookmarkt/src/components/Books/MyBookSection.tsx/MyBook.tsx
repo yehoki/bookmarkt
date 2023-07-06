@@ -29,7 +29,7 @@ const MyBook: React.FC<MyBookProps> = ({
     >
       <Image
         fill
-        src={thumbnailUrl ? thumbnailUrl : ''}
+        src={thumbnailUrl ? thumbnailUrl : '/images/empty-book.png'}
         alt={`${title} cover`}
       />
     </Link>

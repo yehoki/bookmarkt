@@ -1,3 +1,4 @@
+import getBookReview from '@/actions/getBookReview';
 import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import { getSingleBook } from '@/actions/getSingleBook';
 import SingleBookReviews from '@/components/Books/SingleBook/SingleBookReviews';
@@ -16,6 +17,7 @@ const SingleBookPage: React.FC<PageProps> = async ({
 }) => {
   const bookId = params.id;
   const bookInfo = await getSingleBook(bookId);
+  const userReviewInfo = await getBookReview(bookId);
 
   const getImageSize = () => {
     if (!bookInfo.volumeInfo.imageLinks) {
@@ -60,7 +62,10 @@ const SingleBookPage: React.FC<PageProps> = async ({
       <div className="pt-2 text-center text-neutral-500 italic">
         {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
       </div>
-      <SingleBookReviews bookId={bookInfo.id} />
+      <SingleBookReviews
+        bookId={bookInfo.id}
+        reviewRating={userReviewInfo[0] ? userReviewInfo[0].rating : 0}
+      />
       <div>Add to Reading and buy buttons</div>
       <div>
         {bookInfo.volumeInfo.description ? bookInfo.volumeInfo.description : ''}

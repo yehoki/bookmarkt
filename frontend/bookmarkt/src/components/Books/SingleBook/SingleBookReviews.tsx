@@ -7,17 +7,24 @@ import { useState } from 'react';
 
 interface SingleBookReviewsProps {
   bookId: string;
+  reviewRating: number;
 }
 
-const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({ bookId }) => {
-  const [stars, setStars] = useState(0);
+const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
+  bookId,
+  reviewRating,
+}) => {
+  const [stars, setStars] = useState(reviewRating);
+  const [currentStars, setCurrentStars] = useState(reviewRating);
 
   const handleAddRating = async () => {
     const getBooks = await fetch('http://localhost:3000/api/users/books');
     if (!getBooks.ok) {
       return null;
     }
+
     const data: Book[] = await getBooks.json();
+
     if (!data.map((book) => book.googleId).includes(bookId)) {
       const bookInfo = await getSingleBook(bookId);
       const addBook = await fetch('http://localhost:3000/api/users/books', {
@@ -43,25 +50,30 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({ bookId }) => {
         }),
       });
     }
+
     const res = await fetch('http://localhost:3000/api/review', {
       method: 'POST',
       body: JSON.stringify({
-        rating: 4,
+        rating: stars,
         title: 'New Review',
         description: 'New Review Description',
         bookId: bookId,
       }),
     });
+
     if (!res.ok) {
       return null;
     }
     const reviewData = await res.json();
+    setStars(reviewData.rating);
+    setCurrentStars(reviewData.rating);
   };
 
   return (
     <div
       className="w-full flex justify-center"
-      onMouseLeave={() => setStars(0)}
+      onMouseLeave={() => setStars(currentStars ? currentStars : reviewRating)}
+      onClick={handleAddRating}
     >
       <ReviewStar setRating={setStars} rating={1} currentRating={stars} />
       <ReviewStar setRating={setStars} rating={2} currentRating={stars} />
