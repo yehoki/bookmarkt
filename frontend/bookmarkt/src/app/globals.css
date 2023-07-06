@@ -2,8 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: LibreBaskerville;
+  src: url('https://fonts.googleapis.com/css2?family=Lato&family=Libre+Baskerville&display=swap');
+}
+
+html,
+body,
+:root {
+  height: 100%
+}
+
 @layer components {
   .nav-btn {
-    @apply px-4 hover:bg-slate-600 hover:text-white focus:bg-slate-600 focus:text-white
+    @apply px-4 hover: bg-slate-600 hover:text-white focus:bg-slate-600 focus:text-white
   }
 }

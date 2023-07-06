@@ -24,7 +24,6 @@ const Page = () => {
 
   return (
     <div>
-      <ConditionalNav navOn={false} />
       <UserModal title="Sign in to Goodreads" mode="signIn" />
     </div>
   );

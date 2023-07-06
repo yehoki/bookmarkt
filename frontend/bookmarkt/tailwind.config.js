@@ -17,6 +17,7 @@ module.exports = {
       },
       fontFamily: {
         Lato: 'Lato, Helvetica Neue, Helvetica, sans-serif',
+        LibreBaskerville: 'LibreBaskerville, serif',
       },
       minHeight: {
         fulldvh: '100dvh',

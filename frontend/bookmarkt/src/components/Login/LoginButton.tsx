@@ -34,7 +34,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 
   const handleLogin = async () => {
     if (provider === 'credentials') {
-      router.push('/');
+      await signIn();
     } else {
       await signIn(provider);
     }

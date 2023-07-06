@@ -4,12 +4,10 @@ import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
 import ConditionalNav from '@/components/ConditionalNav';
 
 const Page = async () => {
-  const currentUser = await getCurrentUser();
   const currentUserBooks = await getCurrentUserBooks();
 
   return (
-    <div className="pt-32 navOne:pt-24 w-[1000px] mx-auto">
-      <ConditionalNav />
+    <div className="pt-32 navOne:pt-24 w-[1000px] mx-auto pb-[25px]">
       <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
         <h2
           className="
@@ -47,13 +45,19 @@ const Page = async () => {
           </div>
           {/* Right col */}
           <div className="w-[750px]">
-            <div className="grid grid-cols-6 flex-[1_1_75%] gap-2">
+            <div className="grid grid-cols-6 flex-[1_1_75%] gap-2 pt-2">
               {currentUserBooks.map((book) => (
                 <MyBook
                   key={book.id}
                   title={book.title}
                   author={book.author[0]}
                   id={book.id}
+                  googleId={book.googleId}
+                  thumbnailUrl={
+                    book.imageLinks && book.imageLinks.thumbnail
+                      ? book.imageLinks.thumbnail
+                      : ''
+                  }
                 />
               ))}
             </div>

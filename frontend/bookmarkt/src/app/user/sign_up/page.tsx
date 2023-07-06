@@ -28,7 +28,6 @@ const Page = () => {
   ];
   return (
     <div className="h-[100dvh] bg-slate-200">
-      <ConditionalNav navOn={false} />
       <UserModal
         title="Sign up for Bookmarkt"
         subtitle="Sign up to see what your friends are reading, get book
