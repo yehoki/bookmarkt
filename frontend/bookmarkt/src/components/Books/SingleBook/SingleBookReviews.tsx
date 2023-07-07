@@ -1,8 +1,9 @@
 'use client';
 
+import { getCurrentUserCurrentBookReview } from '@/actions/getCurrentUserCurrentBookReview';
 import { getSingleBook } from '@/actions/getSingleBook';
 import ReviewStar from '@/components/ReviewStar';
-import { Book } from '@prisma/client';
+import { Book, Review } from '@prisma/client';
 import { useState } from 'react';
 
 interface SingleBookReviewsProps {
@@ -22,10 +23,11 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
     if (!getBooks.ok) {
       return null;
     }
+    // const currentUserReview = await getCurrentUserCurrentBookReview(bookId);
+    // Make API route to fetch from - otherwise server component
+    const data: { books: Book[]; reviews: Review[] } = await getBooks.json();
 
-    const data: Book[] = await getBooks.json();
-
-    if (!data.map((book) => book.googleId).includes(bookId)) {
+    if (!data.books.map((book) => book.googleId).includes(bookId)) {
       const bookInfo = await getSingleBook(bookId);
       const addBook = await fetch('http://localhost:3000/api/users/books', {
         method: 'POST',

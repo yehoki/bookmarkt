@@ -7,7 +7,8 @@ interface MyBookProps {
   title: string;
   id: string;
   googleId: string;
-  author: string;
+
+  authors: string[];
   thumbnailUrl?: string;
 }
 
@@ -15,7 +16,7 @@ const MyBook: React.FC<MyBookProps> = ({
   title,
   id,
   googleId,
-  author,
+  authors,
   thumbnailUrl,
 }) => {
   return (

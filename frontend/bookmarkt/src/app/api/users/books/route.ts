@@ -1,28 +1,27 @@
-import getCurrentUser, { getSession } from '@/actions/getCurrentUser';
+import getCurrentUser from '@/actions/getCurrentUser';
 import prisma from '@/lib/prismadb';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
-  try {
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      return NextResponse.error();
-    }
-    const currentUserBooks = await prisma.user.findFirst({
-      where: {
-        id: currentUser.id,
-      },
-      select: {
-        books: true,
-      },
-    });
-    if (currentUserBooks) {
-      return NextResponse.json(currentUserBooks.books);
-    }
+// Gets the currentUser's bookList
+export async function GET(req: Request) {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
     return NextResponse.error();
-  } catch (err: any) {
-    throw new Error(err);
   }
+
+  const currentUserBooks = await prisma.user.findFirst({
+    where: {
+      id: currentUser.id,
+    },
+    select: {
+      books: true,
+    },
+  });
+
+  if (!currentUserBooks) {
+    return NextResponse.json({ books: [] });
+  }
+  return NextResponse.json(currentUserBooks);
 }
 
 export async function POST(req: Request) {
@@ -30,8 +29,8 @@ export async function POST(req: Request) {
   if (!currentUser) {
     return NextResponse.error();
   }
-  const body = await req.json();
 
+  const body = await req.json();
   const {
     id,
     title,
@@ -54,6 +53,7 @@ export async function POST(req: Request) {
   const currentBooks = [...(currentUser.bookIds || [])];
 
   if (!findBook) {
+    // When the new book does not exist
     const newBook = await prisma.book.create({
       data: {
         googleId: id,
@@ -63,6 +63,10 @@ export async function POST(req: Request) {
         description: description,
         publishedDate: publishedDate,
         imageLinks: imageLinks,
+        reviewData: {
+          averageReview: 0,
+          totalReviews: 0,
+        },
       },
     });
     currentBooks.push(newBook.id);
@@ -95,6 +99,4 @@ export async function POST(req: Request) {
       book: { ...findBook },
     });
   }
-
-  return NextResponse.json({ user: '', book: '' });
 }

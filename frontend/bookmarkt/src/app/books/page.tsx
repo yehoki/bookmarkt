@@ -50,7 +50,7 @@ const Page = async () => {
                 <MyBook
                   key={book.id}
                   title={book.title}
-                  author={book.author[0]}
+                  authors={book.author}
                   id={book.id}
                   googleId={book.googleId}
                   thumbnailUrl={

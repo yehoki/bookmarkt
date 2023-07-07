@@ -55,6 +55,13 @@ type ImageLinks {
   extraLarge     String?
 }
 
+type ReviewData {
+  totalReviews  Int
+  averageReview Float //set it to 2 d.p. 
+}
+
+// TODO: Add reviewData as a field in books to store their review data instead of refetching it everytime
+
 model Book {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
   googleId      String
@@ -66,6 +73,7 @@ model Book {
   publishedDate String
   userIds       String[]   @db.ObjectId
   reviewIds     String[]   @db.ObjectId
+  reviewData    ReviewData
 
   reviews Review[]
   user    User[]   @relation(fields: [userIds], references: [id])

@@ -2,6 +2,10 @@ import getCurrentUser from '@/actions/getCurrentUser';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 
+// GET retrieves ALL reviews
+
+
+// POST creates a review
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser();
   if (!currentUser) {

@@ -1,17 +1,15 @@
-import dbConnect from '@/lib/dbConnect';
-import BookModel from '@/models/book';
-import UserModel from '@/models/user';
+import prisma from '@/lib/prismadb';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
-  await dbConnect();
-
   try {
-    await BookModel.deleteMany({});
-    await UserModel.deleteMany({});
-    return NextResponse.json({message: 'Done deleting'})
+    await prisma.review.deleteMany({});
+    await prisma.book.deleteMany({});
+    await prisma.user.deleteMany({});
+    await prisma.account.deleteMany({});
+    return NextResponse.json({ message: 'Done deleting' });
   } catch (exc) {
     console.log(exc);
-    return NextResponse.json({message: 'something went wrong'})
+    return NextResponse.json({ message: 'something went wrong' });
   }
 }
