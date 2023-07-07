@@ -1,9 +1,18 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
+import { getSingleBook } from '@/actions/getSingleBook';
+import { Book } from '@prisma/client';
+import { handleNewReview } from '@/utils/helper';
 
 // GET retrieves ALL reviews
-
+export async function GET(req: Request) {
+  const allReviews = prisma.review.findMany({});
+  if (!allReviews) {
+    return NextResponse.error();
+  }
+  return NextResponse.json(allReviews);
+}
 
 // POST creates a review
 export async function POST(req: Request) {
@@ -11,70 +20,145 @@ export async function POST(req: Request) {
   if (!currentUser) {
     return NextResponse.error();
   }
-  try {
-    const body = await req.json();
-    const { bookId, title, description, rating } = body;
-    if (!bookId || !rating) {
+  const body = await req.json();
+  const { bookId, title, description, rating } = body;
+
+  if (!bookId || !rating) {
+    return NextResponse.error();
+  }
+  // Check if the book exists
+  const findBook = await prisma.book.findFirst({
+    where: {
+      googleId: bookId,
+    },
+    select: {
+      id: true,
+      reviewIds: true,
+      reviewData: true,
+    },
+  });
+
+  // When the book does not exist
+  // 1. Fetch it from the Google Books API
+  // 2. Add it to our Database
+  // 3. Add the reviewId to the user's reviewIds
+
+  if (!findBook) {
+    const googleBook = await getSingleBook(bookId);
+    if (!googleBook) {
       return NextResponse.error();
     }
+    const newBook = await fetch(
+      `http://localhost:3000/api/books/${googleBook.id}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          googleId: googleBook.id,
+          title: googleBook.volumeInfo.title,
+          subtitle: googleBook.volumeInfo.subtitle
+            ? googleBook.volumeInfo.subtitle
+            : '',
+          authors: googleBook.volumeInfo.authors
+            ? googleBook.volumeInfo.subtitle
+            : [],
+          description: googleBook.volumeInfo.description
+            ? googleBook.volumeInfo.subtitle
+            : '',
+          publishedDate: googleBook.volumeInfo.publishedDate
+            ? googleBook.volumeInfo.publishedDate
+            : '',
+          imageLinks: googleBook.volumeInfo.imageLinks
+            ? googleBook.volumeInfo.imageLinks
+            : {},
+        }),
+      }
+    );
+    if (!newBook.ok) {
+      return NextResponse.error();
+    }
+    const newBookData: Book = await newBook.json();
 
-    const findBook = await prisma.book.findFirst({
-      where: {
-        googleId: bookId,
-      },
-      select: {
-        id: true,
-        reviewIds: true,
+    // Create the new review
+    const review = await prisma.review.create({
+      data: {
+        bookId: newBookData.id,
+        title: title,
+        description: description,
+        rating: rating,
+        userId: currentUser.id,
       },
     });
-
-    // If that book already exists in OUR DB
-    // 1. Create a new review object
-    // 2. Add the reviewId to the user's reviewIds
-    // 3. Add the reviewId to the book's reviewIds
-
-    if (findBook && findBook.id && findBook.reviewIds) {
-      const newReview = await prisma.review.create({
-        data: {
-          rating: rating,
-          title: title ? title : '',
-          description: description ? description : '',
-          bookId: findBook?.id,
-          userId: currentUser.id,
+    // Add the review to the user's list
+    const currentUserReviewIds = [...(currentUser.reviewIds || [])];
+    currentUserReviewIds.push(review.id);
+    const alterUser = await prisma.user.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        reviewIds: currentUserReviewIds,
+      },
+    });
+    // add the review and review data to the book's list
+    const currentBookReviewIds = [...(newBookData.reviewIds || [])];
+    currentBookReviewIds.push(review.id);
+    const alterBook = await prisma.book.update({
+      where: {
+        id: newBookData.id,
+      },
+      data: {
+        reviewIds: currentBookReviewIds,
+        reviewData: {
+          averageReview: handleNewReview(
+            newBookData.reviewData.totalReviews,
+            newBookData.reviewData.averageReview,
+            rating
+          ),
+          totalReviews: newBookData.reviewData.totalReviews + 1,
         },
-      });
-      const currentUserReviews = [...(currentUser.reviewIds || [])];
-      const currentBookReviews = [...(findBook.reviewIds || [])];
-      currentUserReviews.push(newReview.id);
-      currentBookReviews.push(newReview.id);
-      await prisma.user.update({
-        where: {
-          id: currentUser.id,
-        },
-        data: {
-          reviewIds: currentUserReviews,
-        },
-      });
-      await prisma.book.update({
-        where: {
-          id: findBook.id,
-        },
-        data: {
-          reviewIds: currentBookReviews,
-        },
-      });
-      return NextResponse.json(newReview);
-    } else {
-      console.log('Not in the DB');
-      return NextResponse.json({ message: 'NotInDb' });
-      // When the book does not already exist
-      // 1. Add it to the current user's books
-      // We return an object which has message field: 'Add book first'
-      // 2. Generate the review
-      // 3. Add review to both books and users list
-    }
-  } catch (err: any) {
-    console.log('ERROR:', err);
-    NextResponse.error();
+      },
+    });
+    return NextResponse.json(review);
   }
+
+  const review = await prisma.review.create({
+    data: {
+      bookId: findBook.id,
+      title: title,
+      description: description,
+      rating: rating,
+      userId: currentUser.id,
+    },
+  });
+  // Add the review to the user's list
+  const currentUserReviewIds = [...(currentUser.reviewIds || [])];
+  currentUserReviewIds.push(review.id);
+  const alterUser = await prisma.user.update({
+    where: {
+      id: currentUser.id,
+    },
+    data: {
+      reviewIds: currentUserReviewIds,
+    },
+  });
+  // add the review and review data to the book's list
+  const currentBookReviewIds = [...(findBook.reviewIds || [])];
+  currentBookReviewIds.push(review.id);
+  const alterBook = await prisma.book.update({
+    where: {
+      id: findBook.id,
+    },
+    data: {
+      reviewIds: currentBookReviewIds,
+      reviewData: {
+        averageReview: handleNewReview(
+          findBook.reviewData.totalReviews,
+          findBook.reviewData.averageReview,
+          rating
+        ),
+        totalReviews: findBook.reviewData.totalReviews + 1,
+      },
+    },
+  });
+  return NextResponse.json(review);
 }

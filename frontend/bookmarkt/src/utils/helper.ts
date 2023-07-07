@@ -15,3 +15,13 @@ export const parseAuthors = (authors: string[] | undefined): string => {
   }
   return authorList;
 };
+
+export const handleNewReview = (
+  currentTotal: number,
+  currentAverage: number,
+  newRating: number
+) => {
+  const newAverage =
+    (currentAverage * currentTotal + newRating) / (currentTotal + 1);
+  return parseFloat(newAverage.toFixed(2));
+};
