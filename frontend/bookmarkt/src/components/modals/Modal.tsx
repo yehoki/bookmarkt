@@ -7,6 +7,7 @@ import { FormEvent } from 'react';
 import LoginButton from '../Login/LoginButton';
 import { FcGoogle } from 'react-icons/fc';
 import { BsGithub } from 'react-icons/bs';
+import { signIn } from 'next-auth/react';
 
 export interface ModalInput {
   label: string;
@@ -40,6 +41,58 @@ const Modal: React.FC<ModalProps> = ({
     );
   });
 
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const form = new FormData(e.currentTarget);
+      const email = form.get('Email');
+      const password = form.get('Password');
+      if (!email || !password) {
+        throw new Error('No email or password');
+      }
+      const credentials = {
+        email: email,
+        password: password,
+      };
+      const callback = await signIn('credentials', {
+        ...credentials,
+      });
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const registerForm = new FormData(e.currentTarget);
+    try {
+      const name = registerForm.get('Your name');
+      const email = registerForm.get('Email');
+      const passOne = registerForm.get('Password');
+      const passTwo = registerForm.get('Re-enter password');
+      if (passOne !== passTwo) {
+        throw new Error('Passwords do not match');
+      }
+      if (!name || !email || !passOne || !passTwo) {
+        throw new Error('Details missing');
+      }
+      const callback = await fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: passTwo,
+        }),
+      });
+      if (callback.ok) {
+        console.log('New account made');
+      }
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="mx-auto w-[700px] py-[14px] px-[18px] ">
       <div className="relative block w-[200px] h-[50px] mx-auto pt-4 mb-[22px]">
@@ -52,7 +105,7 @@ const Modal: React.FC<ModalProps> = ({
         <div className="mx-auto text-4xl font-semibold font-serif mb-2">
           {mainLabel}
         </div>
-        <form onSubmit={onFormSubmit}>
+        <form onSubmit={mode === 'signIn' ? handleLogin : handleRegister}>
           <div className="flex flex-col gap-2">{inputs}</div>
           <div className="w-full bg-black rounded-full text-white mt-8 hover:opacity-80">
             <button className="w-full py-2">{submitLabel}</button>
@@ -65,8 +118,8 @@ const Modal: React.FC<ModalProps> = ({
               className="w-full bg-white rounded-full text-black my-2 
             border-[1px] border-black hover:bg-neutral-200"
             >
-              <Link href={'/user/sign_up'}>
-                <button className="w-full py-2">Sign Up</button>
+              <Link href={'/register'}>
+                <button className="w-full py-2">Create an account</button>
               </Link>
             </div>
           </>
@@ -76,7 +129,7 @@ const Modal: React.FC<ModalProps> = ({
             <div className="mx-auto mt-8">
               Already have an account?{' '}
               <span className="underline">
-                <Link href={'/user/sign_in'}>Sign in</Link>
+                <Link href={'/login'}>Sign in</Link>
               </span>
             </div>
           </>

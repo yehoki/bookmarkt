@@ -79,7 +79,15 @@ const SingleBookPage: React.FC<PageProps> = async ({
       />
       <div>Add to Reading and buy buttons</div>
       <div>
-        {bookInfo.volumeInfo.description ? bookInfo.volumeInfo.description : ''}
+        {bookInfo.volumeInfo.description ? (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: bookInfo.volumeInfo.description,
+            }}
+          ></div>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );
