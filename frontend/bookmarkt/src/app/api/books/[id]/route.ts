@@ -33,6 +33,17 @@ export async function POST(req: Request, { params }: { params: IParams }) {
     throw new Error('Invalid book ID');
   }
 
+  const findBook = await prisma.book.findFirst({
+    where: {
+      googleId: id,
+    },
+  });
+
+  // Prevents duplicate book post
+  if (findBook) {
+    return NextResponse.error();
+  }
+
   const body = await req.json();
   const { title, subtitle, authors, description, imageLinks, publishedDate } =
     body;

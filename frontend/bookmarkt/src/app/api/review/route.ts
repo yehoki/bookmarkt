@@ -121,6 +121,40 @@ export async function POST(req: Request) {
     return NextResponse.json(review);
   }
 
+  // Check if a user's review already exists for this book:
+  const currentUserReviews = await prisma.user.findFirst({
+    where: {
+      id: currentUser.id,
+    },
+    select: {
+      reviews: true,
+    },
+  });
+  if (!currentUserReviews) {
+    return NextResponse.error();
+  }
+
+  const checkForUserReview = currentUserReviews.reviews.find(
+    (review) => review.bookId === findBook.id
+  );
+  // In the case that the review exists, and we sent a new review:
+  // Send a PUT request/ alter the current review with the new information
+  if (checkForUserReview) {
+    const updateCurrentReview = await prisma.review.update({
+      where: {
+        id: checkForUserReview.id,
+      },
+      data: {
+        rating: rating,
+        title: title,
+        description: description,
+      },
+    });
+    console.log(checkForUserReview, 'REVIEW EXISTS');
+    console.log('UPDATED REVIEW', updateCurrentReview);
+    return NextResponse.json(updateCurrentReview);
+  }
+
   const review = await prisma.review.create({
     data: {
       bookId: findBook.id,
