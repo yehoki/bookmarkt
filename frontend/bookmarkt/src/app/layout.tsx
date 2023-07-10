@@ -12,7 +12,10 @@ interface Props {
 export default async function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body>
+      <body
+        className="bg-[rgba(244,241,234,0.5)]
+}"
+      >
         <div>{children}</div>
       </body>
     </html>
