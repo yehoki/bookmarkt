@@ -1,7 +1,9 @@
 import RegisterForm from '@/components/Register/RegisterForm';
 import Modal, { ModalInput } from '@/components/modals/Modal';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
-export default function Page() {
+export default async function Page() {
   const loginModalInputs: ModalInput[] = [
     {
       label: 'Your name',
@@ -22,6 +24,10 @@ export default function Page() {
       type: 'password',
     },
   ];
+  const session = await getServerSession();
+  if (session?.user) {
+    return redirect('/');
+  }
 
   return (
     <>

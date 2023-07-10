@@ -1,11 +1,14 @@
-'use client';
-import ConditionalNav from '@/components/ConditionalNav';
-import Modal, { ModalInput } from '@/components/modals/Modal';
+import { ModalInput } from '@/components/modals/Modal';
 import UserModal from '@/components/modals/UserModal';
-import Image from 'next/image';
-import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
-const Page = () => {
+const Page = async () => {
+  const session = await getServerSession();
+  if (session?.user) {
+    return redirect('/');
+  }
+
   const loginModalInputs: ModalInput[] = [
     {
       label: 'Your name',
@@ -31,7 +34,7 @@ const Page = () => {
       <UserModal
         title="Sign up for Bookmarkt"
         subtitle="Sign up to see what your friends are reading, get book
-            recommendations, and join the world’s largest community of readers."
+            recommendations, and join the world's largest community of readers."
         mode="signUp"
       />
     </div>

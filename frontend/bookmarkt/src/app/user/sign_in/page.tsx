@@ -1,12 +1,14 @@
-'use client';
-
-import ConditionalNav from '@/components/ConditionalNav';
-import Modal, { ModalInput } from '@/components/modals/Modal';
+import { ModalInput } from '@/components/modals/Modal';
 import UserModal from '@/components/modals/UserModal';
-import { signIn } from 'next-auth/react';
-import { FormEvent } from 'react';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
-const Page = () => {
+const Page = async () => {
+  const session = await getServerSession();
+  if (session?.user) {
+    return redirect('/');
+  }
+
   const loginModalInputs: ModalInput[] = [
     {
       label: 'Email',
@@ -17,10 +19,6 @@ const Page = () => {
       type: 'password',
     },
   ];
-
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
 
   return (
     <div>
