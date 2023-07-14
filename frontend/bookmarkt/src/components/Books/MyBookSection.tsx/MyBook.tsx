@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import RatingAndPublish from '../Ratings/RatingAndPublish';
 import SingleBookReviews from '../SingleBook/SingleBookReviews';
+import useBookReviewModal from '@/hooks/useBookReviewModal';
 
 interface MyBookProps {
   title: string;
@@ -31,6 +32,7 @@ const MyBook: React.FC<MyBookProps> = ({
   description,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const bookReviewModal = useBookReviewModal();
 
   const extractTextFromDescription = (description: string) => {
     const extractedDescription = description.replace(/<[^>]+>/g, '');
@@ -58,6 +60,15 @@ const MyBook: React.FC<MyBookProps> = ({
           alt={`${title} cover`}
         />
       </Link>
+      <div
+        className="hidden bg-white z-20 absolute
+  right-[15px] top-0 text-xs rounded-sm px-[3px] 
+  text-goodreads-mybooks-green hover:underline group-hover:block
+  cursor-pointer"
+        onClick={() => bookReviewModal.onOpen()}
+      >
+        edit
+      </div>
       <div
         className="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 
           text-black left-[102px] top-0 
