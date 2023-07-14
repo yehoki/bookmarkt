@@ -17,6 +17,7 @@ interface MyBookProps {
     averageReview: number;
   };
   userReview: number | null;
+  description: string;
 }
 
 const MyBook: React.FC<MyBookProps> = ({
@@ -27,8 +28,21 @@ const MyBook: React.FC<MyBookProps> = ({
   thumbnailUrl,
   reviewData,
   userReview,
+  description,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const extractTextFromDescription = (description: string) => {
+    const newDoc = document.createElement('span');
+    newDoc.innerHTML = description;
+    return newDoc.textContent || newDoc.innerText;
+  };
+
+  const slicedDescription = extractTextFromDescription(description).slice(
+    0,
+    200
+  );
+
   return (
     <div className="relative group">
       <Link
@@ -59,7 +73,29 @@ const MyBook: React.FC<MyBookProps> = ({
           averageRating={reviewData.averageReview}
           publishedYear="2023"
         />
-        <div>Description</div>
+        <div className="overflow-hidden">
+          {isExpanded ? (
+            <div>
+              {extractTextFromDescription(description)}
+              <button
+                onClick={() => setIsExpanded(false)}
+                className="hover:underline"
+              >
+                (less)
+              </button>
+            </div>
+          ) : (
+            <div>
+              {slicedDescription}
+              <button
+                onClick={() => setIsExpanded(true)}
+                className="hover:underline"
+              >
+                ...more
+              </button>
+            </div>
+          )}
+        </div>
         <div className="flex justify-between items-center">
           <div>read button</div>
           <div>
