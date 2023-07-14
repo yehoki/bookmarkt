@@ -4,6 +4,7 @@ import { getCurrentUserCurrentBookReview } from '@/actions/getCurrentUserCurrent
 import { getSingleBook } from '@/actions/getSingleBook';
 import ReviewStar from '@/components/ReviewStar';
 import { Book, Review } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface SingleBookReviewsProps {
@@ -17,7 +18,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
 }) => {
   const [stars, setStars] = useState(reviewRating);
   const [currentStars, setCurrentStars] = useState(reviewRating);
-
+  const router = useRouter();
   const handleAddRating = async () => {
     const getBooks = await fetch('http://localhost:3000/api/users/books');
     if (!getBooks.ok) {
@@ -72,6 +73,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
     const reviewData = await res.json();
     setStars(reviewData.rating);
     setCurrentStars(reviewData.rating);
+    router.refresh();
   };
 
   return (

@@ -10,6 +10,7 @@ import AddBookButton from './AddBookButton';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import RatingAndPublish from '../Ratings/RatingAndPublish';
 
 interface DisplaySingleBookProps {
   book: GoogleBookReturnItemsInterface;
@@ -67,7 +68,11 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
       <div className="flex flex-col">
         <div className="text-[120%] font-bold">{book.volumeInfo.title}</div>
         <div>By {parseAuthors(book.volumeInfo.authors)}</div>
-        <div>Ratings</div>
+        <RatingAndPublish
+          averageRating={0}
+          publishedYear="2023"
+          totalRatings={0}
+        />
         <div className="flex flex-row gap-1">
           <AddBookButton
             label="Add book"
