@@ -33,9 +33,8 @@ const MyBook: React.FC<MyBookProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const extractTextFromDescription = (description: string) => {
-    const newDoc = document.createElement('span');
-    newDoc.innerHTML = description;
-    return newDoc.textContent || newDoc.innerText;
+    const extractedDescription = description.replace(/<[^>]+>/g, '');
+    return extractedDescription;
   };
 
   const slicedDescription = extractTextFromDescription(description).slice(
@@ -76,20 +75,20 @@ const MyBook: React.FC<MyBookProps> = ({
         <div className="overflow-hidden">
           {isExpanded ? (
             <div>
-              {extractTextFromDescription(description)}
+              {extractTextFromDescription(description)}{' '}
               <button
                 onClick={() => setIsExpanded(false)}
-                className="hover:underline"
+                className="hover:underline text-neutral-500"
               >
                 (less)
               </button>
             </div>
           ) : (
             <div>
-              {slicedDescription}
+              {slicedDescription}{' '}
               <button
                 onClick={() => setIsExpanded(true)}
-                className="hover:underline"
+                className="hover:underline text-neutral-500"
               >
                 ...more
               </button>

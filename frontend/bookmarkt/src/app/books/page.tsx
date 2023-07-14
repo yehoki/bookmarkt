@@ -2,6 +2,7 @@ import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
 import ConditionalNav from '@/components/ConditionalNav';
+import { Suspense } from 'react';
 
 const Page = async () => {
   const currentUserBooks = await getCurrentUserBooks();
@@ -70,23 +71,25 @@ const Page = async () => {
           {/* Right col */}
           <div className="w-[750px]">
             <div className="grid grid-cols-6 flex-[1_1_75%] gap-2 pt-2">
-              {currentUserBookObject.map((book) => (
-                <MyBook
-                  key={book.id}
-                  title={book.title}
-                  authors={book.authors}
-                  id={book.id}
-                  googleId={book.googleId}
-                  thumbnailUrl={book.thumbnail}
-                  reviewData={book.reviewData}
-                  userReview={book.userBookReview}
-                  description={
-                    book.description === '' || !book.description
-                      ? 'This book does not have any description yet...'
-                      : book.description
-                  }
-                />
-              ))}
+              <Suspense>
+                {currentUserBookObject.map((book) => (
+                  <MyBook
+                    key={book.id}
+                    title={book.title}
+                    authors={book.authors}
+                    id={book.id}
+                    googleId={book.googleId}
+                    thumbnailUrl={book.thumbnail}
+                    reviewData={book.reviewData}
+                    userReview={book.userBookReview}
+                    description={
+                      book.description === '' || !book.description
+                        ? 'This book does not have any description yet...'
+                        : book.description
+                    }
+                  />
+                ))}
+              </Suspense>
             </div>
           </div>
         </div>
