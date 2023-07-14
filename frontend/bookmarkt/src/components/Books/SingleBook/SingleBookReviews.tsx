@@ -29,6 +29,9 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
 
     if (!data.books.map((book) => book.googleId).includes(bookId)) {
       const bookInfo = await getSingleBook(bookId);
+      if (!bookInfo) {
+        return null;
+      }
       const addBook = await fetch('http://localhost:3000/api/users/books', {
         method: 'POST',
         body: JSON.stringify({

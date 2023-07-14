@@ -5,7 +5,31 @@ import ConditionalNav from '@/components/ConditionalNav';
 
 const Page = async () => {
   const currentUserBooks = await getCurrentUserBooks();
+  // const currentUserReviews = await getCurrentUserReviews();
 
+  const currentUserBookObject = currentUserBooks.books.map((book) => {
+    const findUserReview = currentUserBooks.reviews.find(
+      (review) => review.bookId === book.id
+    );
+    let reviewRating;
+    if (findUserReview) {
+      reviewRating = findUserReview.rating;
+    }
+    return {
+      id: book.id,
+      googleId: book.googleId,
+      title: book.title,
+      authors: book.author,
+      reviewData: book.reviewData,
+      userBookReview: reviewRating ? reviewRating : null,
+      description: book.description ? book.description : '',
+      thumbnail:
+        book.imageLinks && book.imageLinks.thumbnail
+          ? book.imageLinks.thumbnail
+          : '',
+      publishedDate: book.publishedDate,
+    };
+  });
   return (
     <div className="pt-6 w-[1000px] mx-auto pb-[25px]">
       <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
@@ -46,18 +70,15 @@ const Page = async () => {
           {/* Right col */}
           <div className="w-[750px]">
             <div className="grid grid-cols-6 flex-[1_1_75%] gap-2 pt-2">
-              {currentUserBooks.map((book) => (
+              {currentUserBookObject.map((book) => (
                 <MyBook
                   key={book.id}
                   title={book.title}
-                  authors={book.author}
+                  authors={book.authors}
                   id={book.id}
                   googleId={book.googleId}
-                  thumbnailUrl={
-                    book.imageLinks && book.imageLinks.thumbnail
-                      ? book.imageLinks.thumbnail
-                      : ''
-                  }
+                  thumbnailUrl={book.thumbnail}
+                  reviewData={book.reviewData}
                 />
               ))}
             </div>

@@ -150,6 +150,21 @@ export async function POST(req: Request) {
         description: description,
       },
     });
+    const alterBook = await prisma.book.update({
+      where: {
+        id: findBook.id,
+      },
+      data: {
+        reviewData: {
+          averageReview: handleNewReview(
+            findBook.reviewData.totalReviews - 1,
+            findBook.reviewData.averageReview,
+            rating
+          ),
+          totalReviews: findBook.reviewData.totalReviews,
+        },
+      },
+    });
     console.log(checkForUserReview, 'REVIEW EXISTS');
     console.log('UPDATED REVIEW', updateCurrentReview);
     return NextResponse.json(updateCurrentReview);

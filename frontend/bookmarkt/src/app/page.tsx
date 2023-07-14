@@ -4,6 +4,8 @@ import HomeBox from '@/components/HomeBox';
 import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
 import HomeBook from '@/components/home/HomeBook';
+import SwitchWithFooter from '@/components/home/SwitchWithFooter';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function Home() {
@@ -47,11 +49,11 @@ export default async function Home() {
     <>
       <Navbar currentUser={currentUser} />
       <div className="w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px]">
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between mt-2">
           <div className="w-[300px]">
             <HomeBox heading="Currently reading" bottomBorder>
               <div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 py-2">
                   <HomeBook
                     title={sampleBooks[0].title}
                     authors={sampleBooks[0].authors}
@@ -69,10 +71,11 @@ export default async function Home() {
                   href="/books"
                   className="text-goodreads-mybooks-green hover:underline"
                 >
-                  View all books{' '}
+                  View all books
                 </Link>
                 <div className="text-goodreads-mybooks-green"> · </div>
                 <div>Add a book</div>
+                <div className="text-goodreads-mybooks-green"> · </div>
                 <div>General update</div>
               </div>
             </HomeBox>
@@ -86,12 +89,28 @@ export default async function Home() {
               <div></div>
             </HomeBox>
           </div>
-          <div className="w-[460px] navOne:w-[560px] border-[1px]">
-            Middle Row
+          <div className="w-[460px] navOne:w-[560px]">
+            <div className="border-[#eeeeee] border-[1px]">
+              <div className="relative w-full h-[100px] ">
+                <Image
+                  src="/images/goodreads-span.png"
+                  fill
+                  alt="Goodreads span image"
+                />
+              </div>
+              <div className="bg-white p-2 ">
+                <div className="text-lg">
+                  Discover the Biggest Books of Summer
+                </div>
+                <div className="text-base text-neutral-400">
+                  Check out your fellow Goodreads members` most anticipated
+                  titles for the season.
+                </div>
+              </div>
+            </div>
+            <div className="mt-2">UPDATES</div>
           </div>
-          <div className="w-[300px] hidden navOne:block border-[1px]">
-            Right Row (Invisible below navOne)
-          </div>
+          <SwitchWithFooter />
         </div>
       </div>
     </>
