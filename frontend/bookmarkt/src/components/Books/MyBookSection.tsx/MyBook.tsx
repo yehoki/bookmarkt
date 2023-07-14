@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import RatingAndPublish from '../Ratings/RatingAndPublish';
+import SingleBookReviews from '../SingleBook/SingleBookReviews';
 
 interface MyBookProps {
   title: string;
@@ -15,7 +16,7 @@ interface MyBookProps {
     totalReviews: number;
     averageReview: number;
   };
-  userReview?: number;
+  userReview: number | null;
 }
 
 const MyBook: React.FC<MyBookProps> = ({
@@ -28,7 +29,6 @@ const MyBook: React.FC<MyBookProps> = ({
   userReview,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
   return (
     <div className="relative group">
       <Link
@@ -58,13 +58,16 @@ const MyBook: React.FC<MyBookProps> = ({
           totalRatings={reviewData.totalReviews}
           averageRating={reviewData.averageReview}
           publishedYear="2023"
-          bookId={googleId}
-          reviewRating={userReview}
         />
         <div>Description</div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <div>read button</div>
-          <div>rate book button</div>
+          <div>
+            <SingleBookReviews
+              bookId={googleId}
+              reviewRating={userReview ? userReview : 0}
+            />
+          </div>
         </div>
       </div>
     </div>

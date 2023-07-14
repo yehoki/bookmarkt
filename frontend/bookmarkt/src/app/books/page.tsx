@@ -79,6 +79,7 @@ const Page = async () => {
                   googleId={book.googleId}
                   thumbnailUrl={book.thumbnail}
                   reviewData={book.reviewData}
+                  userReview={book.userBookReview}
                 />
               ))}
             </div>
