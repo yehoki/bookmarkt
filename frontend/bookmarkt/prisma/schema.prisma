@@ -74,6 +74,7 @@ model Book {
   userIds       String[]   @db.ObjectId
   reviewIds     String[]   @db.ObjectId
   reviewData    ReviewData
+  ISBN          String
 
   reviews Review[]
   user    User[]   @relation(fields: [userIds], references: [id])

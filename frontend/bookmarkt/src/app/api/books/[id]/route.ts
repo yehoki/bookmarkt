@@ -45,8 +45,15 @@ export async function POST(req: Request, { params }: { params: IParams }) {
   }
 
   const body = await req.json();
-  const { title, subtitle, authors, description, imageLinks, publishedDate } =
-    body;
+  const {
+    title,
+    subtitle,
+    authors,
+    description,
+    imageLinks,
+    publishedDate,
+    ISBN,
+  } = body;
 
   if (!title) {
     return NextResponse.error();
@@ -65,6 +72,7 @@ export async function POST(req: Request, { params }: { params: IParams }) {
         averageReview: 0,
         totalReviews: 0,
       },
+      ISBN: ISBN,
     },
   });
   return NextResponse.json(newBook);

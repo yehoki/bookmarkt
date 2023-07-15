@@ -36,6 +36,7 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
         publishedDate: book.volumeInfo.publishedDate
           ? book.volumeInfo.publishedDate
           : '',
+        ISBN: book.volumeInfo.industryIdentifiers[1].identifier,
       }),
     });
     const data = await test.json();

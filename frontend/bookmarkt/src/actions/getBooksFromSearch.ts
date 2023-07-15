@@ -35,6 +35,10 @@ export interface GoogleBookReturnItemsInterface {
     publishedDate?: string;
     subtitle?: string;
     title: string;
+    industryIdentifiers: {
+      type: 'ISBN_10' | 'ISBN_13';
+      identifier: string;
+    }[];
   };
 }
 
@@ -45,7 +49,7 @@ export interface GoogleBookReturnInterface {
 
 export async function getBooksFromSearch(query: string) {
   const partialResponse =
-    'totalItems,items(id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks))';
+    'totalItems,items(id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers))';
   const res = await fetch(
     `${googleAPIBaseUrl}/volumes/?q=${parseQuery(
       query

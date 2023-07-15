@@ -10,6 +10,7 @@ export interface GoogleBookVolumeInfoType {
   publishedDate?: string;
   description?: string;
   imageLinks?: ImageLinks;
+  industryIdentifiers: { type: 'ISBN_10' | 'ISBN_13'; identifier: string }[];
 }
 
 export interface SingleGoogleBookType {
@@ -19,7 +20,7 @@ export interface SingleGoogleBookType {
 
 export async function getSingleBook(googleId: string) {
   const partialResponse =
-    'id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks)';
+    'id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers)';
 
   const res = await fetch(
     `${googleAPIBaseUrl}/volumes/${googleId}?fields=${partialResponse}&key=${GOOGLE_API_KEY}`

@@ -39,6 +39,7 @@ export async function POST(req: Request) {
     description,
     imageLinks,
     publishedDate,
+    ISBN
   } = body;
   if (!id || !title) {
     return NextResponse.error();
@@ -67,6 +68,7 @@ export async function POST(req: Request) {
           averageReview: 0,
           totalReviews: 0,
         },
+        ISBN: ISBN
       },
     });
     currentBooks.push(newBook.id);
