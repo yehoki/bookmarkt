@@ -75,20 +75,41 @@ const BookReviewModal = () => {
               <div className="text-sm">By {authors[0]}</div>
             </div>
           </div>
-          <div className="border-b-[1px] border-neutral-200">
-            <div>My rating {userRating} (SingleBookReviews stars)</div>
-            <div>Bookshelves</div>
-          </div>
-          <div className="border-b-[1px] border-neutral-200">
-            <div>What do you think?</div>
-            <textarea
-              className="resize-y w-full h-auto border-[1px] border-neutral-300 rounded-sm px-[2px] py-[1px] min-h-[10%]
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className="border-b-[1px] border-neutral-200">
+              <div className="flex justify-start">
+                My rating:
+                <div className="flex justify-start items-center pl-1">
+                  <SingleBookReviews
+                    bookId={googleBookId}
+                    reviewRating={userRating}
+                    size={18}
+                  />
+                </div>
+              </div>
+              <div>Bookshelves</div>
+            </div>
+            <div className="border-b-[1px] border-neutral-200">
+              <div>What do you think?</div>
+              <textarea
+                className="resize-y w-full h-auto border-[1px] border-neutral-300 rounded-sm px-[2px] py-[1px] min-h-[150px]
               focus:border-neutral-400 focus:shadow-sm outline-none"
-              placeholder="Enter your review"
-            >
-              {userReview}
-            </textarea>
-          </div>
+                placeholder="Enter your review"
+              >
+                {userReview}
+              </textarea>
+            </div>
+            <div>
+              <div>Dates read</div>
+            </div>
+            <div>
+              <input
+                type="submit"
+                value="Post"
+                className="px-[10px] py-[6px] rounded-sm bg-goodreads-beige/70 hover:bg-goodreads-beige border-[1px] cursor-pointer"
+              />
+            </div>
+          </form>
         </div>
       </div>
     </div>

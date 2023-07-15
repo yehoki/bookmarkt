@@ -7,12 +7,14 @@ interface ReviewStarProps {
   rating: 0 | 1 | 2 | 3 | 4 | 5;
   setRating: Dispatch<SetStateAction<number>>;
   currentRating: number;
+  size?: number;
 }
 
 const ReviewStar: React.FC<ReviewStarProps> = ({
   rating,
   setRating,
   currentRating,
+  size,
 }) => {
   return (
     <div
@@ -20,7 +22,7 @@ const ReviewStar: React.FC<ReviewStarProps> = ({
       onMouseOver={() => setRating(rating)}
     >
       <AiOutlineStar
-        size={28}
+        size={size ? size : 28}
         className={`absolute -left-[2px] -top-[2px]
         ${
           rating <= currentRating
@@ -31,7 +33,7 @@ const ReviewStar: React.FC<ReviewStarProps> = ({
         `}
       />
       <AiFillStar
-        size={24}
+        size={size ? size - 4 : 24}
         className={`${
           rating <= currentRating ? 'fill-yellow-500 opacity-80' : 'fill-white'
         }`}

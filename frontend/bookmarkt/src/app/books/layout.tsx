@@ -11,6 +11,7 @@ const BookPageLayout: React.FC<BookPageLayoutProps> = async ({ children }) => {
   return (
     <>
       <Navbar currentUser={currentUser} />
+
       <div className="pt-[100px] navOne:pt-[50px]">{children}</div>
       <Footer />
     </>

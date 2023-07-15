@@ -10,18 +10,23 @@ import { useState } from 'react';
 interface SingleBookReviewsProps {
   bookId: string;
   reviewRating: number;
+  size?: number;
 }
 
 const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
   bookId,
   reviewRating,
+  size,
 }) => {
   const [stars, setStars] = useState(reviewRating);
   const [currentStars, setCurrentStars] = useState(reviewRating);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleAddRating = async () => {
+    setIsLoading(true);
     const getBooks = await fetch('http://localhost:3000/api/users/books');
     if (!getBooks.ok) {
+      setIsLoading(false);
       return null;
     }
     // const currentUserReview = await getCurrentUserCurrentBookReview(bookId);
@@ -31,6 +36,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
     if (!data.books.map((book) => book.googleId).includes(bookId)) {
       const bookInfo = await getSingleBook(bookId);
       if (!bookInfo) {
+        setIsLoading(false);
         return null;
       }
       const addBook = await fetch('http://localhost:3000/api/users/books', {
@@ -66,26 +72,61 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
     });
 
     if (!res.ok) {
+      setIsLoading(false);
       return null;
     }
     const reviewData = await res.json();
     setStars(reviewData.rating);
     setCurrentStars(reviewData.rating);
+    setIsLoading(false);
     router.refresh();
   };
 
   return (
-    <div
-      className="w-full flex justify-center"
-      onMouseLeave={() => setStars(currentStars ? currentStars : reviewRating)}
-      onClick={handleAddRating}
-    >
-      <ReviewStar setRating={setStars} rating={1} currentRating={stars} />
-      <ReviewStar setRating={setStars} rating={2} currentRating={stars} />
-      <ReviewStar setRating={setStars} rating={3} currentRating={stars} />
-      <ReviewStar setRating={setStars} rating={4} currentRating={stars} />
-      <ReviewStar setRating={setStars} rating={5} currentRating={stars} />
-    </div>
+    <>
+      {isLoading ? (
+        <div className="text-sm text-neutral-400">saving...</div>
+      ) : (
+        <div
+          className="w-full flex justify-center"
+          onMouseLeave={() =>
+            setStars(currentStars ? currentStars : reviewRating)
+          }
+          onClick={handleAddRating}
+        >
+          <ReviewStar
+            size={size}
+            setRating={setStars}
+            rating={1}
+            currentRating={stars}
+          />
+          <ReviewStar
+            size={size}
+            setRating={setStars}
+            rating={2}
+            currentRating={stars}
+          />
+          <ReviewStar
+            size={size}
+            setRating={setStars}
+            rating={3}
+            currentRating={stars}
+          />
+          <ReviewStar
+            size={size}
+            setRating={setStars}
+            rating={4}
+            currentRating={stars}
+          />
+          <ReviewStar
+            size={size}
+            setRating={setStars}
+            rating={5}
+            currentRating={stars}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
