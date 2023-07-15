@@ -25,3 +25,14 @@ export const handleNewReview = (
     (currentAverage * currentTotal + newRating) / (currentTotal + 1);
   return parseFloat(newAverage.toFixed(2));
 };
+
+export const handleChangeReview = (
+  currentTotal: number,
+  currentAverage: number,
+  oldRating: number,
+  newRating: number
+) => {
+  const reviewSum = currentAverage * currentTotal;
+  const revisedSum = reviewSum - oldRating + newRating;
+  return parseFloat((revisedSum / currentTotal).toFixed(2));
+};

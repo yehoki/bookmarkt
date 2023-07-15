@@ -1,6 +1,7 @@
 import getBookReview from '@/actions/getBookReview';
 import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import { getSingleBook } from '@/actions/getSingleBook';
+import { getSingleBookFromDB } from '@/actions/getSingleBookFromDB';
 import EmptyBookState from '@/components/Books/EmptyBookState';
 import SingleBookReviews from '@/components/Books/SingleBook/SingleBookReviews';
 import Image from 'next/image';
@@ -18,7 +19,13 @@ const SingleBookPage: React.FC<PageProps> = async ({
 }) => {
   const bookId = params.id;
   const bookInfo = await getSingleBook(bookId);
+  const bookInDbInfo = await getSingleBookFromDB(bookId);
   const userReviewInfo = await getBookReview(bookId);
+
+  const reviewData =
+    bookInDbInfo && bookInDbInfo?.reviewData
+      ? bookInDbInfo.reviewData
+      : { totalReviews: 0, averageReview: 0 };
 
   // Add Empty book state
   if (!bookInfo) {
@@ -73,10 +80,14 @@ const SingleBookPage: React.FC<PageProps> = async ({
       <div className="pt-2 text-center text-neutral-500 italic">
         {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
       </div>
-      <SingleBookReviews
-        bookId={bookInfo.id}
-        reviewRating={userReviewInfo[0] ? userReviewInfo[0].rating : 0}
-      />
+      <div className="flex gap-4 items-center">
+        <SingleBookReviews
+          bookId={bookInfo.id}
+          reviewRating={userReviewInfo[0] ? userReviewInfo[0].rating : 0}
+        />
+        <div className="text-xl font-semibold">{reviewData.averageReview}</div>
+      </div>
+
       <div>Add to Reading and buy buttons</div>
       <div>
         {bookInfo.volumeInfo.description ? (

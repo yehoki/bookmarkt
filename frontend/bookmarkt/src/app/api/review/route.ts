@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 import { getSingleBook } from '@/actions/getSingleBook';
 import { Book } from '@prisma/client';
-import { handleNewReview } from '@/utils/helper';
+import { handleChangeReview, handleNewReview } from '@/utils/helper';
 
 // GET retrieves ALL reviews
 export async function GET(req: Request) {
@@ -148,15 +148,26 @@ export async function POST(req: Request) {
         description: description,
       },
     });
+    console.log(
+      'old av',
+      findBook.reviewData.averageReview,
+      'new av',
+      handleNewReview(
+        findBook.reviewData.totalReviews - 1,
+        findBook.reviewData.averageReview,
+        rating
+      )
+    );
     const alterBook = await prisma.book.update({
       where: {
         id: findBook.id,
       },
       data: {
         reviewData: {
-          averageReview: handleNewReview(
-            findBook.reviewData.totalReviews - 1,
+          averageReview: handleChangeReview(
+            findBook.reviewData.totalReviews,
             findBook.reviewData.averageReview,
+            checkForUserReview.rating,
             rating
           ),
           totalReviews: findBook.reviewData.totalReviews,
