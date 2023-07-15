@@ -90,7 +90,21 @@ const SingleBookPage: React.FC<PageProps> = async ({
           </div>
         </div>
 
-        <div>Add to Reading and buy buttons</div>
+        <div className="flex flex-col gap-2">
+          <div></div>
+          <div>
+            <a
+              href={`https://www.amazon.co.uk/s?k=${
+                bookInfo.volumeInfo.industryIdentifiers
+                  ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
+                  : '/'
+              }`}
+              target="_blank"
+            >
+              Buy on Amazon
+            </a>
+          </div>
+        </div>
         <div>
           {bookInfo.volumeInfo.description ? (
             <div
