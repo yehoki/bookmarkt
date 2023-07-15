@@ -17,7 +17,10 @@ interface MyBookProps {
     totalReviews: number;
     averageReview: number;
   };
-  userReview: number | null;
+  userReview: {
+    rating: number;
+    review?: string;
+  };
   description: string;
 }
 
@@ -33,6 +36,19 @@ const MyBook: React.FC<MyBookProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const bookReviewModal = useBookReviewModal();
+
+  const handleEditReview = () => {
+    bookReviewModal.setBookDetails({
+      googleBookId: googleId,
+      bookId: id,
+      authors: authors,
+      bookTitle: title,
+      thumbnailUrl: thumbnailUrl,
+      userRating: userReview.rating,
+      userReview: userReview.review,
+    });
+    bookReviewModal.onOpen();
+  };
 
   const extractTextFromDescription = (description: string) => {
     const extractedDescription = description.replace(/<[^>]+>/g, '');
@@ -65,7 +81,7 @@ const MyBook: React.FC<MyBookProps> = ({
   right-[15px] top-0 text-xs rounded-sm px-[3px] 
   text-goodreads-mybooks-green hover:underline group-hover:block
   cursor-pointer"
-        onClick={() => bookReviewModal.onOpen()}
+        onClick={handleEditReview}
       >
         edit
       </div>
@@ -111,7 +127,7 @@ const MyBook: React.FC<MyBookProps> = ({
           <div>
             <SingleBookReviews
               bookId={googleId}
-              reviewRating={userReview ? userReview : 0}
+              reviewRating={userReview ? userReview.rating : 0}
             />
           </div>
         </div>

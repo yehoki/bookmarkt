@@ -1,4 +1,3 @@
-import BookReviewModal from '@/components/modals/BookReviewModal';
 import './globals.css';
 
 export const metadata = {
@@ -13,13 +12,8 @@ interface Props {
 export default async function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body
-        className="bg-[rgba(244,241,234,0.5)] relative
-"
-      >
-        <BookReviewModal />
-
-        <div>{children}</div>
+      <body className="bg-[rgba(244,241,234,0.5)] relative">
+        <div className="relative">{children}</div>
       </body>
     </html>
   );

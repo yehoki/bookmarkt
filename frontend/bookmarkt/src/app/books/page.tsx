@@ -2,6 +2,7 @@ import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
 import ConditionalNav from '@/components/ConditionalNav';
+import BookReviewModal from '@/components/modals/BookReviewModal';
 import { Suspense } from 'react';
 
 const Page = async () => {
@@ -12,9 +13,12 @@ const Page = async () => {
     const findUserReview = currentUserBooks.reviews.find(
       (review) => review.bookId === book.id
     );
-    let reviewRating;
+    let userReview;
     if (findUserReview) {
-      reviewRating = findUserReview.rating;
+      userReview = {
+        rating: findUserReview.rating,
+        review: findUserReview.description,
+      };
     }
     return {
       id: book.id,
@@ -22,7 +26,15 @@ const Page = async () => {
       title: book.title,
       authors: book.author,
       reviewData: book.reviewData,
-      userBookReview: reviewRating ? reviewRating : null,
+      userBookReview: userReview
+        ? {
+            rating: userReview.rating,
+            review: userReview.review ? userReview.review : undefined,
+          }
+        : {
+            rating: 0,
+            review: undefined,
+          },
       description: book.description ? book.description : '',
       thumbnail:
         book.imageLinks && book.imageLinks.thumbnail
@@ -32,69 +44,72 @@ const Page = async () => {
     };
   });
   return (
-    <div className="pt-6 w-[1000px] mx-auto pb-[25px]">
-      <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
-        <h2
-          className="
+    <>
+      <BookReviewModal />
+      <div className="pt-6 w-[1000px] mx-auto pb-[25px]">
+        <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
+          <h2
+            className="
         font-bold
         text-xl
         text-goodreads-mybooks-green
         "
-        >
-          My Books
-        </h2>
-        <div>Search</div>
-      </div>
-      {/* below header */}
-      <div>
-        <div className="flex flex-row justify-between">
-          {/* Left col */}
-          <div className="w-[200px]">
-            <div className="border-b border-b-slate-300">
-              <h3>Bookshelves</h3>
-              <ul>
-                <li>Bookshelf 1</li>
-                <li>Bookshelf 2</li>
-                <li>Bookshelf 3</li>
-              </ul>
+          >
+            My Books
+          </h2>
+          <div>Search</div>
+        </div>
+        {/* below header */}
+        <div>
+          <div className="flex flex-row justify-between">
+            {/* Left col */}
+            <div className="w-[200px]">
+              <div className="border-b border-b-slate-300">
+                <h3>Bookshelves</h3>
+                <ul>
+                  <li>Bookshelf 1</li>
+                  <li>Bookshelf 2</li>
+                  <li>Bookshelf 3</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Your reading activity</h3>
+              </div>
+              <div>
+                <h3>Add books</h3>
+              </div>
+              <div>
+                <h3>Tools</h3>
+              </div>
             </div>
-            <div>
-              <h3>Your reading activity</h3>
-            </div>
-            <div>
-              <h3>Add books</h3>
-            </div>
-            <div>
-              <h3>Tools</h3>
-            </div>
-          </div>
-          {/* Right col */}
-          <div className="w-[750px]">
-            <div className="grid grid-cols-6 flex-[1_1_75%] gap-2 pt-2">
-              <Suspense>
-                {currentUserBookObject.map((book) => (
-                  <MyBook
-                    key={book.id}
-                    title={book.title}
-                    authors={book.authors}
-                    id={book.id}
-                    googleId={book.googleId}
-                    thumbnailUrl={book.thumbnail}
-                    reviewData={book.reviewData}
-                    userReview={book.userBookReview}
-                    description={
-                      book.description === '' || !book.description
-                        ? 'This book does not have any description yet...'
-                        : book.description
-                    }
-                  />
-                ))}
-              </Suspense>
+            {/* Right col */}
+            <div className="w-[750px]">
+              <div className="grid grid-cols-6 flex-[1_1_75%] gap-2 pt-2">
+                <Suspense>
+                  {currentUserBookObject.map((book) => (
+                    <MyBook
+                      key={book.id}
+                      title={book.title}
+                      authors={book.authors}
+                      id={book.id}
+                      googleId={book.googleId}
+                      thumbnailUrl={book.thumbnail}
+                      reviewData={book.reviewData}
+                      userReview={book.userBookReview}
+                      description={
+                        book.description === '' || !book.description
+                          ? 'This book does not have any description yet...'
+                          : book.description
+                      }
+                    />
+                  ))}
+                </Suspense>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

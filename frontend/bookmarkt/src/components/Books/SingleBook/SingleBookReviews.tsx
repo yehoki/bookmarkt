@@ -61,8 +61,6 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
       method: 'POST',
       body: JSON.stringify({
         rating: stars,
-        title: 'New Review',
-        description: 'New Review Description',
         bookId: bookId,
       }),
     });

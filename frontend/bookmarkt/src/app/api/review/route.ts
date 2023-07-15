@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
   const body = await req.json();
-  const { bookId, title, description, rating } = body;
+  const { bookId, description, rating } = body;
 
   if (!bookId || !rating) {
     return NextResponse.error();
@@ -82,7 +82,6 @@ export async function POST(req: Request) {
     const review = await prisma.review.create({
       data: {
         bookId: newBookData.id,
-        title: title,
         description: description,
         rating: rating,
         userId: currentUser.id,
@@ -146,7 +145,6 @@ export async function POST(req: Request) {
       },
       data: {
         rating: rating,
-        title: title,
         description: description,
       },
     });
@@ -173,7 +171,6 @@ export async function POST(req: Request) {
   const review = await prisma.review.create({
     data: {
       bookId: findBook.id,
-      title: title,
       description: description,
       rating: rating,
       userId: currentUser.id,

@@ -82,7 +82,6 @@ model Book {
 model Review {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   rating      Int
-  title       String?
   description String?
   bookId      String   @db.ObjectId
   userId      String   @db.ObjectId

@@ -1,12 +1,22 @@
 import { create } from 'zustand';
 
+export type BookDetails = {
+  googleBookId: string;
+  bookId: string;
+  authors: string[];
+  bookTitle: string;
+  thumbnailUrl?: string;
+  userRating: number;
+  userReview?: string;
+};
+
 interface BookReviewModalStore {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  bookDetails: {
-    googleBookId: string;
-  };
+  bookDetails: BookDetails;
+  setBookDetails: (bookDetails:BookDetails) => void;
+  clearBookDetails: () => void;
 }
 
 const useBookReviewModal = create<BookReviewModalStore>((set) => ({
@@ -15,7 +25,21 @@ const useBookReviewModal = create<BookReviewModalStore>((set) => ({
   onClose: () => set({ isOpen: false }),
   bookDetails: {
     googleBookId: '',
+    bookTitle: '',
+    bookId: '',
+    authors: [],
+    thumbnailUrl: '',
+    userRating: 0,
   },
+  setBookDetails: (bookDetails:BookDetails) => set({bookDetails: bookDetails}),
+  clearBookDetails: () => set({bookDetails:{
+    googleBookId: '',
+    bookTitle: '',
+    bookId: '',
+    authors: [],
+    thumbnailUrl: '',
+    userRating: 0, 
+  }})
 }));
 
 export default useBookReviewModal;
