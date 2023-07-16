@@ -14,6 +14,8 @@ import {
 import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import useResultsStore from '@/hooks/useResultsStore';
 import { User } from '@prisma/client';
+import { getBookByISBN } from '@/actions/getBookByISBN';
+import { useRouter } from 'next/navigation';
 
 interface SearchProps {
   currentUser?: User | null;
@@ -26,13 +28,19 @@ const Search: React.FC<SearchProps> = ({ currentUser }) => {
   >([]);
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const searchResultsStore = useResultsStore();
-
+  const router = useRouter();
   const toggleSearchDropdown = useCallback(() => {
     setIsSearchDropdownOpen((value) => !value);
   }, []);
 
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (searchValue.length === 13) {
+      const bookFromISBN = await getBookByISBN(searchValue);
+      if (bookFromISBN) {
+        return router.push(`/books/${bookFromISBN.items[0].id}`);
+      }
+    }
     let books = await getBooksFromSearch(searchValue);
     if (books) {
       searchResultsStore.setResultSize(books.totalItems);
