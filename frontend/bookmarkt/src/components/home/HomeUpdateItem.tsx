@@ -8,8 +8,10 @@ interface HomeUpdateItemProps {
   userName: string;
   bookTitle: string;
   googleBookId: string;
+  imageUrl?: string;
   reviewRating: number;
   reviewDescription: string;
+  authors?: string[];
 }
 
 const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
@@ -18,6 +20,8 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   googleBookId,
   reviewRating,
   reviewDescription,
+  authors,
+  imageUrl,
 }) => {
   return (
     <div
@@ -42,7 +46,12 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         Rating <DisplayStars averageRating={reviewRating} />
       </div>
       <div className="text-sm">{reviewDescription}</div>
-      <HomeUpdateBookDisplay />
+      <HomeUpdateBookDisplay
+        title={bookTitle}
+        googleBookId={googleBookId}
+        authors={authors}
+        imageUrl={imageUrl}
+      />
     </div>
   );
 };

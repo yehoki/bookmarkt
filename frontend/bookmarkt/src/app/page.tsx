@@ -34,9 +34,15 @@ export default async function Home() {
         key={review.id}
         userName={review.user.name ? review.user.name : 'User'}
         bookTitle={review.book.title}
+        imageUrl={
+          review.book.imageLinks.thumbnail
+            ? review.book.imageLinks.thumbnail
+            : ''
+        }
         googleBookId={review.book.googleId}
         reviewRating={review.rating}
         reviewDescription={review.description ? review.description : ''}
+        authors={review.book.author}
       />
     );
   });
@@ -128,8 +134,8 @@ export default async function Home() {
               </div>
             </div>
             <div className="mt-2">
-              <div className="uppercase">Updates</div>
-              <div className="flex flex-col gap-4">{updateDisplay}</div>
+              <div className="uppercase font-medium">Updates</div>
+              <div className="flex flex-col gap-4 pt-2">{updateDisplay}</div>
             </div>
           </div>
           <SwitchWithFooter />
