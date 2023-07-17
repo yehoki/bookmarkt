@@ -44,7 +44,7 @@ const Page = async () => {
   return (
     <>
       <BookReviewModal />
-      <div className="pt-6 mx-auto max-w-[1000px] pb-[25px]">
+      <div className="pt-6 px-1 mx-auto max-w-[1000px] pb-[25px]">
         <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
           <h2
             className="

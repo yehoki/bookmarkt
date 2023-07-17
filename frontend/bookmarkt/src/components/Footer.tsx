@@ -8,7 +8,7 @@ type Props = {};
 
 const Footer = (props: Props) => {
   return (
-    <footer className="w-[100dvw] bg-goodreads-beige mx-auto">
+    <footer className="w-[100dvw] fixed bg-goodreads-beige mx-auto">
       <div className="w-full flex flex-row mx-auto py-8">
         Copyright © 2023 yehoki
         <Link href="https://github.com/yehoki/">

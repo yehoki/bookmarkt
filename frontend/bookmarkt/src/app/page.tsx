@@ -73,8 +73,62 @@ export default async function Home() {
   return (
     <>
       <Navbar currentUser={currentUser} />
-      <div className="w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px]">
-        <div className="flex flex-row justify-between mt-2">
+      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px]">
+        <div className="md:hidden mx-auto max-w-[625px] px-2">
+          <div className="border-[#eeeeee] border-[1px] my-2">
+            <div className="relative w-full aspect-[14/3] ">
+              <Image
+                src="/images/goodreads-span.png"
+                fill
+                alt="Goodreads span image"
+              />
+            </div>
+            <div className="bg-white p-2 ">
+              <div className="text-lg">
+                Discover the Biggest Books of Summer
+              </div>
+              <div className="text-base text-neutral-400">
+                Check out your fellow Goodreads members` most anticipated titles
+                for the season.
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 mx-auto">
+            {/* Review tab */}
+            <div
+              className="rounded-sm relative p-[10px] min-h-[50px] pl-[50px] bg-white border-[1px] border-neutral-500
+            flex flex-col"
+            >
+              <div className="absolute rounded-full w-[30px] h-[30px] top-[10px] left-[10px] cursor-pointer border-[1px] border-neutral-300">
+                <Image
+                  src="/images/empty-user.png"
+                  alt="User image"
+                  fill
+                  className="rounded-full"
+                />
+              </div>
+              <div className="">User rated a book</div>
+              <div>When</div>
+              <div className="flex items-center">
+                <div className="relative w-[55px] h-[85px] mr-1 border-[1px]">
+                  <Image src={'/images/empty-book.png'} fill alt="empty book" />
+                </div>
+                <div>
+                  <div>Title</div>
+                  <div className="text-neutral-400 font-light text-sm">
+                    Author
+                  </div>
+                </div>
+              </div>
+              <div>Review</div>
+              <div className="flex gap-[2px] text-sm text-goodreads-mybooks-green">
+                <div className="cursor-pointer hover:underline">Like</div>
+                <div className="cursor-pointer hover:underline">Comment</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="hidden md:flex flex-row justify-between mt-2 ">
           <div className="w-[300px]">
             <HomeBox heading="Currently reading" bottomBorder>
               <div>
