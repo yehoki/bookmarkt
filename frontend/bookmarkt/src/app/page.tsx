@@ -7,6 +7,7 @@ import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
 import HomeBook from '@/components/home/HomeBook';
 import HomeUpdateItem from '@/components/home/HomeUpdateItem';
+import HomeUpdateItemMobile from '@/components/home/HomeUpdateItemMobile';
 import SwitchWithFooter from '@/components/home/SwitchWithFooter';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -43,6 +44,25 @@ export default async function Home() {
         reviewDescription={review.description ? review.description : ''}
         authors={review.book.author}
         bookDescription={review.book.description}
+      />
+    );
+  });
+
+  const mobileUpdateDisplay = mostRecentReviews.map((review) => {
+    return (
+      <HomeUpdateItemMobile
+        key={review.id}
+        userName={review.user.name ? review.user.name : 'User'}
+        bookTitle={review.book.title}
+        bookAuthors={review.book.author}
+        googleBookId={review.book.googleId}
+        reviewRating={review.rating}
+        reviewDescription={review.description ? review.description : ''}
+        imageUrl={
+          review.book.imageLinks.thumbnail
+            ? review.book.imageLinks.thumbnail
+            : ''
+        }
       />
     );
   });
@@ -95,37 +115,7 @@ export default async function Home() {
           </div>
           <div className="flex flex-col gap-2 mx-auto">
             {/* Review tab */}
-            <div
-              className="rounded-sm relative p-[10px] min-h-[50px] pl-[50px] bg-white border-[1px] border-neutral-500
-            flex flex-col"
-            >
-              <div className="absolute rounded-full w-[30px] h-[30px] top-[10px] left-[10px] cursor-pointer border-[1px] border-neutral-300">
-                <Image
-                  src="/images/empty-user.png"
-                  alt="User image"
-                  fill
-                  className="rounded-full"
-                />
-              </div>
-              <div className="">User rated a book</div>
-              <div>When</div>
-              <div className="flex items-center">
-                <div className="relative w-[55px] h-[85px] mr-1 border-[1px]">
-                  <Image src={'/images/empty-book.png'} fill alt="empty book" />
-                </div>
-                <div>
-                  <div>Title</div>
-                  <div className="text-neutral-400 font-light text-sm">
-                    Author
-                  </div>
-                </div>
-              </div>
-              <div>Review</div>
-              <div className="flex gap-[2px] text-sm text-goodreads-mybooks-green">
-                <div className="cursor-pointer hover:underline">Like</div>
-                <div className="cursor-pointer hover:underline">Comment</div>
-              </div>
-            </div>
+            {mobileUpdateDisplay}
           </div>
         </div>
         <div className="hidden md:flex flex-row justify-between mt-2 ">
