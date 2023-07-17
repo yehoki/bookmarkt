@@ -1,10 +1,7 @@
-import getCurrentUser from '@/actions/getCurrentUser';
-import LoginForm from '@/components/Login/LoginForm';
 import Modal, { ModalInput } from '@/components/modals/Modal';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { redirect, useRouter } from 'next/navigation';
-import React, { FormEvent, useEffect } from 'react';
+import React from 'react';
 
 type Props = {};
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { getCurrentUserCurrentBookReview } from '@/actions/getCurrentUserCurrentBookReview';
 import { getSingleBook } from '@/actions/getSingleBook';
 import ReviewStar from '@/components/ReviewStar';
 import useBookReviewModal from '@/hooks/useBookReviewModal';
@@ -31,7 +30,6 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
       setIsLoading(false);
       return null;
     }
-    // const currentUserReview = await getCurrentUserCurrentBookReview(bookId);
     // Make API route to fetch from - otherwise server component
     const data: { books: Book[]; reviews: Review[] } = await getBooks.json();
 

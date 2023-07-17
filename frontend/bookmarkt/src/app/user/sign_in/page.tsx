@@ -9,17 +9,6 @@ const Page = async () => {
     return redirect('/');
   }
 
-  const loginModalInputs: ModalInput[] = [
-    {
-      label: 'Email',
-      type: 'email',
-    },
-    {
-      label: 'Password',
-      type: 'password',
-    },
-  ];
-
   return (
     <div>
       <UserModal title="Sign in to Goodreads" mode="signIn" />

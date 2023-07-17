@@ -3,11 +3,9 @@ import {
   getBooksFromSearch,
 } from '@/actions/getBooksFromSearch';
 import getCurrentUser from '@/actions/getCurrentUser';
-import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import getUserBooks from '@/actions/getUserBooks';
 import SearchBookDisplay from '@/components/Books/SearchBooks/SearchBookDisplay';
 import SearchBox from '@/components/Books/SearchBooks/SearchBox';
-import { Book } from '@prisma/client';
 
 interface PageProps {
   params: { search: string };

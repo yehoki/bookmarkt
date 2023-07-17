@@ -1,5 +1,4 @@
 import getBookReview from '@/actions/getBookReview';
-import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import { getSingleBook } from '@/actions/getSingleBook';
 import { getSingleBookFromDB } from '@/actions/getSingleBookFromDB';
 import EmptyBookState from '@/components/Books/EmptyBookState';

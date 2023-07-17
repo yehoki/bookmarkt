@@ -1,7 +1,5 @@
-import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
-import ConditionalNav from '@/components/ConditionalNav';
 import BookReviewModal from '@/components/modals/BookReviewModal';
 import { Suspense } from 'react';
 

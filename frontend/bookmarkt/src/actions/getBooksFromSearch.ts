@@ -1,6 +1,4 @@
 import { parseQuery } from '@/utils/helper';
-import { getGoogleBooksFromUser } from './getGoogleBooksFromUser';
-import getCurrentUser from './getCurrentUser';
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API;
 const googleAPIBaseUrl = 'https://www.googleapis.com/books/v1';
 

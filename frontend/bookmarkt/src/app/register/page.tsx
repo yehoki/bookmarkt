@@ -1,4 +1,3 @@
-import RegisterForm from '@/components/Register/RegisterForm';
 import Modal, { ModalInput } from '@/components/modals/Modal';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
