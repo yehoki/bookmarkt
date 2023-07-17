@@ -43,6 +43,7 @@ export default async function Home() {
         reviewRating={review.rating}
         reviewDescription={review.description ? review.description : ''}
         authors={review.book.author}
+        bookDescription={review.book.description}
       />
     );
   });

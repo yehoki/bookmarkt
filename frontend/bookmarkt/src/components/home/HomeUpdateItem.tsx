@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import DisplayStars from '../Books/Ratings/DisplayStars';
 import HomeUpdateBookDisplay from './HomeUpdateBookDIsplay';
+import { extractTextFromDescription } from '@/utils/helper';
 
 interface HomeUpdateItemProps {
   userName: string;
   bookTitle: string;
   googleBookId: string;
+  bookDescription: string;
   imageUrl?: string;
   reviewRating: number;
   reviewDescription: string;
@@ -18,11 +20,14 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   userName,
   bookTitle,
   googleBookId,
+  bookDescription,
   reviewRating,
   reviewDescription,
   authors,
   imageUrl,
 }) => {
+  const extractedText = extractTextFromDescription(bookDescription);
+  const slicedText = extractedText.slice(0, 175) + '...';
   return (
     <div
       className="
@@ -51,6 +56,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         googleBookId={googleBookId}
         authors={authors}
         imageUrl={imageUrl}
+        bookDescription={slicedText}
       />
     </div>
   );

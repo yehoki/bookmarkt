@@ -36,3 +36,9 @@ export const handleChangeReview = (
   const revisedSum = reviewSum - oldRating + newRating;
   return parseFloat((revisedSum / currentTotal).toFixed(2));
 };
+
+
+export const extractTextFromDescription = (description: string) => {
+  const extractedDescription = description.replace(/<[^>]+>/g, '');
+  return extractedDescription;
+};
