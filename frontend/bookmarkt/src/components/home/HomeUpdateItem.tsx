@@ -33,8 +33,10 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
       className="
   px-4 py-2 bg-white border-[1px] border-neutral-300
   rounded-sm text-sm
+  relative
   "
     >
+      <div className="absolute right-1  top-1"></div>
       <div>
         <Link href={'/'} className="font-semibold hover:underline text-sm">
           {userName}

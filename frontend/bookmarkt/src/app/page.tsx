@@ -23,8 +23,7 @@ export default async function Home() {
   }
 
   const currentUserBooks = await getCurrentUserBooks();
-  // console.log(currentUserBooks);
-  const getCurrentBooks = [];
+  const firstTwoBooks = currentUserBooks.books.slice(0, 3);
 
   const mostRecentReviews = await getMostRecentReviews();
 
@@ -81,15 +80,24 @@ export default async function Home() {
               <div>
                 <div className="flex flex-col gap-2 py-2">
                   <HomeBook
-                    title={sampleBooks[0].title}
-                    authors={sampleBooks[0].authors}
-                    imgsrc={sampleBooks[0].imageLinks.thumbnail}
+                    title={firstTwoBooks[0].title}
+                    authors={firstTwoBooks[0].author}
+                    googleBookId={firstTwoBooks[0].googleId}
+                    imgsrc={
+                      firstTwoBooks[0].imageLinks.thumbnail
+                        ? firstTwoBooks[0].imageLinks.thumbnail
+                        : undefined
+                    }
                   />
-                  <HomeBook
-                    title={sampleBooks[0].title}
-                    authors={sampleBooks[0].authors}
-                    imgsrc={sampleBooks[0].imageLinks.thumbnail}
-                  />
+                  {/* <HomeBook
+                    title={firstTwoBooks[1].title}
+                    authors={firstTwoBooks[1].author}
+                    imgsrc={
+                      firstTwoBooks[1].imageLinks.thumbnail
+                        ? firstTwoBooks[1].imageLinks.thumbnail
+                        : undefined
+                    }
+                  /> */}
                 </div>
               </div>
               <div className="flex gap-[2px] text-xs py-2">

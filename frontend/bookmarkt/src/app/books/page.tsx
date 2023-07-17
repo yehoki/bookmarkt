@@ -46,7 +46,7 @@ const Page = async () => {
   return (
     <>
       <BookReviewModal />
-      <div className="pt-6 w-[1000px] mx-auto pb-[25px]">
+      <div className="pt-6 mx-auto max-w-[1000px] pb-[25px]">
         <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
           <h2
             className="
@@ -61,7 +61,7 @@ const Page = async () => {
         </div>
         {/* below header */}
         <div>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row">
             {/* Left col */}
             <div className="w-[200px]">
               <div className="border-b border-b-slate-300">
@@ -83,8 +83,8 @@ const Page = async () => {
               </div>
             </div>
             {/* Right col */}
-            <div className="w-[750px]">
-              <div className="grid grid-cols-6 flex-[1_1_75%] gap-2 pt-2">
+            <div className="flex-1 max-w-[700px]">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 flex-[1_1_100%] gap-[2px] sm:gap-1 lg:gap-2 pt-2">
                 <Suspense>
                   {currentUserBookObject.map((book) => (
                     <MyBook

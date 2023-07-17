@@ -61,7 +61,7 @@ const MyBook: React.FC<MyBookProps> = ({
   );
 
   return (
-    <div className="relative group">
+    <div className="relative group w-[100px]">
       <Link
         href={`/books/${googleId}`}
         className="
@@ -69,16 +69,17 @@ const MyBook: React.FC<MyBookProps> = ({
     shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <Image
-          height={150}
-          width={100}
-          src={thumbnailUrl ? thumbnailUrl : '/images/empty-book.png'}
-          alt={`${title} cover`}
-        />
+        <div className="relative w-[100px] h-[150px]">
+          <Image
+            fill
+            src={thumbnailUrl ? thumbnailUrl : '/images/empty-book.png'}
+            alt={`${title} cover`}
+          />
+        </div>
       </Link>
       <div
         className="hidden bg-white z-20 absolute
-  right-[15px] top-0 text-xs rounded-sm px-[3px] 
+  right-0 top-0 text-xs rounded-sm px-[3px] 
   text-goodreads-mybooks-green hover:underline group-hover:block
   cursor-pointer"
         onClick={handleEditReview}
