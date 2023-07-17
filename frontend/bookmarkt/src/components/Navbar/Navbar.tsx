@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
       <div
         id="top-navbar"
         className={`
-    fixed w-full z-10
+    fixed w-[100dvw] z-10
    bg-goodreads-beige drop-shadow-md font-Lato
    `}
       >

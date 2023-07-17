@@ -88,9 +88,10 @@ const MyBook: React.FC<MyBookProps> = ({
       </div>
       <div
         className="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 
-          text-black left-[102px] top-0 
+        text-sm md:text-base  
+        text-black -left-[100px] md:left-[102px]     md:top-0 
           bg-white
-          z-10 w-[380px] p-[10px] text-left
+          z-10 w-[240px] md:w-[380px] p-[10px] text-left
           transition delay-700 "
       >
         <div className="text-lg font-semibold">{title}</div>

@@ -63,7 +63,7 @@ const Page = async () => {
         <div>
           <div className="flex flex-row">
             {/* Left col */}
-            <div className="w-[200px]">
+            <div className="max-w-[200px]">
               <div className="border-b border-b-slate-300">
                 <h3>Bookshelves</h3>
                 <ul>
