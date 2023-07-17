@@ -1,16 +1,18 @@
 import getCurrentUser from '@/actions/getCurrentUser';
+import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
+import getMostRecentReviews from '@/actions/getMostRecentReviews';
 import ConditionalNav from '@/components/ConditionalNav';
 import HomeBox from '@/components/HomeBox';
 import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
 import HomeBook from '@/components/home/HomeBook';
+import HomeUpdateItem from '@/components/home/HomeUpdateItem';
 import SwitchWithFooter from '@/components/home/SwitchWithFooter';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function Home() {
   const currentUser = await getCurrentUser();
-
   if (!currentUser) {
     return (
       <>
@@ -20,7 +22,24 @@ export default async function Home() {
     );
   }
 
+  const currentUserBooks = await getCurrentUserBooks();
+  // console.log(currentUserBooks);
   const getCurrentBooks = [];
+
+  const mostRecentReviews = await getMostRecentReviews();
+
+  const updateDisplay = mostRecentReviews.map((review) => {
+    return (
+      <HomeUpdateItem
+        key={review.id}
+        userName={review.user.name ? review.user.name : 'User'}
+        bookTitle={review.book.title}
+        googleBookId={review.book.googleId}
+        reviewRating={review.rating}
+        reviewDescription={review.description ? review.description : ''}
+      />
+    );
+  });
 
   const sampleBooks = [
     {
@@ -108,7 +127,10 @@ export default async function Home() {
                 </div>
               </div>
             </div>
-            <div className="mt-2">UPDATES</div>
+            <div className="mt-2">
+              <div className="uppercase">Updates</div>
+              <div className="flex flex-col gap-4">{updateDisplay}</div>
+            </div>
           </div>
           <SwitchWithFooter />
         </div>

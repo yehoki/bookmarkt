@@ -91,12 +91,7 @@ const BookReviewModal = () => {
         />
         <div className="relative flex flex-col">
           <div className="flex items-center border-b-[1px] border-neutral-200">
-            <Link
-              href={`/books/${googleBookId}`}
-              // onClick={() => {
-              //   bookReviewModal.onClose();
-              // }}
-            >
+            <Link href={`/books/${googleBookId}`}>
               <div className="relative w-[50px] h-[75px] mr-[10px]">
                 <Image
                   src={`${
@@ -114,7 +109,7 @@ const BookReviewModal = () => {
             </div>
           </div>
           <form onSubmit={handleReviewFormSubmit}>
-            <div className="border-b-[1px] border-neutral-200">
+            <div className="border-b-[1px] border-neutral-200 py-1">
               <div className="flex justify-start">
                 My rating:
                 <div className="flex justify-start items-center pl-1">
@@ -125,10 +120,10 @@ const BookReviewModal = () => {
                   />
                 </div>
               </div>
-              <div>Bookshelves</div>
+              <div></div>
             </div>
             <div className="border-b-[1px] border-neutral-200">
-              <div>What do you think?</div>
+              <div className="py-1">What do you think?</div>
               <textarea
                 className="resize-y w-full h-auto border-[1px] border-neutral-300 rounded-sm px-[2px] py-[1px] min-h-[150px]
               focus:border-neutral-400 focus:shadow-sm outline-none"
@@ -139,7 +134,7 @@ const BookReviewModal = () => {
               />
             </div>
             <div>
-              <div>Dates read</div>
+              <div></div>
             </div>
             <div>
               <input

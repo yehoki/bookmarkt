@@ -8,18 +8,16 @@ type Props = {};
 
 const Footer = (props: Props) => {
   return (
-    <footer className="w-full bg-goodreads-beige mx-auto">
-      <Container>
-        <div className="navOne:w-[1200px] flex flex-row mx-auto py-8">
-          Copyright © 2023 yehoki
-          <Link href="https://github.com/yehoki/">
-            {/* <Image
+    <footer className="w-[100dvw] bg-goodreads-beige mx-auto">
+      <div className="w-full flex flex-row mx-auto py-8">
+        Copyright © 2023 yehoki
+        <Link href="https://github.com/yehoki/">
+          {/* <Image
             src={githubLogo}
             alt="Github logo"
           /> */}
-          </Link>
-        </div>
-      </Container>
+        </Link>
+      </div>
     </footer>
   );
 };
