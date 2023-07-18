@@ -49,6 +49,8 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
             fill
             sizes="(max-width: 768px) 55px"
             alt="empty book"
+            placeholder="blur"
+            blurDataURL="/images/empty-book.png"
           />
         </div>
         <div>

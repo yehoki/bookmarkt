@@ -22,8 +22,10 @@ const HomeBook: React.FC<HomeBookProps> = ({
         <div className="relative w-[100px] h-[140px] shadow-md mr-2">
           <Image
             alt={`${title} book`}
-            src={imgsrc ? imgsrc : 'images/empty-book.png'}
+            src={imgsrc ? imgsrc : '/images/empty-book.png'}
             fill
+            placeholder="blur"
+            blurDataURL="/images/empty-book.png"
           />
         </div>
       </Link>
