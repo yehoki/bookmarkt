@@ -26,6 +26,7 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
             src={imageUrl ? imageUrl : '/images/empty-book.png'}
             alt={`${title} cover`}
             fill
+            sizes="100vw"
           />
         </div>
       </Link>

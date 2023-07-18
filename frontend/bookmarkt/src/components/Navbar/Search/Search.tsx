@@ -17,11 +17,7 @@ import { User } from '@prisma/client';
 import { getBookByISBN } from '@/actions/getBookByISBN';
 import { useRouter } from 'next/navigation';
 
-interface SearchProps {
-  currentUser?: User | null;
-}
-
-const Search: React.FC<SearchProps> = ({ currentUser }) => {
+const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState<
     GoogleBookReturnItemsInterface[]

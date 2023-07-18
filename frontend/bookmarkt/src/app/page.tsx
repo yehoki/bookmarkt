@@ -173,6 +173,7 @@ export default async function Home() {
                 <Image
                   src="/images/goodreads-span.png"
                   fill
+                  sizes="100vw"
                   alt="Goodreads span image"
                 />
               </div>

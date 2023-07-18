@@ -23,12 +23,13 @@ const NavLink: React.FC<LinkProps> = ({
         className={`
         ${disabledBreakpoint === '' ? 'flex' : `hidden ${disabledBreakpoint}`}
         flex-auto md:flex-initial
+        text-sm
         items-center
         justify-center
       text-[#382110] 
       hover:text-white 
       hover:bg-[#382110]
-      px-4
+      px-2 md:px-4
       `}
         href={href}
         onClick={onClick}

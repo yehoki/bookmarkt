@@ -31,6 +31,7 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
           src="/images/empty-user.png"
           alt="User image"
           fill
+          sizes="100vw"
           className="rounded-full"
         />
       </div>
@@ -42,10 +43,11 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
       </div>
       <div className="text-xs text-neutral-300">When</div>
       <div className="flex items-center mt-2">
-        <div className="relative w-[55px] h-[85px] mr-1 border-[1px]">
+        <div className="relative w-[55px] h-[85px] aspect-[11/17] mr-1">
           <Image
             src={imageUrl !== '' ? imageUrl : '/images/empty-book.png'}
             fill
+            sizes="(max-width: 768px) 55px"
             alt="empty book"
           />
         </div>

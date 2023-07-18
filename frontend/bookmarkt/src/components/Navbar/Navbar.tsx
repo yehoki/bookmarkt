@@ -47,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
             <MobileSearch />
             <Logo />
             <Links />
-            <Search currentUser={currentUser} />
+            <Search />
             <UserMenu currentUser={currentUser} />
             <MobileUserMenu />
           </div>
