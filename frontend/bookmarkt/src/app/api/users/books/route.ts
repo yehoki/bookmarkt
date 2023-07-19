@@ -29,7 +29,6 @@ export async function POST(req: Request) {
   if (!currentUser) {
     return NextResponse.error();
   }
-
   const body = await req.json();
   const {
     id,
@@ -39,7 +38,7 @@ export async function POST(req: Request) {
     description,
     imageLinks,
     publishedDate,
-    ISBN
+    ISBN,
   } = body;
   if (!id || !title) {
     return NextResponse.error();
@@ -52,6 +51,19 @@ export async function POST(req: Request) {
   });
 
   const currentBooks = [...(currentUser.bookIds || [])];
+
+  const wantToReadBookshelf = await prisma.bookshelf.findFirst({
+    where: {
+      userId: currentUser.id,
+      name: 'Want to read',
+    },
+  });
+  if (!wantToReadBookshelf) {
+    return NextResponse.error();
+  }
+  const wantToReadBooks = wantToReadBookshelf
+    ? wantToReadBookshelf.bookIds
+    : [];
 
   if (!findBook) {
     // When the new book does not exist
@@ -68,16 +80,26 @@ export async function POST(req: Request) {
           averageReview: 0,
           totalReviews: 0,
         },
-        ISBN: ISBN
+        ISBN: ISBN,
       },
     });
+    wantToReadBooks.push(newBook.id);
     currentBooks.push(newBook.id);
+
     const updateUserBooks = await prisma.user.update({
       where: {
         id: currentUser.id,
       },
       data: {
         bookIds: currentBooks,
+      },
+    });
+    const updateBookshelf = await prisma.bookshelf.update({
+      where: {
+        id: wantToReadBookshelf.id,
+      },
+      data: {
+        bookIds: wantToReadBooks,
       },
     });
     return NextResponse.json({
@@ -87,6 +109,7 @@ export async function POST(req: Request) {
   }
 
   if (!currentUser.bookIds.includes(findBook.id)) {
+    wantToReadBooks.push(findBook.id);
     currentBooks.push(findBook.id);
     const updateUserBooks = await prisma.user.update({
       where: {
@@ -94,6 +117,14 @@ export async function POST(req: Request) {
       },
       data: {
         bookIds: currentBooks,
+      },
+    });
+    const updateBookshelf = await prisma.bookshelf.update({
+      where: {
+        id: wantToReadBookshelf.id,
+      },
+      data: {
+        bookIds: wantToReadBooks,
       },
     });
     return NextResponse.json({
