@@ -12,24 +12,51 @@ export async function POST(req: Request) {
       email,
       name,
       hashedPassword,
-      bookshelves: [
-        {
-          name: 'Read',
-          bookIds: [],
-          isDefault: true,
-        },
-        {
-          name: 'Currently reading',
-          bookIds: [],
-          isDefault: true,
-        },
-        {
-          name: 'Want to read',
-          bookIds: [],
-          isDefault: true,
-        },
-      ],
     },
   });
+
+  const defaultBookshelves = await prisma.bookshelf.createMany({
+    data: [
+      {
+        name: 'Read',
+        bookIds: [],
+        isDefault: true,
+        userId: user.id,
+      },
+      {
+        name: 'Currently reading',
+        bookIds: [],
+        isDefault: true,
+        userId: user.id,
+      },
+      {
+        name: 'Want to read',
+        bookIds: [],
+        isDefault: true,
+        userId: user.id,
+      },
+    ],
+  });
+
+  const userBookshelves = await prisma.bookshelf.findMany({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  const userBookshelfIds = userBookshelves.map((bookshelf) => bookshelf.id);
+
+  const updateUserBookshelfIds = await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      bookshelfIds: [...userBookshelfIds] || [],
+    },
+  });
+
   return NextResponse.json(user);
 }

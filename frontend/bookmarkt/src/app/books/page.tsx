@@ -1,11 +1,22 @@
+import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
+import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
 import BookReviewModal from '@/components/modals/BookReviewModal';
 import { Suspense } from 'react';
 
 const Page = async () => {
   const currentUserBooks = await getCurrentUserBooks();
-  // const currentUserReviews = await getCurrentUserReviews();
+  const currentUserBookshelves = await getCurrentUserBookshelves();
+
+  const userBookshelfDisplay = () => {
+    if (!currentUserBookshelves) {
+      return <></>;
+    }
+    return currentUserBookshelves.map((bookshelf) => {
+      return <li key={bookshelf.id}>{bookshelf.name}</li>;
+    });
+  };
 
   const currentUserBookObject = currentUserBooks.books.map((book) => {
     const findUserReview = currentUserBooks.reviews.find(
@@ -64,11 +75,7 @@ const Page = async () => {
             <div className="max-w-[200px]">
               <div className="border-b border-b-slate-300">
                 <h3>Bookshelves</h3>
-                <ul>
-                  <li>Bookshelf 1</li>
-                  <li>Bookshelf 2</li>
-                  <li>Bookshelf 3</li>
-                </ul>
+                <ul>{userBookshelfDisplay()}</ul>
               </div>
               <div>
                 <h3>Your reading activity</h3>

@@ -15,10 +15,14 @@ type UserBookData {
   bookProgress Int
 }
 
-type Bookshelf {
+model Bookshelf {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  bookIds   String[]
+  bookIds   String[] @db.ObjectId
   isDefault Boolean
+  userId    String   @db.ObjectId
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -31,13 +35,14 @@ model User {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   bookProgress   UserBookData[]
-  bookshelves    Bookshelf[]
+  bookshelfIds   String[]       @db.ObjectId
   bookIds        String[]       @db.ObjectId
   reviewIds      String[]       @db.ObjectId
 
-  books    Book[]    @relation(fields: [bookIds], references: [id])
-  reviews  Review[]
-  accounts Account[]
+  books       Book[]      @relation(fields: [bookIds], references: [id])
+  reviews     Review[]
+  accounts    Account[]
+  bookshelves Bookshelf[]
 }
 
 model Account {
