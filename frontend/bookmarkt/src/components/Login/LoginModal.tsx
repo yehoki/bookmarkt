@@ -42,6 +42,7 @@ const LoginModal = () => {
             text="text-[#333333]"
             border="border-[1px] border-[#D6D0C4]"
             email
+            mode="signUp"
           />
 
           <div>Already a member? Sign In</div>

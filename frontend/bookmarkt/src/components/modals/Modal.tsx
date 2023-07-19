@@ -8,6 +8,7 @@ import LoginButton from '../Login/LoginButton';
 import { FcGoogle } from 'react-icons/fc';
 import { BsGithub } from 'react-icons/bs';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export interface ModalInput {
   label: string;
@@ -30,6 +31,8 @@ const Modal: React.FC<ModalProps> = ({
   mode,
   onFormSubmit,
 }) => {
+  const router = useRouter();
+
   const inputs = modalInputs.map((modalInput: ModalInput) => {
     return (
       <RegLogInput
@@ -87,6 +90,7 @@ const Modal: React.FC<ModalProps> = ({
       });
       if (callback.ok) {
         console.log('New account made');
+        router.push('/login');
       }
     } catch (err: any) {
       console.log(err);
