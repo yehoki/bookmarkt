@@ -12,6 +12,23 @@ export async function POST(req: Request) {
       email,
       name,
       hashedPassword,
+      bookshelves: [
+        {
+          name: 'Read',
+          bookIds: [],
+          isDefault: true,
+        },
+        {
+          name: 'Currently reading',
+          bookIds: [],
+          isDefault: true,
+        },
+        {
+          name: 'Want to read',
+          bookIds: [],
+          isDefault: true,
+        },
+      ],
     },
   });
   return NextResponse.json(user);
