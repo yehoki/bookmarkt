@@ -1,7 +1,6 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import getMostRecentReviews from '@/actions/getMostRecentReviews';
-import ConditionalNav from '@/components/ConditionalNav';
 import HomeBox from '@/components/HomeBox';
 import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
@@ -115,7 +114,11 @@ export default async function Home() {
           </div>
           <div className="flex flex-col gap-2 mx-auto">
             {/* Review tab */}
-            {mobileUpdateDisplay}
+            {mostRecentReviews.length === 0 ? (
+              <div className="text-sm text-center">No more updates</div>
+            ) : (
+              mobileUpdateDisplay
+            )}
           </div>
         </div>
         <div className="hidden md:flex flex-row justify-between mt-2 ">
@@ -123,16 +126,18 @@ export default async function Home() {
             <HomeBox heading="Currently reading" bottomBorder>
               <div>
                 <div className="flex flex-col gap-2 py-2">
-                  <HomeBook
-                    title={firstTwoBooks[0].title}
-                    authors={firstTwoBooks[0].author}
-                    googleBookId={firstTwoBooks[0].googleId}
-                    imgsrc={
-                      firstTwoBooks[0].imageLinks.thumbnail
-                        ? firstTwoBooks[0].imageLinks.thumbnail
-                        : undefined
-                    }
-                  />
+                  {firstTwoBooks.length > 0 && (
+                    <HomeBook
+                      title={firstTwoBooks[0].title}
+                      authors={firstTwoBooks[0].author}
+                      googleBookId={firstTwoBooks[0].googleId}
+                      imgsrc={
+                        firstTwoBooks[0].imageLinks.thumbnail
+                          ? firstTwoBooks[0].imageLinks.thumbnail
+                          : undefined
+                      }
+                    />
+                  )}
                   {/* <HomeBook
                     title={firstTwoBooks[1].title}
                     authors={firstTwoBooks[1].author}
@@ -189,7 +194,13 @@ export default async function Home() {
             </div>
             <div className="mt-2">
               <div className="uppercase font-medium">Updates</div>
-              <div className="flex flex-col gap-4 pt-2">{updateDisplay}</div>
+              <div className="flex flex-col gap-4 pt-2">
+                {mostRecentReviews.length === 0 ? (
+                  <div className="text-sm text-center">No more updates</div>
+                ) : (
+                  updateDisplay
+                )}
+              </div>
             </div>
           </div>
           <SwitchWithFooter />
