@@ -20,7 +20,7 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
   const [isOwned, setIsOwned] = useState(book.isOwned ? book.isOwned : false);
   const router = useRouter();
   const handleAddBook = async () => {
-    const test = await fetch('http://localhost:3000/api/users/books', {
+    const test = await fetch('http://127.0.0.1:3000/api/users/books', {
       method: 'POST',
       body: JSON.stringify({
         id: book.id,

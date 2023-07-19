@@ -45,14 +45,22 @@ export interface GoogleBookReturnInterface {
   items: GoogleBookReturnItemsInterface[];
 }
 
-export async function getBooksFromSearch(query: string, maxResults=20) {
+export async function getBooksFromSearch(query: string, maxResults = 20) {
   const partialResponse =
     'totalItems,items(id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers))';
+
   const res = await fetch(
     `${googleAPIBaseUrl}/volumes/?q=${parseQuery(
       query
-    )}&fields=${partialResponse}&key=${GOOGLE_API_KEY}&maxResults=${maxResults}`
+    )}&fields=${partialResponse}&key=${GOOGLE_API_KEY}&maxResults=${maxResults}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
   );
+
   if (!res.ok) {
     return null;
   }

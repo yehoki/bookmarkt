@@ -1,9 +1,5 @@
-import {
-  GoogleBookReturnInterface,
-  getBooksFromSearch,
-} from '@/actions/getBooksFromSearch';
 import getCurrentUser from '@/actions/getCurrentUser';
-import getUserBooks from '@/actions/getUserBooks';
+import { getUserBookData } from '@/actions/getUserBookData';
 import SearchBookDisplay from '@/components/Books/SearchBooks/SearchBookDisplay';
 import SearchBox from '@/components/Books/SearchBooks/SearchBox';
 
@@ -14,29 +10,6 @@ interface PageProps {
   };
 }
 
-const getUserBookData = async (query: string, userId: string) => {
-  const userBooks = await getUserBooks(userId);
-  const userGoogleBooks = userBooks.map((book) => book.googleId);
-  const booksFromSearch = await getBooksFromSearch(query);
-  if (booksFromSearch && userId !== '') {
-    const returnBooks = booksFromSearch.items.map((book) => ({
-      ...book,
-      isOwned: userGoogleBooks.includes(book.id),
-    }));
-    const finalBooks: GoogleBookReturnInterface = {
-      items: returnBooks,
-      totalItems: booksFromSearch.totalItems,
-    };
-    return finalBooks;
-  } else if (booksFromSearch && userId === '') {
-    return booksFromSearch;
-  }
-  return {
-    items: [],
-    totalItems: 0,
-  };
-};
-
 const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
   const currentUser = await getCurrentUser();
   const query =
@@ -44,6 +17,8 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
       ? searchParams.q
       : '';
   const userId = currentUser ? currentUser.id : '';
+
+  // await getUserBookData(query, userId);
 
   const finalBooks = await getUserBookData(query, userId);
   // FIRST - Move all code to a function

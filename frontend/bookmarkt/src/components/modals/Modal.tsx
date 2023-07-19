@@ -80,7 +80,7 @@ const Modal: React.FC<ModalProps> = ({
       if (!name || !email || !passOne || !passTwo) {
         throw new Error('Details missing');
       }
-      const callback = await fetch('http://localhost:3000/api/register', {
+      const callback = await fetch('http://127.0.0.1:3000/api/register', {
         method: 'POST',
         body: JSON.stringify({
           name: name,

@@ -25,7 +25,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
   const bookReviewModal = useBookReviewModal();
   const handleAddRating = async () => {
     setIsLoading(true);
-    const getBooks = await fetch('http://localhost:3000/api/users/books');
+    const getBooks = await fetch('http://127.0.0.1:3000/api/users/books');
     if (!getBooks.ok) {
       setIsLoading(false);
       return null;
@@ -39,7 +39,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
         setIsLoading(false);
         return null;
       }
-      const addBook = await fetch('http://localhost:3000/api/users/books', {
+      const addBook = await fetch('http://127.0.0.1:/api/users/books', {
         method: 'POST',
         body: JSON.stringify({
           id: bookInfo.id,
@@ -66,7 +66,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
       });
     }
 
-    const res = await fetch('http://localhost:3000/api/review', {
+    const res = await fetch('http://127.0.0.1:3000/api/review', {
       method: 'POST',
       body: JSON.stringify({
         rating: stars,
