@@ -43,7 +43,7 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
             </div>
           </div>
         </div>
-        <div className="w-[300px]">Suggestions</div>
+        {/* <div className="w-[300px]">Suggestions</div> */}
       </div>
     </div>
   );

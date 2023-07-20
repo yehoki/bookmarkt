@@ -14,7 +14,11 @@ const Page = async () => {
       return <></>;
     }
     return currentUserBookshelves.map((bookshelf) => {
-      return <li key={bookshelf.id}>{bookshelf.name}</li>;
+      return (
+        <li key={bookshelf.id}>
+          {bookshelf.name}({bookshelf.bookIds.length})
+        </li>
+      );
     });
   };
 
@@ -74,8 +78,11 @@ const Page = async () => {
             {/* Left col */}
             <div className="max-w-[200px]">
               <div className="border-b border-b-slate-300">
-                <h3>Bookshelves</h3>
-                <ul>{userBookshelfDisplay()}</ul>
+                <h3 className="font-semibold">Bookshelves</h3>
+                <ul className="text-sm">
+                  <li>All ({currentUserBooks.books.length})</li>
+                  {userBookshelfDisplay()}
+                </ul>
               </div>
               <div>
                 <h3>Your reading activity</h3>

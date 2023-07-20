@@ -16,7 +16,7 @@ const SearchBookDisplay: React.FC<SearchBookDisplayProps> = ({
   books,
   resultSize,
 }) => {
-  const allBooks = books.map((book: GoogleBookItemsInterface) => {
+  const allBooks = books.map((book: GoogleBookReturnItemsInterface) => {
     return <DisplaySingleBook book={book} key={book.id} />;
   });
   return (

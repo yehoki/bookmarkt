@@ -17,7 +17,7 @@ const HomeBox: React.FC<HomeBoxProps> = ({
 }) => {
   return (
     <div className="py-2 border-b-[1px]">
-      <div className="uppercase ">{heading}</div>
+      <div className="uppercase font-semibold">{heading}</div>
       {children}
     </div>
   );

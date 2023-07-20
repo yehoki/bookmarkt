@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
   try {
     await prisma.review.deleteMany({});
+    await prisma.bookshelf.deleteMany({});
     await prisma.book.deleteMany({});
     await prisma.user.deleteMany({});
     await prisma.account.deleteMany({});

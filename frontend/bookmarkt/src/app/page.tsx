@@ -90,7 +90,7 @@ export default async function Home() {
   ];
 
   return (
-    <>
+    <div className="w-full h-[100dvh] bg-[rgba(244,241,234,0.5)]">
       <Navbar currentUser={currentUser} />
       <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px]">
         <div className="md:hidden mx-auto max-w-[625px] px-2">
@@ -206,6 +206,6 @@ export default async function Home() {
           <SwitchWithFooter />
         </div>
       </div>
-    </>
+    </div>
   );
 }

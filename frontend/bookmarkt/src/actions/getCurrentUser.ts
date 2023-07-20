@@ -17,6 +17,9 @@ export default async function getCurrentUser() {
       where: {
         email: session.user.email as string,
       },
+      include: {
+        bookshelves: true
+      }
     });
     if (!currentUser) {
       return null;
