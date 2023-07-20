@@ -34,6 +34,7 @@ const Page = async () => {
       };
     }
     return {
+      bookshelves: currentUserBookshelves ? currentUserBookshelves : [],
       id: book.id,
       googleId: book.googleId,
       title: book.title,
@@ -101,6 +102,7 @@ const Page = async () => {
                   {currentUserBookObject.map((book) => (
                     <MyBook
                       key={book.id}
+                      bookshelves={book.bookshelves}
                       title={book.title}
                       authors={book.authors}
                       id={book.id}

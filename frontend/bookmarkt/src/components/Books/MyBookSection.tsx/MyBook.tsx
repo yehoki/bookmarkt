@@ -6,8 +6,11 @@ import { useState } from 'react';
 import RatingAndPublish from '../Ratings/RatingAndPublish';
 import SingleBookReviews from '../SingleBook/SingleBookReviews';
 import useBookReviewModal from '@/hooks/useBookReviewModal';
+import { Bookshelf } from '@prisma/client';
+import AddBookButton from '../SearchBooks/AddBookButton';
 
 interface MyBookProps {
+  bookshelves: Bookshelf[];
   title: string;
   id: string;
   googleId: string;
@@ -25,6 +28,7 @@ interface MyBookProps {
 }
 
 const MyBook: React.FC<MyBookProps> = ({
+  bookshelves,
   title,
   id,
   googleId,
@@ -48,6 +52,16 @@ const MyBook: React.FC<MyBookProps> = ({
       userReview: userReview.review,
     });
     bookReviewModal.onOpen();
+  };
+
+  const currentBookshelf = () => {
+    const singleBookshelf = bookshelves.filter((bookshelf) =>
+      bookshelf.bookIds.includes(id)
+    );
+    if (singleBookshelf.length !== 0) {
+      return singleBookshelf[0].name;
+    }
+    return '';
   };
 
   const extractTextFromDescription = (description: string) => {
@@ -125,7 +139,17 @@ const MyBook: React.FC<MyBookProps> = ({
           )}
         </div>
         <div className="flex justify-between items-center">
-          <div>read button</div>
+          <div>
+            {currentBookshelf()}
+            <AddBookButton
+              label=""
+              bookId={googleId}
+              isOwned={false}
+              onClick={() => console.log('test')}
+              bookshelves={bookshelves}
+              currentBookshelf={currentBookshelf()}
+            />
+          </div>
           <div>
             <SingleBookReviews
               bookId={googleId}
