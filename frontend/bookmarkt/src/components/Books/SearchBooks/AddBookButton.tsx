@@ -37,6 +37,8 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
           onClick={() => {
             setIsBookshelfDropdown(!isBookshelfDropdown);
           }}
+          onMouseEnter={() => setIsBookshelfDropdown(true)}
+          onMouseLeave={() => setIsBookshelfDropdown(false)}
         >
           <AiFillCaretDown size={10} className="fill-white" />
           <div
@@ -46,7 +48,7 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
             border-[1px] border-neutral-300 rounded-sm
             ${
               isBookshelfDropdown
-                ? 'scale-100 origin-top-right duration-300 transform ease-in-out'
+                ? 'scale-100 origin-top-right delay-150 duration-300 transform ease-in-out'
                 : 'scale-0 origin-top-right duration-300 transform ease-in-out'
             }`}
           >
