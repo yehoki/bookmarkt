@@ -39,6 +39,7 @@ const MyBook: React.FC<MyBookProps> = ({
   description,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isBookShowing, setIsBookShowing] = useState(false);
   const bookReviewModal = useBookReviewModal();
 
   const handleEditReview = () => {
@@ -75,7 +76,11 @@ const MyBook: React.FC<MyBookProps> = ({
   );
 
   return (
-    <div className="relative group w-[100px]">
+    <div
+      className="relative group w-[100px]"
+      onMouseEnter={() => setIsBookShowing(true)}
+      onMouseLeave={() => setIsBookShowing(false)}
+    >
       <Link
         href={`/books/${googleId}`}
         className="
@@ -101,12 +106,18 @@ const MyBook: React.FC<MyBookProps> = ({
         edit
       </div>
       <div
-        className="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 
+        className={`
+        ${
+          isBookShowing
+            ? 'scale-100 origin-top-left'
+            : 'scale-0 origin-top-left'
+        }
+        absolute
         text-sm md:text-base  
         text-black -left-[100px] md:left-[102px]     md:top-0 
           bg-white
           z-10 w-[240px] md:w-[380px] p-[10px] text-left
-          transition delay-700 "
+          transition delay-700 `}
       >
         <div className="text-lg font-semibold">{title}</div>
         <div className="text-sm">By {authors[0]}</div>
