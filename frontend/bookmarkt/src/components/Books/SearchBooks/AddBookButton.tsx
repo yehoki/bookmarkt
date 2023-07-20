@@ -22,12 +22,30 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   currentBookshelf,
 }) => {
   const [isBookshelfDropdown, setIsBookshelfDropdown] = useState(false);
+  const [displayBookshelf, setDisplayBookshelf] = useState(currentBookshelf);
   // fetch if book is read
+
+  const handleChangeBookshelf = async (newBookshelfName: string) => {
+    if (currentBookshelf !== '') {
+      const res = await fetch(`http://localhost:3000/api/users/bookshelves`, {
+        method: 'POST',
+        body: JSON.stringify({
+          currentBookshelf: displayBookshelf,
+          nextBookshelf: newBookshelfName,
+          bookId: bookId,
+        }),
+      });
+      setDisplayBookshelf(newBookshelfName);
+    }
+  };
+
   const display =
-    currentBookshelf !== '' ? (
+    displayBookshelf !== '' ? (
       <div className="flex items-center gap-[2px]">
         <FaCheck size={14} className="fill-green-800" />
-        {currentBookshelf}
+        <div className="font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap">
+          {displayBookshelf}
+        </div>
       </div>
     ) : (
       'Want to read'
@@ -38,8 +56,8 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
       className="hover:bg-neutral-300 pl-[15px] text-xs py-[1px]
       cursor-pointer"
       key={bookshelf.id}
-      onClick={() => {
-        setIsBookshelfDropdown(true);
+      onClick={(e) => {
+        handleChangeBookshelf(e.currentTarget.innerText);
       }}
     >
       {bookshelf.name}
