@@ -41,14 +41,21 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
           <AiFillCaretDown size={10} className="fill-white" />
           <div
             className={`absolute right-0 top-[26px]
-            cursor-auto
-      w-[180px] pl-[15px] bg-white 
-      border-[1px] border-neutral-300 rounded-sm
-      transform scale-0 group-hover:scale-100 delay-300 duration-150 ease-in-out origin-top
-      z-10
-      `}
+            cursor-auto w-[180px] pl-[15px] z-10
+          bg-white text-black
+            border-[1px] border-neutral-300 rounded-sm
+            ${
+              isBookshelfDropdown
+                ? 'scale-100 origin-top-right duration-300 transform ease-in-out'
+                : 'scale-0 origin-top-right duration-300 transform ease-in-out'
+            }`}
           >
-            Dropdown
+            <ul>
+              <li>Bookshelf 1</li>
+            </ul>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
         </div>
       </div>

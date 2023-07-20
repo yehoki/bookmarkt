@@ -27,8 +27,8 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
   // 3. Enables add book button if the book is not owned
 
   return (
-    <div className="pt-32 navOne:pt-24 mx-auto max-w-[970px] text-left px-2">
-      <div className="flex flex-row">
+    <div className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2">
+      <div className="flex flex-row mt-[15px]">
         <div className="w-[625px]">
           <div className="font-bold text-xl text-goodreads-brown mb-4">
             Search
