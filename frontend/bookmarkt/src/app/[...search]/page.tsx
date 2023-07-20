@@ -1,4 +1,5 @@
 import getCurrentUser from '@/actions/getCurrentUser';
+import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import { getUserBookData } from '@/actions/getUserBookData';
 import SearchBookDisplay from '@/components/Books/SearchBooks/SearchBookDisplay';
 import SearchBox from '@/components/Books/SearchBooks/SearchBox';
@@ -21,11 +22,11 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
   // await getUserBookData(query, userId);
 
   const finalBooks = await getUserBookData(query, userId);
+  const userBookshelves = await getCurrentUserBookshelves();
   // FIRST - Move all code to a function
   // 1. UseEffect -> Rerender everytime the searchparams change
   // 2. USe query from searchparams
   // 3. Enables add book button if the book is not owned
-
   return (
     <div className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2">
       <div className="flex flex-row mt-[15px]">
@@ -39,6 +40,7 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
               <SearchBookDisplay
                 resultSize={finalBooks?.totalItems ? finalBooks?.totalItems : 0}
                 books={finalBooks?.items ? finalBooks?.items : []}
+                bookshelves={userBookshelves ? userBookshelves : []}
               />
             </div>
           </div>

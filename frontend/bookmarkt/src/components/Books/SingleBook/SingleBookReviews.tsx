@@ -39,7 +39,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
         setIsLoading(false);
         return null;
       }
-      const addBook = await fetch('http://localhost:/api/users/books', {
+      const addBook = await fetch('http://localhost:3000/api/users/books', {
         method: 'POST',
         body: JSON.stringify({
           id: bookInfo.id,

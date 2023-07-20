@@ -24,6 +24,7 @@ export interface GoogleBookInterface {
 export interface GoogleBookReturnItemsInterface {
   id: string;
   isOwned?: boolean;
+  bookshelf?: string;
   volumeInfo: {
     authors?: string[];
     description?: string;

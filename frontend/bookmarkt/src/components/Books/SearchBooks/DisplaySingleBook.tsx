@@ -11,14 +11,21 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import RatingAndPublish from '../Ratings/RatingAndPublish';
+import { Bookshelf } from '@prisma/client';
+import { getSingleBookFromDB } from '@/actions/getSingleBookFromDB';
 
 interface DisplaySingleBookProps {
   book: GoogleBookReturnItemsInterface;
+  bookshelves: Bookshelf[];
 }
 
-const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
+const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({
+  book,
+  bookshelves,
+}) => {
   const [isOwned, setIsOwned] = useState(book.isOwned ? book.isOwned : false);
   const router = useRouter();
+
   const handleAddBook = async () => {
     const test = await fetch('http://localhost:3000/api/users/books', {
       method: 'POST',
@@ -80,6 +87,8 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({ book }) => {
             bookId={book.id}
             isOwned={isOwned}
             onClick={handleAddBook}
+            bookshelves={bookshelves}
+            currentBookshelf={book.bookshelf ? book.bookshelf : ''}
           />
         </div>
         <div>Rate this book</div>
