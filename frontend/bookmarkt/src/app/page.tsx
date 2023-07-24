@@ -3,6 +3,7 @@ import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import getMostRecentReviews from '@/actions/getMostRecentReviews';
+import { getUserBooksByBookshelf } from '@/actions/getUserBooksByBookshelf';
 import HomeBox from '@/components/HomeBox';
 import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
@@ -29,7 +30,7 @@ export default async function Home() {
   const mostRecentReviews = await getMostRecentReviews();
   const booksReadFromThisYear = await getBooksReadThisYear();
   const userBookshelves = await getCurrentUserBookshelves();
-  // const wantToReadBooks =
+  const wantToReadBooks = await getUserBooksByBookshelf('Want to read');
 
   const updateDisplay = mostRecentReviews.map((review) => {
     const bookshelfName = currentUserBooks.books.find(
@@ -221,7 +222,52 @@ export default async function Home() {
               </div>
             </HomeBox>
             <HomeBox heading="Want to read" bottomBorder>
-              <div></div>
+              <div>
+                {wantToReadBooks && wantToReadBooks.length !== 0 ? (
+                  <div className="grid grid-cols-3 grid-rows-2 gap-1">
+                    {wantToReadBooks.slice(0, 6).map((book) => (
+                      <div className="border-[1px]" key={book.id}>
+                        <div className="relative w-[96px] h-[118px]">
+                          <Image
+                            src={
+                              book.imageLinks.thumbnail
+                                ? book.imageLinks.thumbnail
+                                : 'images/empty-book.png'
+                            }
+                            fill
+                            alt={`${book.title} cover`}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <div>
+                      <div className="relative w-[65px] h-[75px]">
+                        <Image
+                          src="images/read-next.svg"
+                          fill
+                          alt="Read next"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="whitespace-nowrap text-sm">
+                      What do you want to read next?
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div>
+                <Link
+                  className="hover:underline 
+                  text-goodreads-mybooks-green cursor-pointer"
+                  href="/books"
+                >
+                  View all books
+                </Link>
+              </div>
             </HomeBox>
             <HomeBox heading="Bookshelves">
               <div></div>

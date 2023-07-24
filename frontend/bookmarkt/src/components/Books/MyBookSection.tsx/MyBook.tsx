@@ -120,7 +120,7 @@ const MyBook: React.FC<MyBookProps> = ({
         text-black -left-[100px] md:left-[102px]     md:top-0 
           bg-white
           z-10 w-[240px] md:w-[380px] p-[10px] text-left
-          transition delay-700 `}
+          transition delay-300 `}
       >
         <div className="text-lg font-semibold">{title}</div>
         <div className="text-sm">By {authors[0]}</div>

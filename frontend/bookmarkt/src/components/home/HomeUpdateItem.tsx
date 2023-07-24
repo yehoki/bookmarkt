@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import DisplayStars from '../Books/Ratings/DisplayStars';
-import HomeUpdateBookDisplay from './HomeUpdateBookDIsplay';
+import HomeUpdateBookDisplay from './HomeUpdateBookDisplay';
 import { extractTextFromDescription, getTimeDifference } from '@/utils/helper';
 import Image from 'next/image';
 import { Bookshelf } from '@prisma/client';
