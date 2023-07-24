@@ -270,9 +270,23 @@ export default async function Home() {
               </div>
             </HomeBox>
             <HomeBox heading="Bookshelves">
-              <div>
+              <div className="pt-2 text-sm">
                 {userBookshelves?.map((bookshelf) => (
-                  <div key={bookshelf.id}>{bookshelf.name}</div>
+                  <div key={bookshelf.id} className="flex gap-4 my-[2px]">
+                    <Link
+                      href={`/books?shelf=${bookshelf.name}`}
+                      className="hover:underline text-goodreads-mybooks-green cursor-pointer"
+                    >
+                      {bookshelf.books.length}
+                    </Link>
+
+                    <Link
+                      href={`/books?shelf=${bookshelf.name}`}
+                      className="hover:underline text-goodreads-mybooks-green cursor-pointer"
+                    >
+                      {bookshelf.name}
+                    </Link>
+                  </div>
                 ))}
               </div>
             </HomeBox>
