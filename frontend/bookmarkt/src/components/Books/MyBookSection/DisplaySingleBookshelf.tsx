@@ -27,14 +27,15 @@ const DisplaySingleBookshelf: React.FC<DisplaySingleBookshelfProps> = ({
     const updatedQuery: any = {
       // We want to put the shelf currently into here
       ...currentQuery,
-      shelf: label,
+      shelf: bookshelfName,
     };
     const url = qs.stringifyUrl({
       url: '/books',
       query: updatedQuery,
     });
     router.push(url);
-  }, [params, router, label]);
+    router.refresh();
+  }, [params, router, bookshelfName]);
 
   return (
     <li
