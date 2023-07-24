@@ -1,5 +1,6 @@
 'use client';
 
+import { getTimeDifference } from '@/utils/helper';
 import Image from 'next/image';
 
 interface HomeUpdateItemMobileProps {
@@ -10,6 +11,7 @@ interface HomeUpdateItemMobileProps {
   imageUrl: string;
   reviewRating: number;
   reviewDescription: string;
+  reviewMadeAt: Date;
 }
 
 const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
@@ -17,10 +19,16 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
   bookTitle,
   bookAuthors,
   googleBookId,
+  reviewMadeAt,
   imageUrl,
   reviewRating,
   reviewDescription,
 }) => {
+  const timeAtRender = new Date();
+  const timeDifference = getTimeDifference(
+    timeAtRender.getTime(),
+    reviewMadeAt.getTime()
+  );
   return (
     <div
       className="rounded-sm relative p-[10px] min-h-[50px] pl-[50px] bg-white border-[1px] border-neutral-500
@@ -34,6 +42,12 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
           sizes="100vw"
           className="rounded-full"
         />
+      </div>
+      <div
+        className="absolute right-1 top-1 text-sm text-neutral-500
+      hover:underline cursor-pointer"
+      >
+        {timeDifference}
       </div>
       <div className="text-sm leading-1">
         <span className="text-goodreads-mybooks-green hover:underline cursor-pointer font-semibold">

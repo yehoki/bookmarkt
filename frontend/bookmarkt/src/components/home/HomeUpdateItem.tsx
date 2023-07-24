@@ -44,7 +44,12 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   relative
   "
     >
-      <div className="absolute right-1  top-1">{timeDifference}</div>
+      <div
+        className="absolute right-1 top-1 text-neutral-500
+      hover:underline cursor-pointer"
+      >
+        {timeDifference}
+      </div>
       <div>
         <Link href={'/'} className="font-semibold hover:underline text-sm">
           {userName}
