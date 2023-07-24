@@ -31,18 +31,27 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   const router = useRouter();
 
   const handleChangeBookshelf = async (newBookshelfName: string) => {
-    if (currentBookshelf !== '') {
+    if (displayBookshelf !== '') {
+      // When a current bookshelf exist, send it via a PUT request to update
       const res = await fetch(`http://localhost:3000/api/users/bookshelves`, {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify({
           currentBookshelf: displayBookshelf,
           nextBookshelf: newBookshelfName,
           bookId: bookId,
         }),
       });
-      setDisplayBookshelf(newBookshelfName);
-      router.refresh();
+    } else {
+      const res = await fetch(`http://localhost:3000/api/users/bookshelves`, {
+        method: 'POST',
+        body: JSON.stringify({
+          googleId: bookId,
+          newBookshelf: newBookshelfName,
+        }),
+      });
     }
+    setDisplayBookshelf(newBookshelfName);
+    router.refresh();
   };
 
   useEffect(() => {
@@ -51,18 +60,6 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
     );
     setBookshelvesWithoutCurrent(bookshelvesNotCurrent);
   }, [displayBookshelf]);
-
-  const display =
-    displayBookshelf !== '' ? (
-      <div className="flex items-center gap-[2px]">
-        <FaCheck size={14} className="fill-green-800" />
-        <div className="font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap">
-          {displayBookshelf}
-        </div>
-      </div>
-    ) : (
-      'Want to read'
-    );
 
   const bookshelfNames = bookshelvesWithoutCurrent.map((bookshelf) => (
     <li
@@ -89,7 +86,21 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
             : 'bg-[#F2F2F2] text-black border-none'
         } rounded-bl-sm rounded-tl-sm`}
         >
-          {display}
+          {displayBookshelf !== '' ? (
+            <div className="flex items-center gap-[2px]">
+              <FaCheck size={14} className="fill-green-800" />
+              <div className="font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap">
+                {displayBookshelf}
+              </div>
+            </div>
+          ) : (
+            <div
+              className="cursor-pointer"
+              onClick={() => handleChangeBookshelf('Want to read')}
+            >
+              Want to read
+            </div>
+          )}
         </div>
         <div
           className="px-2 py-2 hover:bg-[#409D69] rounded-tr-sm rounded-br-sm relative group
