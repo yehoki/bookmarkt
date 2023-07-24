@@ -1,5 +1,6 @@
 'use client';
 import { Bookshelf } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { FaCheck } from 'react-icons/fa';
@@ -27,6 +28,8 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
     useState(bookshelves);
   // fetch if book is read
 
+  const router = useRouter();
+
   const handleChangeBookshelf = async (newBookshelfName: string) => {
     if (currentBookshelf !== '') {
       const res = await fetch(`http://localhost:3000/api/users/bookshelves`, {
@@ -38,6 +41,7 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
         }),
       });
       setDisplayBookshelf(newBookshelfName);
+      router.refresh();
     }
   };
 
@@ -48,8 +52,8 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
     setBookshelvesWithoutCurrent(bookshelvesNotCurrent);
   }, [displayBookshelf]);
 
-  const display = () => {
-    return displayBookshelf !== '' ? (
+  const display =
+    displayBookshelf !== '' ? (
       <div className="flex items-center gap-[2px]">
         <FaCheck size={14} className="fill-green-800" />
         <div className="font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap">
@@ -59,7 +63,6 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
     ) : (
       'Want to read'
     );
-  };
 
   const bookshelfNames = bookshelvesWithoutCurrent.map((bookshelf) => (
     <li
@@ -86,12 +89,7 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
             : 'bg-[#F2F2F2] text-black border-none'
         } rounded-bl-sm rounded-tl-sm`}
         >
-          <div className="flex items-center gap-[2px]">
-            <FaCheck size={14} className="fill-green-800" />
-            <div className="font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap">
-              {displayBookshelf}
-            </div>
-          </div>
+          {display}
         </div>
         <div
           className="px-2 py-2 hover:bg-[#409D69] rounded-tr-sm rounded-br-sm relative group

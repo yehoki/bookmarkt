@@ -151,7 +151,6 @@ const MyBook: React.FC<MyBookProps> = ({
         </div>
         <div className="flex justify-between items-center">
           <div>
-            {currentBookshelf()}
             <AddBookButton
               label=""
               bookId={googleId}
