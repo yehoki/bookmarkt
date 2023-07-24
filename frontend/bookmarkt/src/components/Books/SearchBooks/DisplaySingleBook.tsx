@@ -4,7 +4,7 @@ import {
   GoogleBookItemsInterface,
   GoogleBookReturnItemsInterface,
 } from '@/actions/getBooksFromSearch';
-import { parseAuthors } from '@/utils/helper';
+import { extractYearFromDate, parseAuthors } from '@/utils/helper';
 import Image from 'next/image';
 import AddBookButton from './AddBookButton';
 import { useState } from 'react';
@@ -78,7 +78,11 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({
         <div>By {parseAuthors(book.volumeInfo.authors)}</div>
         <RatingAndPublish
           averageRating={0}
-          publishedYear="2023"
+          publishedYear={
+            book.volumeInfo.publishedDate
+              ? extractYearFromDate(book.volumeInfo.publishedDate)
+              : 'unknown'
+          }
           totalRatings={0}
         />
         <div className="flex flex-row gap-1">

@@ -8,6 +8,7 @@ import SingleBookReviews from '../SingleBook/SingleBookReviews';
 import useBookReviewModal from '@/hooks/useBookReviewModal';
 import { Bookshelf } from '@prisma/client';
 import AddBookButton from '../SearchBooks/AddBookButton';
+import { extractYearFromDate } from '@/utils/helper';
 
 interface MyBookProps {
   bookshelves: Bookshelf[];
@@ -20,6 +21,7 @@ interface MyBookProps {
     totalReviews: number;
     averageReview: number;
   };
+  publishedDate: string;
   userReview: {
     rating: number;
     review?: string;
@@ -37,6 +39,7 @@ const MyBook: React.FC<MyBookProps> = ({
   reviewData,
   userReview,
   description,
+  publishedDate,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isBookShowing, setIsBookShowing] = useState(false);
@@ -124,7 +127,7 @@ const MyBook: React.FC<MyBookProps> = ({
         <RatingAndPublish
           totalRatings={reviewData.totalReviews}
           averageRating={reviewData.averageReview}
-          publishedYear="2023"
+          publishedYear={extractYearFromDate(publishedDate)}
         />
         <div className="overflow-hidden">
           {isExpanded ? (

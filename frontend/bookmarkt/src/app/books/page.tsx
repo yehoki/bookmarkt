@@ -110,6 +110,7 @@ const Page = async () => {
                       thumbnailUrl={book.thumbnail}
                       reviewData={book.reviewData}
                       userReview={book.userBookReview}
+                      publishedDate={book.publishedDate}
                       description={
                         book.description === '' || !book.description
                           ? 'This book does not have any description yet...'

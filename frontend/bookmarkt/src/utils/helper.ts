@@ -41,3 +41,9 @@ export const extractTextFromDescription = (description: string) => {
   const extractedDescription = description.replace(/<[^>]+>/g, '');
   return extractedDescription;
 };
+
+
+export const extractYearFromDate = (stringDate: string) => {
+  const year = stringDate.split('-', 1)[0];
+  return year;
+}
