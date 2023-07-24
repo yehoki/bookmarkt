@@ -166,7 +166,28 @@ export default async function Home() {
               <div></div>
             </HomeBox>
             <HomeBox heading="Want to read" bottomBorder>
-              <div></div>
+              <div>
+                <div className="w-[110px] h-[130px] bg-[#7584e9]">
+                  <div className="text-white text-4xl font-semibold text-center pb-1">
+                    2023
+                  </div>
+                  <div className="w-[105px] h-[40px] relative mx-auto">
+                    <Image
+                      src="/images/2023-reading-challenge.svg"
+                      alt="Reading challenge"
+                      fill
+                    />
+                  </div>
+                  <div>
+                    <div className="text-white text-[22px] font-semibold uppercase text-center leading-none">
+                      Reading
+                    </div>
+                    <div className="text-white text-md font-semibold uppercase text-center leading-none">
+                      Challenge
+                    </div>
+                  </div>
+                </div>
+              </div>
             </HomeBox>
             <HomeBox heading="Bookshelves">
               <div></div>
