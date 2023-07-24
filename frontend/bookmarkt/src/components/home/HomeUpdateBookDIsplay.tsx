@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AddBookButton from '../Books/SearchBooks/AddBookButton';
 import { Bookshelf } from '@prisma/client';
+import SingleBookReviews from '../Books/SingleBook/SingleBookReviews';
 
 interface HomeUpdateBookDisplayProps {
   title: string;
@@ -30,7 +31,7 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
     <div
       className={`p-2 border-neutral-300 ${
         borderOff ? 'border-none pl-0' : 'border-[1px]'
-      } flex gap-1`}
+      } flex gap-2`}
     >
       <Link href={`/books/${googleBookId}`}>
         <div className="relative h-[180px] min-w-[110px]">
@@ -51,7 +52,7 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
         <div className="text-[#333333]">
           By {authors && authors[0] ? authors[0] : ''}
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <div>
             <AddBookButton
               bookId={googleBookId}
@@ -59,7 +60,14 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
               currentBookshelf={currentBookshelf}
             />
           </div>
-          <div>2</div>
+          <div className="hidden navOne:flex items-center gap-1">
+            <div className="text-sm whitespace-nowrap">{`Rate it`}</div>
+            <SingleBookReviews
+              bookId={googleBookId}
+              reviewRating={0}
+              size={18}
+            />
+          </div>
         </div>
         <div>
           {bookDescription}{' '}
