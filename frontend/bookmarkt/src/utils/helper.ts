@@ -47,3 +47,19 @@ export const extractYearFromDate = (stringDate: string) => {
   const year = stringDate.split('-', 1)[0];
   return year;
 }
+
+
+export const getTimeDifference = (timeNow: number, timeThen: number) => {
+  const timeDifference = (timeNow - timeThen)/1000;
+  if (timeDifference / 60 < 1) {
+    return 'Just now';
+  }
+  if (timeDifference / 60 >= 1 && timeDifference / 3600 < 1) {
+    return `${Math.floor(timeDifference / 60)}m`;
+  }
+  if (timeDifference / 3600 >= 1 && timeDifference / (3600 * 60) < 1) {
+    return `${Math.floor(timeDifference / 3600)}h`;
+  } else {
+    return `Over a day ago`;
+  }
+}

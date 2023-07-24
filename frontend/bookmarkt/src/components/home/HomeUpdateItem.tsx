@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import DisplayStars from '../Books/Ratings/DisplayStars';
 import HomeUpdateBookDisplay from './HomeUpdateBookDIsplay';
-import { extractTextFromDescription } from '@/utils/helper';
+import { extractTextFromDescription, getTimeDifference } from '@/utils/helper';
+import { useEffect, useState } from 'react';
 
 interface HomeUpdateItemProps {
   userName: string;
@@ -14,10 +15,12 @@ interface HomeUpdateItemProps {
   reviewRating: number;
   reviewDescription: string;
   authors?: string[];
+  reviewMadeAt: Date;
 }
 
 const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   userName,
+  reviewMadeAt,
   bookTitle,
   googleBookId,
   bookDescription,
@@ -27,6 +30,11 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   imageUrl,
 }) => {
   const extractedText = extractTextFromDescription(bookDescription);
+  const timeAtRender = new Date();
+  const timeDifference = getTimeDifference(
+    timeAtRender.getTime(),
+    reviewMadeAt.getTime()
+  );
   const slicedText = extractedText.slice(0, 175) + '...';
   return (
     <div
@@ -36,7 +44,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   relative
   "
     >
-      <div className="absolute right-1  top-1"></div>
+      <div className="absolute right-1  top-1">{timeDifference}</div>
       <div>
         <Link href={'/'} className="font-semibold hover:underline text-sm">
           {userName}

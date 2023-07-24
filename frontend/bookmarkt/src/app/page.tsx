@@ -33,6 +33,7 @@ export default async function Home() {
     return (
       <HomeUpdateItem
         key={review.id}
+        reviewMadeAt={review.createdAt}
         userName={review.user.name ? review.user.name : 'User'}
         bookTitle={review.book.title}
         imageUrl={
