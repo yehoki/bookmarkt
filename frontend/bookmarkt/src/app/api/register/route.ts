@@ -19,19 +19,19 @@ export async function POST(req: Request) {
     data: [
       {
         name: 'Read',
-        bookIds: [],
+        books: [],
         isDefault: true,
         userId: user.id,
       },
       {
         name: 'Currently reading',
-        bookIds: [],
+        books: [],
         isDefault: true,
         userId: user.id,
       },
       {
         name: 'Want to read',
-        bookIds: [],
+        books: [],
         isDefault: true,
         userId: user.id,
       },

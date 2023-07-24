@@ -15,6 +15,7 @@ interface HomeUpdateBookDisplayProps {
   borderOff?: boolean;
   bookshelves: Bookshelf[];
   currentBookshelf: string;
+  userBookReview: number;
 }
 
 const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
@@ -26,6 +27,7 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
   borderOff,
   bookshelves,
   currentBookshelf,
+  userBookReview,
 }) => {
   return (
     <div
@@ -64,7 +66,7 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
             <div className="text-sm whitespace-nowrap">{`Rate it`}</div>
             <SingleBookReviews
               bookId={googleBookId}
-              reviewRating={0}
+              reviewRating={userBookReview}
               size={18}
             />
           </div>

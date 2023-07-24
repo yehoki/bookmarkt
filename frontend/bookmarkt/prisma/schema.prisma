@@ -23,7 +23,7 @@ type BookshelfBooks {
 
 model Bookshelf {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String  @unique
+  name      String  
   books   BookshelfBooks[] 
   isDefault Boolean
   userId    String   @db.ObjectId

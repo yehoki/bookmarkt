@@ -41,6 +41,10 @@ export default async function Home() {
           )
         )?.name
       : '';
+    const userBookReview = currentUserBooks.reviews.find(
+      (userReview) => userReview.bookId === review.bookId
+    );
+
     return (
       <HomeUpdateItem
         key={review.id}
@@ -59,6 +63,9 @@ export default async function Home() {
         reviewDescription={review.description ? review.description : ''}
         authors={review.book.author}
         bookDescription={review.book.description}
+        userReview={
+          userBookReview && userBookReview.rating ? userBookReview.rating : 0
+        }
       />
     );
   });

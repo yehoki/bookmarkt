@@ -19,6 +19,7 @@ interface HomeUpdateItemProps {
   reviewMadeAt: Date;
   bookshelves: Bookshelf[];
   currentBookshelf: string;
+  userReview: number;
 }
 
 const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
@@ -33,6 +34,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   imageUrl,
   bookshelves,
   currentBookshelf,
+  userReview,
 }) => {
   const extractedText = extractTextFromDescription(bookDescription);
   const timeAtRender = new Date();
@@ -103,6 +105,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         borderOff={reviewDescription === ''}
         bookshelves={bookshelves}
         currentBookshelf={currentBookshelf}
+        userBookReview={userReview}
       />
     </div>
   );
