@@ -1,6 +1,7 @@
 import getBooksReadThisYear from '@/actions/getBooksReadThisYear';
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
+import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import getMostRecentReviews from '@/actions/getMostRecentReviews';
 import HomeBox from '@/components/HomeBox';
 import LoginModal from '@/components/Login/LoginModal';
@@ -27,13 +28,24 @@ export default async function Home() {
   const firstTwoBooks = currentUserBooks.books.slice(0, 3);
   const mostRecentReviews = await getMostRecentReviews();
   const booksReadFromThisYear = await getBooksReadThisYear();
-
+  const userBookshelves = await getCurrentUserBookshelves();
   // const wantToReadBooks =
 
   const updateDisplay = mostRecentReviews.map((review) => {
+    const bookshelfName = currentUserBooks.books.find(
+      (book) => book.id === review.book.id
+    )
+      ? userBookshelves?.find((bookshelf) =>
+          bookshelf.books.find(
+            (bookshelfBook) => bookshelfBook.bookId === review.bookId
+          )
+        )?.name
+      : '';
     return (
       <HomeUpdateItem
         key={review.id}
+        bookshelves={userBookshelves ? userBookshelves : []}
+        currentBookshelf={bookshelfName ? bookshelfName : ''}
         reviewMadeAt={review.createdAt}
         userName={review.user.name ? review.user.name : 'User'}
         bookTitle={review.book.title}

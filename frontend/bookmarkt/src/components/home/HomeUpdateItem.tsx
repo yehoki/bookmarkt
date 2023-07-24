@@ -5,6 +5,7 @@ import DisplayStars from '../Books/Ratings/DisplayStars';
 import HomeUpdateBookDisplay from './HomeUpdateBookDIsplay';
 import { extractTextFromDescription, getTimeDifference } from '@/utils/helper';
 import Image from 'next/image';
+import { Bookshelf } from '@prisma/client';
 
 interface HomeUpdateItemProps {
   userName: string;
@@ -16,6 +17,8 @@ interface HomeUpdateItemProps {
   reviewDescription: string;
   authors?: string[];
   reviewMadeAt: Date;
+  bookshelves: Bookshelf[];
+  currentBookshelf: string;
 }
 
 const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
@@ -28,6 +31,8 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   reviewDescription,
   authors,
   imageUrl,
+  bookshelves,
+  currentBookshelf,
 }) => {
   const extractedText = extractTextFromDescription(bookDescription);
   const timeAtRender = new Date();
@@ -96,6 +101,8 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         imageUrl={imageUrl}
         bookDescription={slicedText}
         borderOff={reviewDescription === ''}
+        bookshelves={bookshelves}
+        currentBookshelf={currentBookshelf}
       />
     </div>
   );

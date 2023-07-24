@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import AddBookButton from '../Books/SearchBooks/AddBookButton';
+import { Bookshelf } from '@prisma/client';
 
 interface HomeUpdateBookDisplayProps {
   title: string;
@@ -10,6 +12,8 @@ interface HomeUpdateBookDisplayProps {
   bookDescription?: string;
   imageUrl?: string;
   borderOff?: boolean;
+  bookshelves: Bookshelf[];
+  currentBookshelf: string;
 }
 
 const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
@@ -19,6 +23,8 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
   bookDescription,
   imageUrl,
   borderOff,
+  bookshelves,
+  currentBookshelf,
 }) => {
   return (
     <div
@@ -44,6 +50,16 @@ const HomeUpdateBookDisplay: React.FC<HomeUpdateBookDisplayProps> = ({
         </div>
         <div className="text-[#333333]">
           By {authors && authors[0] ? authors[0] : ''}
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <AddBookButton
+              bookId={googleBookId}
+              bookshelves={bookshelves}
+              currentBookshelf={currentBookshelf}
+            />
+          </div>
+          <div>2</div>
         </div>
         <div>
           {bookDescription}{' '}

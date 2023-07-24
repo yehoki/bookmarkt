@@ -6,10 +6,10 @@ import { AiFillCaretDown } from 'react-icons/ai';
 import { FaCheck } from 'react-icons/fa';
 
 interface AddBookButtonProps {
-  label: string;
+  label?: string;
   bookId: string;
-  isOwned: boolean;
-  onClick: () => void;
+  isOwned?: boolean;
+  onClick?: () => void;
   bookshelves: Bookshelf[];
   currentBookshelf: string;
 }
@@ -27,7 +27,6 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   const [bookshelvesWithoutCurrent, setBookshelvesWithoutCurrent] =
     useState(bookshelves);
   // fetch if book is read
-
   const router = useRouter();
 
   const handleChangeBookshelf = async (newBookshelfName: string) => {
