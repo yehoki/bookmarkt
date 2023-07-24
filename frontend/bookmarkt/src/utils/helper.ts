@@ -63,3 +63,8 @@ export const getTimeDifference = (timeNow: number, timeThen: number) => {
     return `Over a day ago`;
   }
 }
+
+export const parseBookshelfName = (bookshelfName: string):string => {
+  const firstParse = bookshelfName.replaceAll(' ','-');
+  return firstParse.toLowerCase();
+}

@@ -46,12 +46,12 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   return (
     <div
       className="
-  px-5 py-3 bg-white border-[1px] border-neutral-300
+  pl-8 pr-2 py-3 bg-white border-[1px] border-neutral-300
   rounded-sm text-sm
   relative
   "
     >
-      <div className="absolute -left-7 top-1">
+      <div className="absolute -left-5 top-1">
         <div
           className="relative w-10 h-10 rounded-full 
         border-[1px] border-neutral-200"

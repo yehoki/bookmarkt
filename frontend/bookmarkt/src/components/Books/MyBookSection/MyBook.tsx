@@ -117,7 +117,7 @@ const MyBook: React.FC<MyBookProps> = ({
         }
         absolute
         text-sm md:text-base  
-        text-black -left-[100px] md:left-[102px]     md:top-0 
+        text-black -left-[100px] navOne:left-[102px] navOne:top-0 
           bg-white
           z-10 w-[240px] md:w-[380px] p-[10px] text-left
           transition delay-300 `}

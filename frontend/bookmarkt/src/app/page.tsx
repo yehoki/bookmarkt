@@ -117,7 +117,7 @@ export default async function Home() {
   return (
     <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">
       <Navbar currentUser={currentUser} />
-      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px]">
+      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] h-[100dvh]">
         <div className="md:hidden mx-auto max-w-[625px] px-2">
           <div className="border-[#eeeeee] border-[1px] my-2">
             <div className="relative w-full aspect-[14/3] ">
@@ -270,7 +270,11 @@ export default async function Home() {
               </div>
             </HomeBox>
             <HomeBox heading="Bookshelves">
-              <div></div>
+              <div>
+                {userBookshelves?.map((bookshelf) => (
+                  <div key={bookshelf.id}>{bookshelf.name}</div>
+                ))}
+              </div>
             </HomeBox>
           </div>
           <div className="w-[460px] navOne:w-[560px]">

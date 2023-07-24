@@ -1,26 +1,26 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
-import MyBook from '@/components/Books/MyBookSection.tsx/MyBook';
+import DisplayBookshelves from '@/components/Books/MyBookSection/DisplayBookshelves';
+import MyBook from '@/components/Books/MyBookSection/MyBook';
 import BookReviewModal from '@/components/modals/BookReviewModal';
 import { Suspense } from 'react';
 
-const Page = async () => {
+interface BookPageProps {
+  searchParams: {
+    shelf: string;
+    perPage: string;
+  };
+}
+
+const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
   const currentUserBooks = await getCurrentUserBooks();
   const currentUserBookshelves = await getCurrentUserBookshelves();
-
-  const userBookshelfDisplay = () => {
-    if (!currentUserBookshelves) {
-      return <></>;
-    }
-    return currentUserBookshelves.map((bookshelf) => {
-      return (
-        <li key={bookshelf.id}>
-          {bookshelf.name}({bookshelf.books.length})
-        </li>
-      );
-    });
-  };
+  // console.log(searchParams);
+  // const query =
+  //   searchParams && searchParams.q && typeof searchParams.q === 'string'
+  //     ? searchParams.q
+  //     : '';
 
   const currentUserBookObject = currentUserBooks.books.map((book) => {
     const findUserReview = currentUserBooks.reviews.find(
@@ -80,10 +80,11 @@ const Page = async () => {
             <div className="max-w-[200px]">
               <div className="border-b border-b-slate-300">
                 <h3 className="font-semibold">Bookshelves</h3>
-                <ul className="text-sm">
-                  <li>All ({currentUserBooks.books.length})</li>
-                  {userBookshelfDisplay()}
-                </ul>
+                <DisplayBookshelves
+                  bookshelves={
+                    currentUserBookshelves ? currentUserBookshelves : []
+                  }
+                />
               </div>
               <div>
                 <h3>Your reading activity</h3>
