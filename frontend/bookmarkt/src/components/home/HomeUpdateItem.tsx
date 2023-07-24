@@ -4,7 +4,7 @@ import Link from 'next/link';
 import DisplayStars from '../Books/Ratings/DisplayStars';
 import HomeUpdateBookDisplay from './HomeUpdateBookDIsplay';
 import { extractTextFromDescription, getTimeDifference } from '@/utils/helper';
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface HomeUpdateItemProps {
   userName: string;
@@ -39,39 +39,63 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   return (
     <div
       className="
-  px-4 py-2 bg-white border-[1px] border-neutral-300
+  px-5 py-3 bg-white border-[1px] border-neutral-300
   rounded-sm text-sm
   relative
   "
     >
+      <div className="absolute -left-7 top-1">
+        <div
+          className="relative w-10 h-10 rounded-full 
+        border-[1px] border-neutral-200"
+        >
+          <Image
+            fill
+            src="/images/empty-user.png"
+            alt="User profile image"
+            className="rounded-full"
+          />
+        </div>
+      </div>
       <div
         className="absolute right-1 top-1 text-neutral-500
       hover:underline cursor-pointer"
       >
         {timeDifference}
       </div>
-      <div>
+      <div className="flex gap-1">
         <Link href={'/'} className="font-semibold hover:underline text-sm">
           {userName}
-        </Link>{' '}
-        reviewed{' '}
-        <Link
-          href={`/books/${googleBookId}`}
-          className="font-semibold hover:underline text-sm "
-        >
-          {bookTitle}
         </Link>
+        {reviewDescription === '' ? (
+          <div className="flex gap-1 items-center">
+            rated a book <DisplayStars averageRating={reviewRating} />
+          </div>
+        ) : (
+          <div className="flex gap-1">
+            reviewed{' '}
+            <Link
+              href={`/books/${googleBookId}`}
+              className="font-semibold hover:underline text-sm "
+            >
+              {bookTitle}
+            </Link>
+          </div>
+        )}
       </div>
-      <div className="flex items-center gap-1 text-sm text-neutral-400">
-        Rating <DisplayStars averageRating={reviewRating} />
-      </div>
-      <div className="text-sm">{reviewDescription}</div>
+      {reviewDescription !== '' && (
+        <div className="flex items-center gap-1 text-sm text-neutral-400">
+          Rating <DisplayStars averageRating={reviewRating} />
+        </div>
+      )}
+      <div className="text-sm mb-2">{reviewDescription}</div>
       <HomeUpdateBookDisplay
         title={bookTitle}
         googleBookId={googleBookId}
         authors={authors}
         imageUrl={imageUrl}
         bookDescription={slicedText}
+        borderOff={reviewDescription === ''}
       />
     </div>
   );

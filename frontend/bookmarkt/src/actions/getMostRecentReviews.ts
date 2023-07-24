@@ -3,11 +3,6 @@ import prisma from '@/lib/prismadb';
 export default async function getMostRecentReviews() {
   try {
     const mostRecentReviews = await prisma.review.findMany({
-      where: {
-        description: {
-          not: '',
-        },
-      },
       include: {
         user: true,
         book: true,

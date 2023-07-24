@@ -25,9 +25,10 @@ export default async function Home() {
 
   const currentUserBooks = await getCurrentUserBooks();
   const firstTwoBooks = currentUserBooks.books.slice(0, 3);
-
   const mostRecentReviews = await getMostRecentReviews();
   const booksReadFromThisYear = await getBooksReadThisYear();
+
+  // const wantToReadBooks =
 
   const updateDisplay = mostRecentReviews.map((review) => {
     return (
@@ -94,7 +95,7 @@ export default async function Home() {
   ];
 
   return (
-    <div className="w-full h-[100dvh] bg-[rgba(244,241,234,0.5)]">
+    <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">
       <Navbar currentUser={currentUser} />
       <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px]">
         <div className="md:hidden mx-auto max-w-[625px] px-2">
