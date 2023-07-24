@@ -27,9 +27,7 @@ export default async function Home() {
   const firstTwoBooks = currentUserBooks.books.slice(0, 3);
 
   const mostRecentReviews = await getMostRecentReviews();
-
   const booksReadFromThisYear = await getBooksReadThisYear();
-  console.log(booksReadFromThisYear);
 
   const updateDisplay = mostRecentReviews.map((review) => {
     return (
@@ -167,10 +165,7 @@ export default async function Home() {
               </div>
             </HomeBox>
             <HomeBox heading="2023 Reading Challenge" bottomBorder>
-              <div></div>
-            </HomeBox>
-            <HomeBox heading="Want to read" bottomBorder>
-              <div>
+              <div className="flex gap-2">
                 <div className="w-[110px] h-[130px] bg-[#7584e9]">
                   <div className="text-white text-4xl font-semibold text-center pb-1">
                     2023
@@ -191,7 +186,20 @@ export default async function Home() {
                     </div>
                   </div>
                 </div>
+                <div>
+                  <div className="text-2xl">
+                    {booksReadFromThisYear ? booksReadFromThisYear.length : 0}
+                  </div>
+                  <div className="text-lg">
+                    {booksReadFromThisYear && booksReadFromThisYear.length > 1
+                      ? 'books completed'
+                      : 'book completed'}
+                  </div>
+                </div>
               </div>
+            </HomeBox>
+            <HomeBox heading="Want to read" bottomBorder>
+              <div></div>
             </HomeBox>
             <HomeBox heading="Bookshelves">
               <div></div>
