@@ -1,5 +1,6 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import prisma from '@/lib/prismadb';
+import { BookshelfBooks } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -45,12 +46,18 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
 
-  const oldBookshelfBookIdsPostRemoval: string[] = oldBookshelf.bookIds.filter(
-    (bookshelfBookId) => bookshelfBookId !== bookFromGoogleId.id
-  );
-  const newBookshelfBookIdsPostAppend: string[] = [
-    ...newBookshelf.bookIds,
-    bookFromGoogleId.id,
+  const oldBookshelfBookIdsPostRemoval: BookshelfBooks[] =
+    oldBookshelf.books.filter(
+      (bookshelfBook) => bookshelfBook.bookId !== bookFromGoogleId.id
+    );
+
+  const newBook: BookshelfBooks = {
+    bookId: bookFromGoogleId.id,
+    addedToBookShelfAt: new Date(),
+  };
+  const newBookshelfBookIdsPostAppend: BookshelfBooks[] = [
+    ...newBookshelf.books,
+    newBook,
   ];
 
   const updateOldBookshelf = await prisma.bookshelf.update({
@@ -58,7 +65,7 @@ export async function POST(req: Request) {
       id: oldBookshelf.id,
     },
     data: {
-      bookIds: oldBookshelfBookIdsPostRemoval,
+      books: oldBookshelfBookIdsPostRemoval,
     },
   });
   const updateNewBookshelf = await prisma.bookshelf.update({
@@ -66,7 +73,7 @@ export async function POST(req: Request) {
       id: newBookshelf.id,
     },
     data: {
-      bookIds: newBookshelfBookIdsPostAppend,
+      books: newBookshelfBookIdsPostAppend,
     },
   });
   return NextResponse.json({ message: 'Update successful' });

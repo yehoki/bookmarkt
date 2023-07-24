@@ -1,3 +1,4 @@
+import getBooksReadThisYear from '@/actions/getBooksReadThisYear';
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
 import getMostRecentReviews from '@/actions/getMostRecentReviews';
@@ -26,6 +27,9 @@ export default async function Home() {
   const firstTwoBooks = currentUserBooks.books.slice(0, 3);
 
   const mostRecentReviews = await getMostRecentReviews();
+
+  const booksReadFromThisYear = await getBooksReadThisYear();
+  console.log(booksReadFromThisYear);
 
   const updateDisplay = mostRecentReviews.map((review) => {
     return (

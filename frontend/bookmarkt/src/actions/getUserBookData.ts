@@ -23,7 +23,7 @@ export const getUserBookData = async (query: string, userId: string) => {
         if (foundBook) {
           // If the user already has the book in their store
           const returnBookshelf = userBookshelves.find((bookshelf) =>
-            bookshelf.bookIds.includes(foundBook.id)
+            bookshelf.books.find((bookItem) => bookItem.bookId === foundBook.id)
           );
           if (returnBookshelf) {
             return {
@@ -50,7 +50,7 @@ export const getUserBookData = async (query: string, userId: string) => {
       if (foundBook) {
         // If the user already has the book in their store
         const returnBookshelf = userBookshelves.find((bookshelf) =>
-          bookshelf.bookIds.includes(foundBook.id)
+          bookshelf.books.find((bookItem) => bookItem.bookId === foundBook.id)
         );
         if (returnBookshelf) {
           return {

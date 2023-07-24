@@ -16,7 +16,7 @@ const Page = async () => {
     return currentUserBookshelves.map((bookshelf) => {
       return (
         <li key={bookshelf.id}>
-          {bookshelf.name}({bookshelf.bookIds.length})
+          {bookshelf.name}({bookshelf.books.length})
         </li>
       );
     });

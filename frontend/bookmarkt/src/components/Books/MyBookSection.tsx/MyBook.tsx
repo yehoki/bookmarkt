@@ -56,9 +56,9 @@ const MyBook: React.FC<MyBookProps> = ({
   };
 
   const currentBookshelf = () => {
-    const singleBookshelf = bookshelves.filter((bookshelf) =>
-      bookshelf.bookIds.includes(id)
-    );
+    const singleBookshelf = bookshelves.filter((bookshelf) => {
+      return bookshelf.books.find((book) => book.bookId === id);
+    });
     if (singleBookshelf.length !== 0) {
       return singleBookshelf[0].name;
     }

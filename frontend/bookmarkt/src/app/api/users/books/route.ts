@@ -1,5 +1,6 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import prisma from '@/lib/prismadb';
+import { BookshelfBooks } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 // Gets the currentUser's bookList
@@ -61,9 +62,7 @@ export async function POST(req: Request) {
   if (!wantToReadBookshelf) {
     return NextResponse.error();
   }
-  const wantToReadBooks = wantToReadBookshelf
-    ? wantToReadBookshelf.bookIds
-    : [];
+  const wantToReadBooks = wantToReadBookshelf ? wantToReadBookshelf.books : [];
 
   if (!findBook) {
     // When the new book does not exist
@@ -83,7 +82,11 @@ export async function POST(req: Request) {
         ISBN: ISBN,
       },
     });
-    wantToReadBooks.push(newBook.id);
+    const newWantToRead: BookshelfBooks = {
+      bookId: newBook.id,
+      addedToBookShelfAt: new Date(),
+    };
+    wantToReadBooks.push(newWantToRead);
     currentBooks.push(newBook.id);
 
     const updateUserBooks = await prisma.user.update({
@@ -99,7 +102,7 @@ export async function POST(req: Request) {
         id: wantToReadBookshelf.id,
       },
       data: {
-        bookIds: wantToReadBooks,
+        books: wantToReadBooks,
       },
     });
     return NextResponse.json({
@@ -109,7 +112,11 @@ export async function POST(req: Request) {
   }
 
   if (!currentUser.bookIds.includes(findBook.id)) {
-    wantToReadBooks.push(findBook.id);
+    const wantToRead:BookshelfBooks = {
+      bookId: findBook.id,
+      addedToBookShelfAt: new Date()
+    } 
+    wantToReadBooks.push(wantToRead);
     currentBooks.push(findBook.id);
     const updateUserBooks = await prisma.user.update({
       where: {
@@ -124,7 +131,7 @@ export async function POST(req: Request) {
         id: wantToReadBookshelf.id,
       },
       data: {
-        bookIds: wantToReadBooks,
+        books: wantToReadBooks,
       },
     });
     return NextResponse.json({

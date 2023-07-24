@@ -15,10 +15,16 @@ type UserBookData {
   bookProgress Int
 }
 
+
+type BookshelfBooks {
+  bookId String @db.ObjectId
+  addedToBookShelfAt DateTime @default(now())
+}
+
 model Bookshelf {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String  @unique
-  bookIds   String[] @db.ObjectId
+  books   BookshelfBooks[] 
   isDefault Boolean
   userId    String   @db.ObjectId
 
