@@ -1,11 +1,15 @@
 import getCurrentUser from '@/actions/getCurrentUser';
-import { getSingleBook } from '@/actions/getSingleBook';
+import { SingleGoogleBookType, getSingleBook } from '@/actions/getSingleBook';
 import getCurrentUserBooks from '@/actions/googleRefactored/getCurrentUserBooks';
+import getCurrentUserBookshelves from '@/actions/googleRefactored/getCurrentUserBookshelves';
 import { getGoogleBooksFromList } from '@/actions/googleRefactored/getGoogleBooksFromList';
+import getMostRecentReviews from '@/actions/googleRefactored/getMostRecentReviews';
+import { getUserBooksByBookshelf } from '@/actions/googleRefactored/getUserBooksByBookshelf';
 import HomeBox from '@/components/HomeBox';
 import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
 import HomeBook from '@/components/home/HomeBook';
+import HomeUpdateItem from '@/components/home/HomeUpdateItem';
 import SwitchWithFooter from '@/components/home/SwitchWithFooter';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,11 +24,28 @@ export default async function Page() {
       </>
     );
   }
+
+  const mostRecentReviews = await getMostRecentReviews();
+  const userBookshelves = await getCurrentUserBookshelves();
+  // fetch all the 'currently reading' books
+  const currentlyReadingBookIds = await getUserBooksByBookshelf(
+    'Currently reading'
+  );
+  let firstCurrentlyReadingBook: SingleGoogleBookType | null = null;
+  if (
+    currentlyReadingBookIds &&
+    currentlyReadingBookIds.googleBooks.length !== 0
+  ) {
+    firstCurrentlyReadingBook = await getSingleBook(
+      currentlyReadingBookIds.googleBooks[0].googleBookId
+    );
+  }
+
   const currentUserBooks = await getCurrentUserBooks();
   const currentUserGoogleBooks = currentUserBooks.bookData.map(
     (book) => book.googleId
   );
-  currentUserGoogleBooks.push('s1gVAAAAYAAJ');
+  // currentUserGoogleBooks.push('s1gVAAAAYAAJ');
 
   const googleBooks = await getGoogleBooksFromList(currentUserGoogleBooks);
 
@@ -40,9 +61,46 @@ export default async function Page() {
   });
 
   const firstBook = currentUserBooks.bookData[0];
-  const firstBookVolumeInfo = await getGoogleBooksFromList([
-    firstBook.googleId,
-  ]);
+  const firstBookVolumeInfo = await getGoogleBooksFromList(
+    firstBook ? [firstBook.googleId] : []
+  );
+
+  const updateDisplay = mostRecentReviews.map((review) => {
+    const bookshelfName = currentUserBooks.bookData.find(
+      (book) => book.googleId === review.bookData.googleId
+    )
+      ? userBookshelves?.find((bookshelf) =>
+          bookshelf.googleBooks.find(
+            (bookshelfBook) =>
+              bookshelfBook.googleBookId === review.googleBookId
+          )
+        )?.name
+      : '';
+
+    const userBookReview = currentUserBooks.reviews.find(
+      (userReview) => userReview.googleBookId === review.googleBookId
+    );
+
+    return (
+      <HomeUpdateItem
+        key={review.id}
+        bookshelves={userBookshelves ? userBookshelves : []}
+        currentBookshelf={bookshelfName ? bookshelfName : ''}
+        reviewMadeAt={review.createdAt}
+        userName={review.user.name ? review.user.name : 'User'}
+        bookTitle="test"
+        imageUrl=""
+        googleBookId={review.googleBookId}
+        reviewRating={review.rating}
+        reviewDescription={review.description ? review.description : ''}
+        authors={[]}
+        bookDescription=""
+        userReview={
+          userBookReview && userBookReview.rating ? userBookReview.rating : 0
+        }
+      />
+    );
+  });
 
   return (
     <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">
@@ -81,15 +139,16 @@ export default async function Page() {
             <HomeBox heading="Currently reading" bottomBorder>
               <div>
                 <div className="flex flex-col gap-2 py-2">
-                  {firstBook && firstBookVolumeInfo[0] && (
+                  {firstCurrentlyReadingBook !== null && (
                     <HomeBook
-                      title={firstBookVolumeInfo[0].volumeInfo.title}
-                      authors={firstBookVolumeInfo[0].volumeInfo.authors}
-                      googleBookId={firstBookVolumeInfo[0].id}
+                      title={firstCurrentlyReadingBook.volumeInfo.title}
+                      authors={firstCurrentlyReadingBook.volumeInfo.authors}
+                      googleBookId={firstCurrentlyReadingBook.id}
                       imgsrc={
-                        firstBookVolumeInfo[0].volumeInfo.imageLinks &&
-                        firstBookVolumeInfo[0].volumeInfo.imageLinks.thumbnail
-                          ? firstBookVolumeInfo[0].volumeInfo.imageLinks
+                        firstCurrentlyReadingBook.volumeInfo.imageLinks &&
+                        firstCurrentlyReadingBook.volumeInfo.imageLinks
+                          .thumbnail
+                          ? firstCurrentlyReadingBook.volumeInfo.imageLinks
                               .thumbnail
                           : ''
                       }
@@ -246,11 +305,11 @@ export default async function Page() {
             <div className="mt-2">
               <div className="uppercase font-medium">Updates</div>
               <div className="flex flex-col gap-4 pt-2">
-                {/* {mostRecentReviews.length === 0 ? (
-                <div className="text-sm text-center">No more updates</div>
-              ) : (
-                updateDisplay
-              )} */}
+                {mostRecentReviews.length === 0 ? (
+                  <div className="text-sm text-center">No more updates</div>
+                ) : (
+                  updateDisplay
+                )}
               </div>
             </div>
           </div>

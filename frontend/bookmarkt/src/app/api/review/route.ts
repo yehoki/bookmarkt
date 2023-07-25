@@ -38,6 +38,76 @@ export async function POST(req: Request) {
     },
   });
 
+  const findBookData = await prisma.bookData.findFirst({
+    where: {
+      googleId: bookId,
+    },
+    select: {
+      googleId: true,
+      reviewIds: true,
+      reviewData: true,
+    },
+  });
+  console.log('Find', findBookData);
+
+  if (!findBookData) {
+    const newBookData = await prisma.bookData.create({
+      data: {
+        googleId: bookId,
+        reviewData: {
+          averageReview: 0,
+          totalReviews: 0,
+        },
+      },
+    });
+    if (!newBookData) {
+      return NextResponse.error();
+    }
+    const review = await prisma.review.create({
+      data: {
+        // Change bookId/remove it completely once refactored
+        bookId: currentUser.id,
+        description: description,
+        rating: rating,
+        userId: currentUser.id,
+        googleBookId: newBookData.googleId,
+      },
+    });
+    if (!review) {
+      return NextResponse.error();
+    }
+    // Add the review to the user's list
+    const currentUserReviewIds = [...(currentUser.reviewIds || [])];
+    currentUserReviewIds.push(review.id);
+    const alterUser = await prisma.user.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        reviewIds: currentUserReviewIds,
+      },
+    });
+    // add the review and review data to the book's list
+    const currentBookReviewIds = [...(newBookData.reviewIds || [])];
+    currentBookReviewIds.push(review.id);
+    const alterBook = await prisma.bookData.update({
+      where: {
+        googleId: newBookData.googleId,
+      },
+      data: {
+        reviewIds: currentBookReviewIds,
+        reviewData: {
+          averageReview: handleNewReview(
+            newBookData.reviewData.totalReviews,
+            newBookData.reviewData.averageReview,
+            rating
+          ),
+          totalReviews: newBookData.reviewData.totalReviews + 1,
+        },
+      },
+    });
+  }
+
   // When the book does not exist
   // 1. Fetch it from the Google Books API
   // 2. Add it to our Database
@@ -85,6 +155,7 @@ export async function POST(req: Request) {
         description: description,
         rating: rating,
         userId: currentUser.id,
+        googleBookId: newBookData.googleId,
       },
     });
     // Add the review to the user's list
@@ -148,7 +219,7 @@ export async function POST(req: Request) {
         description: description,
       },
     });
-  
+
     const alterBook = await prisma.book.update({
       where: {
         id: findBook.id,
@@ -174,6 +245,7 @@ export async function POST(req: Request) {
       description: description,
       rating: rating,
       userId: currentUser.id,
+      googleBookId: bookId,
     },
   });
   // Add the review to the user's list

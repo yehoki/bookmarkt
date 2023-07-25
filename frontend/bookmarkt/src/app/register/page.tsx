@@ -1,3 +1,4 @@
+import getCurrentUser from '@/actions/getCurrentUser';
 import Modal, { ModalInput } from '@/components/modals/Modal';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
@@ -23,8 +24,8 @@ export default async function Page() {
       type: 'password',
     },
   ];
-  const session = await getServerSession();
-  if (session?.user) {
+  const currentUser = await getCurrentUser();
+  if (currentUser) {
     return redirect('/');
   }
 

@@ -1,3 +1,4 @@
+import getCurrentUser from '@/actions/getCurrentUser';
 import Modal, { ModalInput } from '@/components/modals/Modal';
 import { getServerSession } from 'next-auth';
 import { redirect, useRouter } from 'next/navigation';
@@ -6,8 +7,8 @@ import React from 'react';
 type Props = {};
 
 export default async function Login({}: Props) {
-  const session = await getServerSession();
-  if (session?.user) {
+  const currentUser = await getCurrentUser();
+  if (currentUser) {
     return redirect('/');
   }
 

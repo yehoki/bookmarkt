@@ -14,7 +14,7 @@ export async function GET(req: Request) {
         averageReview: 0,
         totalReviews: 0,
       },
-      googleId: 'yng_CwAAQBAJ',
+      googleId: 'qAY4jgEACAAJ',
     },
   });
 
@@ -29,5 +29,30 @@ export async function GET(req: Request) {
       googleBookIds: [...currentUser.googleBookIds, newBook.googleId],
     },
   });
-  return NextResponse.json(updateUserBooks);
+
+  const findOneBookshelf = await prisma.bookshelf.findFirst({
+    where: {
+      userId: currentUser.id,
+      name: 'Currently reading',
+    },
+  });
+
+  if (!findOneBookshelf) {
+    return NextResponse.error();
+  }
+
+  const updateOneBookshelf = await prisma.bookshelf.update({
+    where: {
+      id: findOneBookshelf.id,
+    },
+    data: {
+      googleBooks: [
+        {
+          googleBookId: 'yng_CwAAQBAJ',
+          addedToBookShelfAt: new Date(),
+        },
+      ],
+    },
+  });
+  return NextResponse.json(updateOneBookshelf);
 }

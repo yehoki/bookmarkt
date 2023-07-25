@@ -20,10 +20,16 @@ type BookshelfBooks {
   addedToBookShelfAt DateTime @default(now())
 }
 
+type NewBookshelfBooks {
+  googleBookId       String
+  addedToBookShelfAt DateTime @default(now())
+}
+
 model Bookshelf {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   books     BookshelfBooks[]
+  googleBooks NewBookshelfBooks[]
   isDefault Boolean
   userId    String           @db.ObjectId
 
