@@ -5,7 +5,7 @@ export default async function getMostRecentReviews() {
     const mostRecentReviews = await prisma.review.findMany({
       include: {
         user: true,
-        book: true,
+        bookData: true
       },
       orderBy: {
         createdAt: 'desc',

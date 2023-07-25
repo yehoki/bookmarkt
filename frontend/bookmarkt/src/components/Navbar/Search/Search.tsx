@@ -1,27 +1,21 @@
 'use client';
 
-// 1. Make Each result clickable to its actual book page --- DONE
-// 2. Render out 20 results at first try -> slice to show the first 5 results --- DONE
-// 3. Pass in props the result and pass in each individual one to see the page
-import Image from 'next/image';
 import React, { useCallback, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import SearchDropdownTile from './SearchDropdownTile';
-import {
-  GoogleBookReturnItemsInterface,
-  getBooksFromSearch,
-} from '@/actions/getBooksFromSearch';
-import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import useResultsStore from '@/hooks/useResultsStore';
-import { User } from '@prisma/client';
 import { getBookByISBN } from '@/actions/getBookByISBN';
 import { useRouter } from 'next/navigation';
+import {
+  GoogleBookItemInterface,
+  getBooksFromSearch,
+} from '@/actions/getBooksFromSearch';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState<
-    GoogleBookReturnItemsInterface[]
-  >([]);
+  const [searchResults, setSearchResults] = useState<GoogleBookItemInterface[]>(
+    []
+  );
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const searchResultsStore = useResultsStore();
   const router = useRouter();
@@ -34,12 +28,13 @@ const Search = () => {
     if (searchValue.length === 13) {
       const bookFromISBN = await getBookByISBN(searchValue);
       if (bookFromISBN) {
-        return router.push(`/books/${bookFromISBN.items[0].id}`);
+        return router.push(`/books/${bookFromISBN.id}`);
       }
     }
     let books = await getBooksFromSearch(searchValue);
     if (books) {
       searchResultsStore.setResultSize(books.totalItems);
+      setSearchResults(books.items);
     }
   };
 
@@ -56,8 +51,8 @@ const Search = () => {
   };
 
   const displayBookObjects = () => {
-    return searchResults.slice(0, 5).map((book: GoogleBookItemsInterface) => {
-      if (book?.volumeInfo?.title) {
+    return searchResults.slice(0, 5).map((book) => {
+      if (book) {
         return (
           <SearchDropdownTile
             key={book.id}
@@ -80,24 +75,6 @@ const Search = () => {
     });
   };
 
-  const displayBooks = (books: any) => {
-    return books.map((book: any) => {
-      return (
-        <li key={book.id}>
-          {book.volumeInfo.title}{' '}
-          {book.volumeInfo.authors ? `by ${book.volumeInfo.authors[0]}` : ''}{' '}
-          {book.volumeInfo.imageLinks ? (
-            <Image
-              src={book.volumeInfo.imageLinks.thumbnail}
-              alt={book.volumeInfo.description}
-              width={100}
-              height={100}
-            />
-          ) : null}
-        </li>
-      );
-    });
-  };
   return (
     <>
       <div className="hidden w-full bg-transparent md:flex flex-row relative mr-2 text-sm items-center">

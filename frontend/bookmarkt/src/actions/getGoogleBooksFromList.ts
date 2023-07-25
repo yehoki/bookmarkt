@@ -1,5 +1,5 @@
 import { ReviewData } from '@prisma/client';
-import { getSingleBook } from '../getSingleBook';
+import { getSingleBook } from './getSingleBook';
 
 export interface GoogleBookType {
   googleId: string;

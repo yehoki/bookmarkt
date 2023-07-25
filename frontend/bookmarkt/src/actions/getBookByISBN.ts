@@ -1,4 +1,6 @@
-import { GoogleBookReturnInterface, GoogleBookReturnItemsInterface } from "./getBooksFromSearch";
+
+
+import { GoogleBookItemInterface } from "./getBooksFromSearch";
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API;
 const googleAPIISBNSearchUrl =
@@ -13,9 +15,6 @@ export async function getBookByISBN(ISBN: string) {
   if (!res.ok) {
     return null;
   }
-  const bookData:GoogleBookReturnInterface = await res.json();
-  if (bookData.totalItems === 1){
-    return bookData
-  }
-  return null;
+  const bookData:GoogleBookItemInterface = await res.json();
+  return bookData;
 }

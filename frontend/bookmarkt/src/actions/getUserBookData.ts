@@ -1,6 +1,7 @@
+
+import { getBooksFromSearch } from './getBooksFromSearch';
 import getCurrentUserBookshelves from './getCurrentUserBookshelves';
-import { getBooksFromSearch } from './googleRefactored/getBooksFromSearch';
-import getUserBooks from './googleRefactored/getUserBooks';
+import getUserBooks from './getUserBooks';
 
 export const getUserBookData = async (query: string, userId: string) => {
   const userBooks = await getUserBooks(userId);

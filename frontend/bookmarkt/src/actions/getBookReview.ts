@@ -3,32 +3,32 @@ import getCurrentUser from './getCurrentUser';
 
 export default async function getBookReview(bookId: string) {
   try {
-    const user = await getCurrentUser();
+    const currentUser = await getCurrentUser();
 
-    if (!user) {
+    if (!currentUser) {
       throw new Error('Could not get user');
     }
-    const findBookId = await prisma.book.findFirst({
+    const findBookId = await prisma.bookData.findFirst({
       where: {
         googleId: bookId,
       },
       select: {
-        id: true,
+        googleId: true,
       },
     });
     const userReviews = await prisma.user.findFirst({
       where: {
-        id: user.id,
+        id: currentUser.id,
       },
       select: {
         reviews: true,
       },
     });
-    if (userReviews && userReviews.reviews && findBookId && findBookId.id) {
+    if (userReviews && userReviews.reviews && findBookId && findBookId.googleId) {
       return userReviews.reviews.filter(
-        (review) => review.bookId === findBookId.id
+        (review) => review.googleBookId === findBookId.googleId
       );
-    } else if (userReviews && userReviews.reviews){
+    } else if (userReviews && userReviews.reviews) {
       return [];
     }
     throw new Error('Something went wrong');

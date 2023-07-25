@@ -1,10 +1,10 @@
-import getCurrentUserBooks from '@/actions/googleRefactored/getCurrentUserBooks';
-import getCurrentUserBookshelves from '@/actions/googleRefactored/getCurrentUserBookshelves';
+import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
+import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import {
   GoogleBookType,
   getGoogleBooksFromList,
-} from '@/actions/googleRefactored/getGoogleBooksFromList';
-import { getUserBooksByBookshelf } from '@/actions/googleRefactored/getUserBooksByBookshelf';
+} from '@/actions/getGoogleBooksFromList';
+import { getUserBooksByBookshelf } from '@/actions/getUserBooksByBookshelf';
 import DisplayBookshelves from '@/components/Books/MyBookSection/DisplayBookshelves';
 import MyBook from '@/components/Books/MyBookSection/MyBook';
 import BookReviewModal from '@/components/modals/BookReviewModal';

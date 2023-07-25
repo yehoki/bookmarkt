@@ -2,21 +2,18 @@ import prisma from '@/lib/prismadb';
 
 export default async function getUserBooks(userId: string) {
   try {
-    const currentUserBooks = await prisma.user.findMany({
+    const currentUserBooks = await prisma.user.findFirst({
       where: {
         id: userId,
       },
       select: {
-        books: true,
+        bookData: true,
       },
     });
     if (!currentUserBooks) {
       throw new Error('Books could not be retrieved');
     }
-    const returnBooks = currentUserBooks[0].books.map((book) => ({
-      ...book,
-    }));
-    return returnBooks;
+    return currentUserBooks.bookData;
   } catch (err: any) {
     throw new Error(err);
   }

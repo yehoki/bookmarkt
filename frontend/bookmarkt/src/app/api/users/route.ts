@@ -1,11 +1,9 @@
-import dbConnect from '@/lib/dbConnect';
 import { UserType } from '@/models/user';
 import { NextRequest, NextResponse } from 'next/server';
 import UserModel from '@/models/user';
 import bcrypt from 'bcrypt';
 
 export async function GET(req: NextRequest) {
-  await dbConnect();
 
   try {
     const users = await UserModel.find({});
@@ -23,7 +21,6 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: Request) {
-  await dbConnect();
   const { name, username, password }: Partial<UserType> = await req.json();
   if (!name || !username || !password) {
     return NextResponse.json({ message: 'Missing required data', status: 400 });

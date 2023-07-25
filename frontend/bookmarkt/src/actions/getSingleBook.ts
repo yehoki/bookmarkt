@@ -1,4 +1,4 @@
-import { GoogleBookItemInterface } from "./googleRefactored/getBooksFromSearch";
+import { GoogleBookItemInterface } from "./getBooksFromSearch";
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API;
 const googleAPIBaseUrl = 'https://www.googleapis.com/books/v1';

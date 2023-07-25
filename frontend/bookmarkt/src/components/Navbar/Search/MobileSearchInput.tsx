@@ -1,8 +1,7 @@
 'use client';
 
 import {
-  GoogleBookItemsInterface,
-  GoogleBookReturnInterface,
+  GoogleBookItemInterface,
   getBooksFromSearch,
 } from '@/actions/getBooksFromSearch';
 import useMobileSearch from '@/hooks/useMobileSearch';
@@ -11,9 +10,9 @@ import { FormEvent, useEffect, useState } from 'react';
 
 const MobileSearchInput = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState<
-    GoogleBookItemsInterface[]
-  >([]);
+  const [searchResults, setSearchResults] = useState<GoogleBookItemInterface[]>(
+    []
+  );
   const mobileSearch = useMobileSearch();
 
   const handleSearchSubmit = async (e: FormEvent<HTMLFormElement>) => {

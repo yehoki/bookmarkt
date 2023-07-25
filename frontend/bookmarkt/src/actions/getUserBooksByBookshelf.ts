@@ -7,31 +7,24 @@ export async function getUserBooksByBookshelf(bookshelfName: string) {
     if (!currentUser) {
       return null;
     }
-    const currentUserBookshelf = await prisma.bookshelf.findFirst({
+    const currentUserBookshelfBooks = await prisma.bookshelf.findFirst({
       where: {
         userId: currentUser.id,
         name: bookshelfName,
       },
-    });
-
-    if (!currentUserBookshelf) {
-      return null;
-    }
-    const bookIds = currentUserBookshelf.books.map((book) => book.bookId);
-
-    const booksInBookshelf = await prisma.book.findMany({
-      where: {
-        id: {
-          in: bookIds,
+      select: {
+        googleBooks: {
+          select: {
+            googleBookId: true,
+          },
         },
       },
     });
 
-    if (!booksInBookshelf) {
+    if (!currentUserBookshelfBooks) {
       return null;
     }
-
-    return booksInBookshelf;
+    return currentUserBookshelfBooks;
   } catch (err: any) {
     throw new Error(err);
   }

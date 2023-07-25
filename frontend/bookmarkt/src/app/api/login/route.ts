@@ -1,4 +1,4 @@
-import dbConnect from '@/lib/dbConnect';
+
 import UserModel, { UserType } from '@/models/user';
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '@/utils/config';
 import { errorHandler } from '@/utils/errorHandler';
 export async function POST(req: Request) {
-  await dbConnect();
 
   const { username, password }: Partial<UserType> = await req.json();
   if (!username || !password) {

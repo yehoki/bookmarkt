@@ -1,17 +1,17 @@
 import prisma from '@/lib/prismadb';
-import { getSession } from './getCurrentUser';
+import getCurrentUser from './getCurrentUser';
 
 export default async function getCurrentUserBookshelves() {
   try {
-    const session = await getSession();
+    const currentUser = await getCurrentUser();
 
-    if (!session?.user?.email) {
+    if (!currentUser) {
       return null;
     }
 
     const currentUserWithBookshelves = await prisma.user.findUnique({
       where: {
-        email: session.user.email as string,
+        id: currentUser.id,
       },
       include: {
         bookshelves: true,

@@ -1,8 +1,8 @@
 import prisma from '@/lib/prismadb';
 
-export async function getSingleBookFromDB(googleId: string) {
+export async function getSingleBookFromDb(googleId: string) {
   try {
-    const book = await prisma.book.findFirst({
+    const book = await prisma.bookData.findFirst({
       where: {
         googleId: googleId,
       },
