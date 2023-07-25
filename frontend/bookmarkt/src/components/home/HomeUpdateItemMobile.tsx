@@ -2,6 +2,7 @@
 
 import { getTimeDifference } from '@/utils/helper';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 interface HomeUpdateItemMobileProps {
   userName: string;
@@ -47,7 +48,7 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
         className="absolute right-1 top-1 text-sm text-neutral-500
       hover:underline cursor-pointer"
       >
-        {timeDifference}
+        <Suspense fallback="">{timeDifference}</Suspense>
       </div>
       <div className="text-sm leading-1">
         <span className="text-goodreads-mybooks-green hover:underline cursor-pointer font-semibold">

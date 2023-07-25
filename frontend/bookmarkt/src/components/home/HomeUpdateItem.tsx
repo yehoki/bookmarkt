@@ -6,6 +6,7 @@ import HomeUpdateBookDisplay from './HomeUpdateBookDisplay';
 import { extractTextFromDescription, getTimeDifference } from '@/utils/helper';
 import Image from 'next/image';
 import { Bookshelf } from '@prisma/client';
+import { Suspense } from 'react';
 
 interface HomeUpdateItemProps {
   userName: string;
@@ -68,7 +69,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         className="absolute right-1 top-1 text-neutral-500
       hover:underline cursor-pointer"
       >
-        {timeDifference}
+        <Suspense fallback="...">{timeDifference}</Suspense>
       </div>
       <div className="flex gap-1">
         <Link href={'/'} className="font-semibold hover:underline text-sm">

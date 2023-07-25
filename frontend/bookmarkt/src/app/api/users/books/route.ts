@@ -51,6 +51,12 @@ export async function POST(req: Request) {
     },
   });
 
+  const findBookData = await prisma.bookData.findFirst({
+    where: {
+      googleId: id,
+    },
+  });
+
   const currentBooks = [...(currentUser.bookIds || [])];
 
   const wantToReadBookshelf = await prisma.bookshelf.findFirst({
@@ -63,6 +69,18 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
   const wantToReadBooks = wantToReadBookshelf ? wantToReadBookshelf.books : [];
+
+  if (!findBookData) {
+    const newBookData = await prisma.bookData.create({
+      data: {
+        googleId: id,
+        reviewData: {
+          averageReview: 0,
+          totalReviews: 0,
+        },
+      },
+    });
+  }
 
   if (!findBook) {
     // When the new book does not exist
@@ -112,10 +130,10 @@ export async function POST(req: Request) {
   }
 
   if (!currentUser.bookIds.includes(findBook.id)) {
-    const wantToRead:BookshelfBooks = {
+    const wantToRead: BookshelfBooks = {
       bookId: findBook.id,
-      addedToBookShelfAt: new Date()
-    } 
+      addedToBookShelfAt: new Date(),
+    };
     wantToReadBooks.push(wantToRead);
     currentBooks.push(findBook.id);
     const updateUserBooks = await prisma.user.update({
