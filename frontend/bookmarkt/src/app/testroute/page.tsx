@@ -12,6 +12,7 @@ import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
 import HomeBook from '@/components/home/HomeBook';
 import HomeUpdateItem from '@/components/home/HomeUpdateItem';
+import HomeUpdateItemMobile from '@/components/home/HomeUpdateItemMobile';
 import SwitchWithFooter from '@/components/home/SwitchWithFooter';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -83,7 +84,7 @@ export default async function Page() {
     readThisYearWithReviewData
   );
 
-  const updateDisplay = await Promise.all(
+  const frontPageUpdateMap = await Promise.all(
     mostRecentReviews.map(async (review) => {
       const googleBook = await getSingleBook(review.googleBookId);
 
@@ -100,42 +101,76 @@ export default async function Page() {
       const userBookReview = currentUserBooks.reviews.find(
         (userReview) => userReview.googleBookId === review.googleBookId
       );
-
       return (
-        <>
-          {googleBook && (
-            <HomeUpdateItem
-              key={review.id}
-              bookshelves={userBookshelves ? userBookshelves : []}
-              currentBookshelf={bookshelfName ? bookshelfName : ''}
-              reviewMadeAt={review.createdAt}
-              userName={review.user.name ? review.user.name : 'User'}
-              bookTitle={googleBook.volumeInfo.title}
-              imageUrl={
-                googleBook.volumeInfo.imageLinks &&
-                googleBook.volumeInfo.imageLinks.thumbnail
-                  ? googleBook.volumeInfo.imageLinks.thumbnail
-                  : ''
-              }
-              googleBookId={review.googleBookId}
-              reviewRating={review.rating}
-              reviewDescription={review.description ? review.description : ''}
-              authors={googleBook.volumeInfo.authors}
-              bookDescription={
-                googleBook.volumeInfo.description
-                  ? googleBook.volumeInfo.description
-                  : ''
-              }
-              userReview={
-                userBookReview && userBookReview.rating
-                  ? userBookReview.rating
-                  : 0
-              }
-            />
-          )}
-        </>
+        googleBook && {
+          id: review.id,
+          bookshelves: userBookshelves ? userBookshelves : [],
+          currentBookshelf: bookshelfName ? bookshelfName : '',
+          reviewMadeAt: review.createdAt,
+          userName: review.user.name ? review.user.name : 'User',
+          bookTitle: googleBook.volumeInfo.title,
+          imageUrl:
+            googleBook.volumeInfo.imageLinks &&
+            googleBook.volumeInfo.imageLinks.thumbnail
+              ? googleBook.volumeInfo.imageLinks.thumbnail
+              : '',
+          googleBookId: googleBook.id,
+          reviewRating: review.rating,
+          reviewDescription: review.description ? review.description : '',
+          authors: googleBook.volumeInfo.authors
+            ? googleBook.volumeInfo.authors
+            : [],
+          bookDescription: googleBook.volumeInfo.description
+            ? googleBook.volumeInfo.description
+            : '',
+          userReview:
+            userBookReview && userBookReview.rating ? userBookReview.rating : 0,
+        }
       );
     })
+  );
+
+  const mobileDisplay = frontPageUpdateMap.map((frontPageItem) => {
+    return (
+      frontPageItem && (
+        <HomeUpdateItemMobile
+          key={frontPageItem.id}
+          reviewMadeAt={frontPageItem.reviewMadeAt}
+          userName={frontPageItem.userName}
+          bookTitle={frontPageItem.bookTitle}
+          bookAuthors={frontPageItem.authors}
+          googleBookId={frontPageItem.googleBookId}
+          reviewRating={frontPageItem.reviewRating}
+          reviewDescription={frontPageItem.reviewDescription}
+          imageUrl={frontPageItem.imageUrl}
+        />
+      )
+    );
+  });
+
+  const desktopDisplay = frontPageUpdateMap.map((frontPageItem) => {
+    return (
+      frontPageItem && (
+        <HomeUpdateItem
+          key={frontPageItem.id}
+          bookshelves={frontPageItem.bookshelves}
+          currentBookshelf={frontPageItem.currentBookshelf}
+          reviewMadeAt={frontPageItem.reviewMadeAt}
+          userName={frontPageItem.userName}
+          bookTitle={frontPageItem.bookTitle}
+          imageUrl={frontPageItem.imageUrl}
+          googleBookId={frontPageItem.googleBookId}
+          reviewRating={frontPageItem.reviewRating}
+          reviewDescription={frontPageItem.reviewDescription}
+          authors={frontPageItem.authors}
+          bookDescription={frontPageItem.bookDescription}
+          userReview={frontPageItem.userReview}
+        />
+      )
+    );
+  });
+  const mobileUpdateDisplay = await Promise.all(
+    mostRecentReviews.map(async (review) => {})
   );
 
   return (
@@ -161,14 +196,14 @@ export default async function Page() {
               </div>
             </div>
           </div>
-          {/* <div className="flex flex-col gap-2 mx-auto">
-          Review tab
-          {mostRecentReviews.length === 0 ? (
-            <div className="text-sm text-center">No more updates</div>
-          ) : (
-            mobileUpdateDisplay
-          )}
-        </div> */}
+          <div className="flex flex-col gap-2 mx-auto">
+            Review tab
+            {mostRecentReviews.length === 0 ? (
+              <div className="text-sm text-center">No more updates</div>
+            ) : (
+              mobileDisplay
+            )}
+          </div>
         </div>
         <div className="hidden md:flex flex-row justify-between mt-2 ">
           <div className="w-[300px]">
@@ -352,7 +387,7 @@ export default async function Page() {
                 {mostRecentReviews.length === 0 ? (
                   <div className="text-sm text-center">No more updates</div>
                 ) : (
-                  updateDisplay
+                  desktopDisplay
                 )}
               </div>
             </div>
