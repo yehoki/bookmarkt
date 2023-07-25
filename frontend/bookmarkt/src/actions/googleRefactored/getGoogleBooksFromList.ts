@@ -1,12 +1,25 @@
-import { getSingleBook } from "../getSingleBook";
+import { ReviewData } from '@prisma/client';
+import { getSingleBook } from '../getSingleBook';
 
-export async function getGoogleBooksFromList(googleIds: string[]) {
-  const googleBooks = await Promise.all(googleIds.map(async (googleId) => {
-    const res = await getSingleBook(googleId);
-    if (res) {
-      return res
-    }
-    return null;
-  }));
+export interface GoogleBookType {
+  googleId: string;
+  reviewData: ReviewData;
+}
+
+export async function getGoogleBooksFromList(
+  bookInformation: GoogleBookType[]
+) {
+  const googleBooks = await Promise.all(
+    bookInformation.map(async (book) => {
+      const res = await getSingleBook(book.googleId);
+      if (res) {
+        return {
+          ...res,
+          reviewData: book.reviewData,
+        };
+      }
+      return null;
+    })
+  );
   return googleBooks;
 }

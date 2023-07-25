@@ -1,6 +1,6 @@
-import getBookReview from '@/actions/getBookReview';
 import { getSingleBook } from '@/actions/getSingleBook';
-import { getSingleBookFromDB } from '@/actions/getSingleBookFromDB';
+import getBookReview from '@/actions/googleRefactored/getBookReview';
+import { getSingleBookFromDb } from '@/actions/googleRefactored/getSingleBookFromDb';
 import EmptyBookState from '@/components/Books/EmptyBookState';
 import SingleBookReviews from '@/components/Books/SingleBook/SingleBookReviews';
 import Image from 'next/image';
@@ -18,8 +18,8 @@ const SingleBookPage: React.FC<PageProps> = async ({
 }) => {
   const bookId = params.id;
   const bookInfo = await getSingleBook(bookId);
-  console.log(bookInfo?.volumeInfo.industryIdentifiers);
-  const bookInDbInfo = await getSingleBookFromDB(bookId);
+  // console.log(bookInfo?.volumeInfo.industryIdentifiers);
+  const bookInDbInfo = await getSingleBookFromDb(bookId);
   const userReviewInfo = await getBookReview(bookId);
 
   const reviewData =

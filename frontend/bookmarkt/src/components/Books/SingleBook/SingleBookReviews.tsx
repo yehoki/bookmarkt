@@ -3,7 +3,7 @@
 import { getSingleBook } from '@/actions/getSingleBook';
 import ReviewStar from '@/components/ReviewStar';
 import useBookReviewModal from '@/hooks/useBookReviewModal';
-import { Book, Review } from '@prisma/client';
+import { BookData, Review } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -31,9 +31,10 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
       return null;
     }
     // Make API route to fetch from - otherwise server component
-    const data: { books: Book[]; reviews: Review[] } = await getBooks.json();
+    const data: { bookData: BookData[]; reviews: Review[] } =
+      await getBooks.json();
 
-    if (!data.books.map((book) => book.googleId).includes(bookId)) {
+    if (!data.bookData.map((book) => book.googleId).includes(bookId)) {
       const bookInfo = await getSingleBook(bookId);
       if (!bookInfo) {
         setIsLoading(false);

@@ -42,9 +42,10 @@ export default async function Page() {
   }
 
   const currentUserBooks = await getCurrentUserBooks();
-  const currentUserGoogleBooks = currentUserBooks.bookData.map(
-    (book) => book.googleId
-  );
+  const currentUserGoogleBooks = currentUserBooks.bookData.map((book) => ({
+    googleId: book.googleId,
+    reviewData: book.reviewData,
+  }));
   // currentUserGoogleBooks.push('s1gVAAAAYAAJ');
 
   const googleBooks = await getGoogleBooksFromList(currentUserGoogleBooks);
@@ -62,7 +63,9 @@ export default async function Page() {
 
   const firstBook = currentUserBooks.bookData[0];
   const firstBookVolumeInfo = await getGoogleBooksFromList(
-    firstBook ? [firstBook.googleId] : []
+    firstBook
+      ? [{ googleId: firstBook.googleId, reviewData: firstBook.reviewData }]
+      : []
   );
 
   const updateDisplay = mostRecentReviews.map((review) => {
@@ -105,7 +108,7 @@ export default async function Page() {
   return (
     <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">
       <Navbar currentUser={currentUser} />
-      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] h-full">
+      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] min-h-[100dvh] h-full">
         <div className="md:hidden mx-auto max-w-[625px] px-2">
           <div className="border-[#eeeeee] border-[1px] my-2">
             <div className="relative w-full aspect-[14/3] ">

@@ -15,7 +15,7 @@ export async function GET(req: Request) {
       id: currentUser.id,
     },
     select: {
-      books: true,
+      bookData: true,
     },
   });
 
@@ -45,19 +45,13 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
 
-  const findBook = await prisma.book.findFirst({
-    where: {
-      googleId: id,
-    },
-  });
-
   const findBookData = await prisma.bookData.findFirst({
     where: {
       googleId: id,
     },
   });
 
-  const currentBooks = [...(currentUser.bookIds || [])];
+  const currentBooks = [...(currentUser.googleBookIds || [])];
 
   const wantToReadBookshelf = await prisma.bookshelf.findFirst({
     where: {
@@ -68,7 +62,9 @@ export async function POST(req: Request) {
   if (!wantToReadBookshelf) {
     return NextResponse.error();
   }
-  const wantToReadBooks = wantToReadBookshelf ? wantToReadBookshelf.books : [];
+  const wantToReadBooks = wantToReadBookshelf
+    ? wantToReadBookshelf.googleBooks
+    : [];
 
   if (!findBookData) {
     const newBookData = await prisma.bookData.create({
@@ -80,68 +76,49 @@ export async function POST(req: Request) {
         },
       },
     });
-  }
-
-  if (!findBook) {
-    // When the new book does not exist
-    const newBook = await prisma.book.create({
-      data: {
-        googleId: id,
-        title: title,
-        subtitle: subtitle,
-        author: author,
-        description: description,
-        publishedDate: publishedDate,
-        imageLinks: imageLinks,
-        reviewData: {
-          averageReview: 0,
-          totalReviews: 0,
-        },
-        ISBN: ISBN,
-      },
-    });
     const newWantToRead: BookshelfBooks = {
-      bookId: newBook.id,
+      googleBookId: newBookData.googleId,
       addedToBookShelfAt: new Date(),
     };
     wantToReadBooks.push(newWantToRead);
-    currentBooks.push(newBook.id);
+    currentBooks.push(newBookData.googleId);
 
     const updateUserBooks = await prisma.user.update({
       where: {
         id: currentUser.id,
       },
       data: {
-        bookIds: currentBooks,
+        googleBookIds: currentBooks,
       },
     });
+
     const updateBookshelf = await prisma.bookshelf.update({
       where: {
         id: wantToReadBookshelf.id,
       },
       data: {
-        books: wantToReadBooks,
+        googleBooks: wantToReadBooks,
       },
     });
     return NextResponse.json({
       user: { ...updateUserBooks },
-      book: { ...newBook },
+      bookData: { ...newBookData },
     });
   }
 
-  if (!currentUser.bookIds.includes(findBook.id)) {
+  if (!currentUser.googleBookIds.includes(findBookData.googleId)) {
     const wantToRead: BookshelfBooks = {
-      bookId: findBook.id,
+      googleBookId: findBookData.googleId,
       addedToBookShelfAt: new Date(),
     };
     wantToReadBooks.push(wantToRead);
-    currentBooks.push(findBook.id);
+    currentBooks.push(findBookData.googleId);
     const updateUserBooks = await prisma.user.update({
       where: {
         id: currentUser.id,
       },
       data: {
-        bookIds: currentBooks,
+        googleBookIds: currentBooks,
       },
     });
     const updateBookshelf = await prisma.bookshelf.update({
@@ -149,12 +126,12 @@ export async function POST(req: Request) {
         id: wantToReadBookshelf.id,
       },
       data: {
-        books: wantToReadBooks,
+        googleBooks: wantToReadBooks,
       },
     });
     return NextResponse.json({
       user: { ...updateUserBooks },
-      book: { ...findBook },
+      bookData: { ...findBookData },
     });
   }
 }

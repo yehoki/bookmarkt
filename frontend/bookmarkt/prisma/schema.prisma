@@ -15,12 +15,8 @@ type UserBookData {
   bookProgress Int
 }
 
-type BookshelfBooks {
-  bookId             String   @db.ObjectId
-  addedToBookShelfAt DateTime @default(now())
-}
 
-type NewBookshelfBooks {
+type BookshelfBooks {
   googleBookId       String
   addedToBookShelfAt DateTime @default(now())
 }
@@ -28,8 +24,7 @@ type NewBookshelfBooks {
 model Bookshelf {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  books     BookshelfBooks[]
-  googleBooks NewBookshelfBooks[]
+  googleBooks BookshelfBooks[]
   isDefault Boolean
   userId    String           @db.ObjectId
 
@@ -47,11 +42,9 @@ model User {
   updatedAt      DateTime       @updatedAt
   bookProgress   UserBookData[]
   bookshelfIds   String[]       @db.ObjectId
-  bookIds        String[]       @db.ObjectId
   googleBookIds  String[]
   reviewIds      String[]       @db.ObjectId
 
-  books       Book[]      @relation(fields: [bookIds], references: [id])
   reviews     Review[]
   accounts    Account[]
   bookshelves Bookshelf[]
@@ -103,34 +96,14 @@ model BookData {
   reviews Review[]
 }
 
-model Book {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  googleId      String
-  title         String
-  subtitle      String
-  author        String[]
-  description   String
-  imageLinks    ImageLinks
-  publishedDate String
-  userIds       String[]   @db.ObjectId
-  reviewIds     String[]   @db.ObjectId
-  reviewData    ReviewData
-  ISBN          String
-
-  reviews Review[]
-  user    User[]   @relation(fields: [userIds], references: [id])
-}
-
 model Review {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   rating       Int
   description  String?
-  bookId       String   @db.ObjectId
   googleBookId String
   userId       String   @db.ObjectId
   createdAt    DateTime @default(now())
 
-  book     Book     @relation(fields: [bookId], references: [id])
   user     User     @relation(fields: [userId], references: [id])
   bookData BookData @relation(fields: [googleBookId], references: [googleId])
 }

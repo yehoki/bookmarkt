@@ -12,7 +12,7 @@ const DisplayBookshelves: React.FC<DisplayBookshelvesProps> = ({
   bookshelves,
 }) => {
   const allBooksCount = bookshelves.reduce(
-    (acc, currentValue) => acc + currentValue.books.length,
+    (acc, currentValue) => acc + currentValue.googleBooks.length,
     0
   );
 
@@ -22,7 +22,7 @@ const DisplayBookshelves: React.FC<DisplayBookshelvesProps> = ({
         key={bookshelf.id}
         label={parseBookshelfName(bookshelf.name)}
         bookshelfName={bookshelf.name}
-        bookshelfLength={bookshelf.books.length}
+        bookshelfLength={bookshelf.googleBooks.length}
       />
     ));
   };
