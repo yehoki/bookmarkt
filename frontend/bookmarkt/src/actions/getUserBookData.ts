@@ -11,8 +11,7 @@ export const getUserBookData = async (query: string, userId: string) => {
   });
   const userBookshelves = await getCurrentUserBookshelves();
 
-
-  if (booksFromSearch && userId !== '' && userBookshelves) {
+  if (booksFromSearch && userBookshelves) {
     const returnBooks = booksFromSearch.items.map((googleBook) => {
       const foundBook = userBooks.find(
         (userBook) => userBook.googleId === googleBook.id
@@ -28,12 +27,17 @@ export const getUserBookData = async (query: string, userId: string) => {
           return {
             ...googleBook,
             bookshelf: returnBookshelf.name,
+            reviewData: foundBook.reviewData,
           };
         }
       }
       return {
         ...googleBook,
         bookshelf: '',
+        reviewData: {
+          averageReview: 0,
+          totalReviews: 0,
+        },
       };
     });
 
@@ -42,8 +46,6 @@ export const getUserBookData = async (query: string, userId: string) => {
       totalItems: booksFromSearch.totalItems,
     };
     return finalBooks;
-  } else if (booksFromSearch && userId === '') {
-    return booksFromSearch;
   }
   return {
     items: [],

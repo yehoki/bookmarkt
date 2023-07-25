@@ -78,7 +78,6 @@ export interface GoogleSearchBooksInterface {
   items: GoogleBookItemInterface[];
 }
 
-
 export async function getBooksFromSearch(query: string, maxResults = 20) {
   const partialResponse =
     'totalItems,items(id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers))';
@@ -92,12 +91,15 @@ export async function getBooksFromSearch(query: string, maxResults = 20) {
       headers: {
         'Content-Type': 'application/json',
       },
+      next: {
+        revalidate: 30,
+      },
     }
   );
 
   if (!res.ok) {
     return null;
   }
-  const books:GoogleSearchBooksInterface  = await res.json();
+  const books: GoogleSearchBooksInterface = await res.json();
   return books;
 }

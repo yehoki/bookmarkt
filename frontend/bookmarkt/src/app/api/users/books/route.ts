@@ -34,12 +34,6 @@ export async function POST(req: Request) {
   const {
     id,
     title,
-    subtitle,
-    author,
-    description,
-    imageLinks,
-    publishedDate,
-    ISBN,
   } = body;
   if (!id || !title) {
     return NextResponse.error();

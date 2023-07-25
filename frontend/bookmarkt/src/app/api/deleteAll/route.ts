@@ -6,7 +6,6 @@ export async function GET(req: Request) {
     await prisma.review.deleteMany({});
     await prisma.bookshelf.deleteMany({});
     await prisma.bookData.deleteMany({});
-    await prisma.book.deleteMany({});
     await prisma.user.deleteMany({});
     await prisma.account.deleteMany({});
     return NextResponse.json({ message: 'Done deleting' });

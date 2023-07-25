@@ -3,11 +3,12 @@
 // import { GoogleBookItemsInterface } from '@/actions/getBooksFromSearch';
 import Image from 'next/image';
 import DisplaySingleBook from './DisplaySingleBook';
-import { Bookshelf } from '@prisma/client';
+import { Bookshelf, ReviewData } from '@prisma/client';
 import { GoogleBookItemInterface } from '@/actions/googleRefactored/getBooksFromSearch';
 
-interface SearchDisplayBook extends GoogleBookItemInterface {
+export interface SearchDisplayBook extends GoogleBookItemInterface {
   bookshelf?: string;
+  reviewData: ReviewData;
 }
 
 interface SearchBookDisplayProps {

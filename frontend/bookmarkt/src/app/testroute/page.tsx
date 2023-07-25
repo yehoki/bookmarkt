@@ -1,5 +1,6 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import { SingleGoogleBookType, getSingleBook } from '@/actions/getSingleBook';
+import { GoogleBookItemInterface } from '@/actions/googleRefactored/getBooksFromSearch';
 import getCurrentUserBooks from '@/actions/googleRefactored/getCurrentUserBooks';
 import getCurrentUserBookshelves from '@/actions/googleRefactored/getCurrentUserBookshelves';
 import { getGoogleBooksFromList } from '@/actions/googleRefactored/getGoogleBooksFromList';
@@ -31,7 +32,7 @@ export default async function Page() {
   const currentlyReadingBookIds = await getUserBooksByBookshelf(
     'Currently reading'
   );
-  let firstCurrentlyReadingBook: SingleGoogleBookType | null = null;
+  let firstCurrentlyReadingBook: GoogleBookItemInterface | null = null;
   if (
     currentlyReadingBookIds &&
     currentlyReadingBookIds.googleBooks.length !== 0
@@ -46,64 +47,61 @@ export default async function Page() {
     googleId: book.googleId,
     reviewData: book.reviewData,
   }));
-  // currentUserGoogleBooks.push('s1gVAAAAYAAJ');
 
-  const googleBooks = await getGoogleBooksFromList(currentUserGoogleBooks);
+  const updateDisplay = await Promise.all(
+    mostRecentReviews.map(async (review) => {
+      const googleBook = await getSingleBook(review.googleBookId);
 
-  const displayGoogleBooks = googleBooks.map((googleBook) => {
-    if (googleBook) {
-      return (
-        <div key={googleBook.id}>
-          {googleBook.volumeInfo.title}
-          {googleBook.volumeInfo.authors[0]}
-        </div>
+      const bookshelfName = currentUserBooks.bookData.find(
+        (book) => book.googleId === review.bookData.googleId
+      )
+        ? userBookshelves?.find((bookshelf) =>
+            bookshelf.googleBooks.find(
+              (bookshelfBook) =>
+                bookshelfBook.googleBookId === review.googleBookId
+            )
+          )?.name
+        : '';
+      const userBookReview = currentUserBooks.reviews.find(
+        (userReview) => userReview.googleBookId === review.googleBookId
       );
-    }
-  });
 
-  const firstBook = currentUserBooks.bookData[0];
-  const firstBookVolumeInfo = await getGoogleBooksFromList(
-    firstBook
-      ? [{ googleId: firstBook.googleId, reviewData: firstBook.reviewData }]
-      : []
+      return (
+        <>
+          {googleBook && (
+            <HomeUpdateItem
+              key={review.id}
+              bookshelves={userBookshelves ? userBookshelves : []}
+              currentBookshelf={bookshelfName ? bookshelfName : ''}
+              reviewMadeAt={review.createdAt}
+              userName={review.user.name ? review.user.name : 'User'}
+              bookTitle={googleBook.volumeInfo.title}
+              imageUrl={
+                googleBook.volumeInfo.imageLinks &&
+                googleBook.volumeInfo.imageLinks.thumbnail
+                  ? googleBook.volumeInfo.imageLinks.thumbnail
+                  : ''
+              }
+              googleBookId={review.googleBookId}
+              reviewRating={review.rating}
+              reviewDescription={review.description ? review.description : ''}
+              authors={googleBook.volumeInfo.authors}
+              bookDescription={
+                googleBook.volumeInfo.description
+                  ? googleBook.volumeInfo.description
+                  : ''
+              }
+              userReview={
+                userBookReview && userBookReview.rating
+                  ? userBookReview.rating
+                  : 0
+              }
+            />
+          )}
+        </>
+      );
+    })
   );
-
-  const updateDisplay = mostRecentReviews.map((review) => {
-    const bookshelfName = currentUserBooks.bookData.find(
-      (book) => book.googleId === review.bookData.googleId
-    )
-      ? userBookshelves?.find((bookshelf) =>
-          bookshelf.googleBooks.find(
-            (bookshelfBook) =>
-              bookshelfBook.googleBookId === review.googleBookId
-          )
-        )?.name
-      : '';
-
-    const userBookReview = currentUserBooks.reviews.find(
-      (userReview) => userReview.googleBookId === review.googleBookId
-    );
-
-    return (
-      <HomeUpdateItem
-        key={review.id}
-        bookshelves={userBookshelves ? userBookshelves : []}
-        currentBookshelf={bookshelfName ? bookshelfName : ''}
-        reviewMadeAt={review.createdAt}
-        userName={review.user.name ? review.user.name : 'User'}
-        bookTitle="test"
-        imageUrl=""
-        googleBookId={review.googleBookId}
-        reviewRating={review.rating}
-        reviewDescription={review.description ? review.description : ''}
-        authors={[]}
-        bookDescription=""
-        userReview={
-          userBookReview && userBookReview.rating ? userBookReview.rating : 0
-        }
-      />
-    );
-  });
 
   return (
     <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">

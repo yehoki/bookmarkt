@@ -211,7 +211,7 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
                             currentUserBookshelves ? currentUserBookshelves : []
                           }
                           title={book.title}
-                          authors={book.authors}
+                          authors={book.authors ? book.authors : []}
                           id={book.id}
                           googleId={book.googleId}
                           thumbnailUrl={book.thumbnail}

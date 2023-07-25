@@ -71,7 +71,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
       >
         <Suspense fallback="...">{timeDifference}</Suspense>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-1 pr-10 ">
         <Link href={'/'} className="font-semibold hover:underline text-sm">
           {userName}
         </Link>

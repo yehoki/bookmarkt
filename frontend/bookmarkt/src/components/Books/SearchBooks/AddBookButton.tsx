@@ -1,24 +1,19 @@
 'use client';
 import { Bookshelf } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { FaCheck } from 'react-icons/fa';
+import BookshelfButton from './BookshelfButton';
 
 interface AddBookButtonProps {
-  label?: string;
   bookId: string;
-  isOwned?: boolean;
-  onClick?: () => void;
   bookshelves: Bookshelf[];
   currentBookshelf: string;
 }
 
 const AddBookButton: React.FC<AddBookButtonProps> = ({
-  label,
   bookId,
-  isOwned,
-  onClick,
   bookshelves,
   currentBookshelf,
 }) => {
@@ -53,12 +48,12 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
     router.refresh();
   };
 
-  useEffect(() => {
+  useCallback(() => {
     const bookshelvesNotCurrent = bookshelves.filter(
       (bookshelf) => bookshelf.name !== displayBookshelf
     );
     setBookshelvesWithoutCurrent(bookshelvesNotCurrent);
-  }, [displayBookshelf]);
+  }, [displayBookshelf, bookshelves]);
 
   const bookshelfNames = bookshelvesWithoutCurrent.map((bookshelf) => (
     <li
@@ -76,31 +71,28 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   return (
     <div className="bg-[#409D69]/90 text-[13px] text-white rounded-sm">
       <div className="flex items-center justify-between">
-        <div
-          className={`w-[105px] pr-1 pl-2 py-[5px] border-r-[1px] 
+        <Suspense fallback="...">
+          <div
+            className={`w-[105px] pr-1 pl-2 py-[5px] border-r-[1px] 
         font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap
         ${
           currentBookshelf === ''
             ? 'hover:bg-[#409D69] border-neutral-600'
             : 'bg-[#F2F2F2] text-black border-none'
         } rounded-bl-sm rounded-tl-sm`}
-        >
-          {displayBookshelf !== '' ? (
-            <div className="flex items-center gap-[2px]">
-              <FaCheck size={14} className="fill-green-800" />
-              <div className="font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap">
-                {displayBookshelf}
+          >
+            {displayBookshelf !== '' ? (
+              <BookshelfButton displayBookshelfName={displayBookshelf} />
+            ) : (
+              <div
+                className="cursor-pointer"
+                onClick={() => handleChangeBookshelf('Want to read')}
+              >
+                Want to read
               </div>
-            </div>
-          ) : (
-            <div
-              className="cursor-pointer"
-              onClick={() => handleChangeBookshelf('Want to read')}
-            >
-              Want to read
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </Suspense>
         <div
           className="px-2 py-2 hover:bg-[#409D69] rounded-tr-sm rounded-br-sm relative group
           cursor-pointer"
