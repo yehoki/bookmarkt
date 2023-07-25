@@ -1,6 +1,7 @@
 import getCurrentUser from '@/actions/getCurrentUser';
-import { SingleGoogleBookType, getSingleBook } from '@/actions/getSingleBook';
+import { getSingleBook } from '@/actions/getSingleBook';
 import { GoogleBookItemInterface } from '@/actions/googleRefactored/getBooksFromSearch';
+import getBooksReadThisYear from '@/actions/googleRefactored/getBooksReadThisYear';
 import getCurrentUserBooks from '@/actions/googleRefactored/getCurrentUserBooks';
 import getCurrentUserBookshelves from '@/actions/googleRefactored/getCurrentUserBookshelves';
 import { getGoogleBooksFromList } from '@/actions/googleRefactored/getGoogleBooksFromList';
@@ -27,11 +28,14 @@ export default async function Page() {
   }
 
   const mostRecentReviews = await getMostRecentReviews();
+  const currentUserBooks = await getCurrentUserBooks();
   const userBookshelves = await getCurrentUserBookshelves();
-  // fetch all the 'currently reading' books
   const currentlyReadingBookIds = await getUserBooksByBookshelf(
     'Currently reading'
   );
+  const wantToReadBookIds = await getUserBooksByBookshelf('Want to read');
+  const booksReadFromThisYear = await getBooksReadThisYear();
+
   let firstCurrentlyReadingBook: GoogleBookItemInterface | null = null;
   if (
     currentlyReadingBookIds &&
@@ -42,11 +46,42 @@ export default async function Page() {
     );
   }
 
-  const currentUserBooks = await getCurrentUserBooks();
-  const currentUserGoogleBooks = currentUserBooks.bookData.map((book) => ({
-    googleId: book.googleId,
-    reviewData: book.reviewData,
-  }));
+  const wantToReadGoogleBookIds = wantToReadBookIds
+    ? wantToReadBookIds.googleBooks.map((googleBook) => googleBook.googleBookId)
+    : [];
+
+  const readThisYearGoogleBookIds = booksReadFromThisYear
+    ? booksReadFromThisYear.map((googleBook) => googleBook.googleBookId)
+    : [];
+
+  const combineBookIdsAndReviewData = (bookIds: string[]) => {
+    return bookIds.map((googleId) => {
+      const bookReviewData = currentUserBooks.bookData.find(
+        (bookData) => bookData.googleId === googleId
+      );
+      return {
+        googleId: googleId,
+        reviewData: bookReviewData
+          ? bookReviewData.reviewData
+          : { averageReview: 0, totalReviews: 0 },
+      };
+    });
+  };
+
+  const wantToReadBooksWithReviewData = combineBookIdsAndReviewData(
+    wantToReadGoogleBookIds
+  );
+  const readThisYearWithReviewData = combineBookIdsAndReviewData(
+    readThisYearGoogleBookIds
+  );
+
+  const wantToReadGoogleBooks = await getGoogleBooksFromList(
+    wantToReadBooksWithReviewData
+  );
+
+  const booksReadThisYear = await getGoogleBooksFromList(
+    readThisYearWithReviewData
+  );
 
   const updateDisplay = await Promise.all(
     mostRecentReviews.map(async (review) => {
@@ -202,54 +237,61 @@ export default async function Page() {
                   </div>
                 </div>
                 <div>
-                  {/* <div className="text-2xl">
-                  {booksReadFromThisYear ? booksReadFromThisYear.length : 0}
-                </div>
-                <div className="text-lg">
-                  {booksReadFromThisYear && booksReadFromThisYear.length > 1
-                    ? 'books completed'
-                    : 'book completed'}
-                </div> */}
+                  <div className="text-2xl">
+                    {booksReadFromThisYear ? booksReadFromThisYear.length : 0}
+                  </div>
+                  <div className="text-lg">
+                    {booksReadFromThisYear && booksReadFromThisYear.length > 1
+                      ? 'books completed'
+                      : 'book completed'}
+                  </div>
                 </div>
               </div>
             </HomeBox>
             <HomeBox heading="Want to read" bottomBorder>
               <div>
-                {/* {wantToReadBooks && wantToReadBooks.length !== 0 ? (
-                <div className="grid grid-cols-3 grid-rows-2 gap-1">
-                  {wantToReadBooks.slice(0, 6).map((book) => (
-                    <div className="border-[1px]" key={book.id}>
-                      <div className="relative w-[96px] h-[118px]">
+                {wantToReadGoogleBooks && wantToReadGoogleBooks.length !== 0 ? (
+                  <div className="grid grid-cols-3 grid-rows-2 gap-1">
+                    {wantToReadGoogleBooks.slice(0, 6).map((book) => {
+                      return (
+                        book && (
+                          <Link href={`/books/${book.id}`}>
+                            <div className="border-[1px]" key={book.id}>
+                              <div className="relative w-[96px] h-[118px]">
+                                <Image
+                                  src={
+                                    book.volumeInfo.imageLinks &&
+                                    book.volumeInfo.imageLinks.thumbnail
+                                      ? book.volumeInfo.imageLinks.thumbnail
+                                      : 'images/empty-book.png'
+                                  }
+                                  fill
+                                  alt={`${book.volumeInfo.title} cover`}
+                                />
+                              </div>
+                            </div>
+                          </Link>
+                        )
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <div>
+                      <div className="relative w-[65px] h-[75px]">
                         <Image
-                          src={
-                            book.imageLinks.thumbnail
-                              ? book.imageLinks.thumbnail
-                              : 'images/empty-book.png'
-                          }
+                          src="images/read-next.svg"
                           fill
-                          alt={`${book.title} cover`}
+                          alt="Read next"
                         />
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex items-center gap-1">
-                  <div>
-                    <div className="relative w-[65px] h-[75px]">
-                      <Image
-                        src="images/read-next.svg"
-                        fill
-                        alt="Read next"
-                      />
+
+                    <div className="whitespace-nowrap text-sm">
+                      What do you want to read next?
                     </div>
                   </div>
-
-                  <div className="whitespace-nowrap text-sm">
-                    What do you want to read next?
-                  </div>
-                </div>
-              )} */}
+                )}
               </div>
               <div>
                 <Link
@@ -263,23 +305,24 @@ export default async function Page() {
             </HomeBox>
             <HomeBox heading="Bookshelves">
               <div className="pt-2 text-sm">
-                {/* {userBookshelves?.map((bookshelf) => (
-                <div key={bookshelf.id} className="flex gap-4 my-[2px]">
-                  <Link
-                    href={`/books?shelf=${bookshelf.name}`}
-                    className="hover:underline text-goodreads-mybooks-green cursor-pointer"
-                  >
-                    {bookshelf.books.length}
-                  </Link>
+                {userBookshelves &&
+                  userBookshelves.map((bookshelf) => (
+                    <div key={bookshelf.id} className="flex gap-4 my-[2px]">
+                      <Link
+                        href={`/books?shelf=${bookshelf.name}`}
+                        className="hover:underline text-goodreads-mybooks-green cursor-pointer"
+                      >
+                        {bookshelf.googleBooks.length}
+                      </Link>
 
-                  <Link
-                    href={`/books?shelf=${bookshelf.name}`}
-                    className="hover:underline text-goodreads-mybooks-green cursor-pointer"
-                  >
-                    {bookshelf.name}
-                  </Link>
-                </div>
-              ))} */}
+                      <Link
+                        href={`/books?shelf=${bookshelf.name}`}
+                        className="hover:underline text-goodreads-mybooks-green cursor-pointer"
+                      >
+                        {bookshelf.name}
+                      </Link>
+                    </div>
+                  ))}
               </div>
             </HomeBox>
           </div>
