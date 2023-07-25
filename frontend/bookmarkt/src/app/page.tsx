@@ -1,9 +1,12 @@
-import getBooksReadThisYear from '@/actions/getBooksReadThisYear';
 import getCurrentUser from '@/actions/getCurrentUser';
-import getCurrentUserBooks from '@/actions/getCurrentUserBooks';
-import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
-import getMostRecentReviews from '@/actions/getMostRecentReviews';
-import { getUserBooksByBookshelf } from '@/actions/getUserBooksByBookshelf';
+import { getSingleBook } from '@/actions/getSingleBook';
+import { GoogleBookItemInterface } from '@/actions/googleRefactored/getBooksFromSearch';
+import getBooksReadThisYear from '@/actions/googleRefactored/getBooksReadThisYear';
+import getCurrentUserBooks from '@/actions/googleRefactored/getCurrentUserBooks';
+import getCurrentUserBookshelves from '@/actions/googleRefactored/getCurrentUserBookshelves';
+import { getGoogleBooksFromList } from '@/actions/googleRefactored/getGoogleBooksFromList';
+import getMostRecentReviews from '@/actions/googleRefactored/getMostRecentReviews';
+import { getUserBooksByBookshelf } from '@/actions/googleRefactored/getUserBooksByBookshelf';
 import HomeBox from '@/components/HomeBox';
 import LoginModal from '@/components/Login/LoginModal';
 import Navbar from '@/components/Navbar/Navbar';
@@ -11,12 +14,10 @@ import HomeBook from '@/components/home/HomeBook';
 import HomeUpdateItem from '@/components/home/HomeUpdateItem';
 import HomeUpdateItemMobile from '@/components/home/HomeUpdateItemMobile';
 import SwitchWithFooter from '@/components/home/SwitchWithFooter';
-
 import Image from 'next/image';
 import Link from 'next/link';
-// import getCurrentUserBooks from '@/actions/googleRefactored/getCurrentUserBooks';
 
-export default async function Home() {
+export default async function Page() {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
     return (
@@ -27,101 +28,155 @@ export default async function Home() {
     );
   }
 
-  // const newCurrentUserBooks = await getCurrentUserBooks()
-
-  const currentUserBooks = await getCurrentUserBooks();
-  const firstTwoBooks = currentUserBooks.books.slice(0, 3);
   const mostRecentReviews = await getMostRecentReviews();
-  const booksReadFromThisYear = await getBooksReadThisYear();
+  const currentUserBooks = await getCurrentUserBooks();
   const userBookshelves = await getCurrentUserBookshelves();
-  const wantToReadBooks = await getUserBooksByBookshelf('Want to read');
+  const currentlyReadingBookIds = await getUserBooksByBookshelf(
+    'Currently reading'
+  );
+  const wantToReadBookIds = await getUserBooksByBookshelf('Want to read');
+  const booksReadFromThisYear = await getBooksReadThisYear();
 
-  const updateDisplay = mostRecentReviews.map((review) => {
-    const bookshelfName = currentUserBooks.books.find(
-      (book) => book.id === review.book.id
-    )
-      ? userBookshelves?.find((bookshelf) =>
-          bookshelf.books.find(
-            (bookshelfBook) => bookshelfBook.bookId === review.bookId
-          )
-        )?.name
-      : '';
-    const userBookReview = currentUserBooks.reviews.find(
-      (userReview) => userReview.bookId === review.bookId
+  let firstCurrentlyReadingBook: GoogleBookItemInterface | null = null;
+  if (
+    currentlyReadingBookIds &&
+    currentlyReadingBookIds.googleBooks.length !== 0
+  ) {
+    firstCurrentlyReadingBook = await getSingleBook(
+      currentlyReadingBookIds.googleBooks[0].googleBookId
     );
+  }
 
+  const wantToReadGoogleBookIds = wantToReadBookIds
+    ? wantToReadBookIds.googleBooks.map((googleBook) => googleBook.googleBookId)
+    : [];
+
+  const readThisYearGoogleBookIds = booksReadFromThisYear
+    ? booksReadFromThisYear.map((googleBook) => googleBook.googleBookId)
+    : [];
+
+  const combineBookIdsAndReviewData = (bookIds: string[]) => {
+    return bookIds.map((googleId) => {
+      const bookReviewData = currentUserBooks.bookData.find(
+        (bookData) => bookData.googleId === googleId
+      );
+      return {
+        googleId: googleId,
+        reviewData: bookReviewData
+          ? bookReviewData.reviewData
+          : { averageReview: 0, totalReviews: 0 },
+      };
+    });
+  };
+
+  const wantToReadBooksWithReviewData = combineBookIdsAndReviewData(
+    wantToReadGoogleBookIds
+  );
+  const readThisYearWithReviewData = combineBookIdsAndReviewData(
+    readThisYearGoogleBookIds
+  );
+
+  const wantToReadGoogleBooks = await getGoogleBooksFromList(
+    wantToReadBooksWithReviewData
+  );
+
+  const booksReadThisYear = await getGoogleBooksFromList(
+    readThisYearWithReviewData
+  );
+
+  const frontPageUpdateMap = await Promise.all(
+    mostRecentReviews.map(async (review) => {
+      const googleBook = await getSingleBook(review.googleBookId);
+
+      const bookshelfName = currentUserBooks.bookData.find(
+        (book) => book.googleId === review.bookData.googleId
+      )
+        ? userBookshelves?.find((bookshelf) =>
+            bookshelf.googleBooks.find(
+              (bookshelfBook) =>
+                bookshelfBook.googleBookId === review.googleBookId
+            )
+          )?.name
+        : '';
+      const userBookReview = currentUserBooks.reviews.find(
+        (userReview) => userReview.googleBookId === review.googleBookId
+      );
+      return (
+        googleBook && {
+          id: review.id,
+          bookshelves: userBookshelves ? userBookshelves : [],
+          currentBookshelf: bookshelfName ? bookshelfName : '',
+          reviewMadeAt: review.createdAt,
+          userName: review.user.name ? review.user.name : 'User',
+          bookTitle: googleBook.volumeInfo.title,
+          imageUrl:
+            googleBook.volumeInfo.imageLinks &&
+            googleBook.volumeInfo.imageLinks.thumbnail
+              ? googleBook.volumeInfo.imageLinks.thumbnail
+              : '',
+          googleBookId: googleBook.id,
+          reviewRating: review.rating,
+          reviewDescription: review.description ? review.description : '',
+          authors: googleBook.volumeInfo.authors
+            ? googleBook.volumeInfo.authors
+            : [],
+          bookDescription: googleBook.volumeInfo.description
+            ? googleBook.volumeInfo.description
+            : '',
+          userReview:
+            userBookReview && userBookReview.rating ? userBookReview.rating : 0,
+        }
+      );
+    })
+  );
+
+  const mobileDisplay = frontPageUpdateMap.map((frontPageItem) => {
     return (
-      <HomeUpdateItem
-        key={review.id}
-        bookshelves={userBookshelves ? userBookshelves : []}
-        currentBookshelf={bookshelfName ? bookshelfName : ''}
-        reviewMadeAt={review.createdAt}
-        userName={review.user.name ? review.user.name : 'User'}
-        bookTitle={review.book.title}
-        imageUrl={
-          review.book.imageLinks.thumbnail
-            ? review.book.imageLinks.thumbnail
-            : ''
-        }
-        googleBookId={review.book.googleId}
-        reviewRating={review.rating}
-        reviewDescription={review.description ? review.description : ''}
-        authors={review.book.author}
-        bookDescription={review.book.description}
-        userReview={
-          userBookReview && userBookReview.rating ? userBookReview.rating : 0
-        }
-      />
+      frontPageItem && (
+        <HomeUpdateItemMobile
+          key={frontPageItem.id}
+          reviewMadeAt={frontPageItem.reviewMadeAt}
+          userName={frontPageItem.userName}
+          bookTitle={frontPageItem.bookTitle}
+          bookAuthors={frontPageItem.authors}
+          googleBookId={frontPageItem.googleBookId}
+          reviewRating={frontPageItem.reviewRating}
+          reviewDescription={frontPageItem.reviewDescription}
+          imageUrl={frontPageItem.imageUrl}
+        />
+      )
     );
   });
 
-  const mobileUpdateDisplay = mostRecentReviews.map((review) => {
+  const desktopDisplay = frontPageUpdateMap.map((frontPageItem) => {
     return (
-      <HomeUpdateItemMobile
-        key={review.id}
-        reviewMadeAt={review.createdAt}
-        userName={review.user.name ? review.user.name : 'User'}
-        bookTitle={review.book.title}
-        bookAuthors={review.book.author}
-        googleBookId={review.book.googleId}
-        reviewRating={review.rating}
-        reviewDescription={review.description ? review.description : ''}
-        imageUrl={
-          review.book.imageLinks.thumbnail
-            ? review.book.imageLinks.thumbnail
-            : ''
-        }
-      />
+      frontPageItem && (
+        <HomeUpdateItem
+          key={frontPageItem.id}
+          bookshelves={frontPageItem.bookshelves}
+          currentBookshelf={frontPageItem.currentBookshelf}
+          reviewMadeAt={frontPageItem.reviewMadeAt}
+          userName={frontPageItem.userName}
+          bookTitle={frontPageItem.bookTitle}
+          imageUrl={frontPageItem.imageUrl}
+          googleBookId={frontPageItem.googleBookId}
+          reviewRating={frontPageItem.reviewRating}
+          reviewDescription={frontPageItem.reviewDescription}
+          authors={frontPageItem.authors}
+          bookDescription={frontPageItem.bookDescription}
+          userReview={frontPageItem.userReview}
+        />
+      )
     );
   });
-
-  const sampleBooks = [
-    {
-      title: 'sampleBook',
-      subtitle: 'sampleSubtitle',
-      authors: ['sample Author'],
-      publishedDate: '2023-07-10',
-      description: 'Sample description text',
-      imageLinks: {
-        thumbnail: '/images/empty-book.png',
-      },
-    },
-    {
-      title: 'sampleBook',
-      subtitle: 'sampleSubtitle',
-      authors: ['sampleAuthor'],
-      publishedDate: '2023-07-10',
-      description: 'Sample description text',
-      imageLinks: {
-        thumbnail: '/images/empty-book.png',
-      },
-    },
-  ];
+  const mobileUpdateDisplay = await Promise.all(
+    mostRecentReviews.map(async (review) => {})
+  );
 
   return (
     <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">
       <Navbar currentUser={currentUser} />
-      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] h-[100dvh]">
+      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] min-h-[100dvh] h-full">
         <div className="md:hidden mx-auto max-w-[625px] px-2">
           <div className="border-[#eeeeee] border-[1px] my-2">
             <div className="relative w-full aspect-[14/3] ">
@@ -142,11 +197,11 @@ export default async function Home() {
             </div>
           </div>
           <div className="flex flex-col gap-2 mx-auto">
-            {/* Review tab */}
+            Review tab
             {mostRecentReviews.length === 0 ? (
               <div className="text-sm text-center">No more updates</div>
             ) : (
-              mobileUpdateDisplay
+              mobileDisplay
             )}
           </div>
         </div>
@@ -155,27 +210,30 @@ export default async function Home() {
             <HomeBox heading="Currently reading" bottomBorder>
               <div>
                 <div className="flex flex-col gap-2 py-2">
-                  {firstTwoBooks.length > 0 && (
+                  {firstCurrentlyReadingBook !== null && (
                     <HomeBook
-                      title={firstTwoBooks[0].title}
-                      authors={firstTwoBooks[0].author}
-                      googleBookId={firstTwoBooks[0].googleId}
+                      title={firstCurrentlyReadingBook.volumeInfo.title}
+                      authors={firstCurrentlyReadingBook.volumeInfo.authors}
+                      googleBookId={firstCurrentlyReadingBook.id}
                       imgsrc={
-                        firstTwoBooks[0].imageLinks.thumbnail
-                          ? firstTwoBooks[0].imageLinks.thumbnail
-                          : undefined
+                        firstCurrentlyReadingBook.volumeInfo.imageLinks &&
+                        firstCurrentlyReadingBook.volumeInfo.imageLinks
+                          .thumbnail
+                          ? firstCurrentlyReadingBook.volumeInfo.imageLinks
+                              .thumbnail
+                          : ''
                       }
                     />
                   )}
                   {/* <HomeBook
-                    title={firstTwoBooks[1].title}
-                    authors={firstTwoBooks[1].author}
-                    imgsrc={
-                      firstTwoBooks[1].imageLinks.thumbnail
-                        ? firstTwoBooks[1].imageLinks.thumbnail
-                        : undefined
-                    }
-                  /> */}
+                  title={firstTwoBooks[1].title}
+                  authors={firstTwoBooks[1].author}
+                  imgsrc={
+                    firstTwoBooks[1].imageLinks.thumbnail
+                      ? firstTwoBooks[1].imageLinks.thumbnail
+                      : undefined
+                  }
+                /> */}
                 </div>
               </div>
               <div className="flex gap-[2px] text-xs py-2">
@@ -227,23 +285,30 @@ export default async function Home() {
             </HomeBox>
             <HomeBox heading="Want to read" bottomBorder>
               <div>
-                {wantToReadBooks && wantToReadBooks.length !== 0 ? (
+                {wantToReadGoogleBooks && wantToReadGoogleBooks.length !== 0 ? (
                   <div className="grid grid-cols-3 grid-rows-2 gap-1">
-                    {wantToReadBooks.slice(0, 6).map((book) => (
-                      <div className="border-[1px]" key={book.id}>
-                        <div className="relative w-[96px] h-[118px]">
-                          <Image
-                            src={
-                              book.imageLinks.thumbnail
-                                ? book.imageLinks.thumbnail
-                                : 'images/empty-book.png'
-                            }
-                            fill
-                            alt={`${book.title} cover`}
-                          />
-                        </div>
-                      </div>
-                    ))}
+                    {wantToReadGoogleBooks.slice(0, 6).map((book) => {
+                      return (
+                        book && (
+                          <Link href={`/books/${book.id}`}>
+                            <div className="border-[1px]" key={book.id}>
+                              <div className="relative w-[96px] h-[118px]">
+                                <Image
+                                  src={
+                                    book.volumeInfo.imageLinks &&
+                                    book.volumeInfo.imageLinks.thumbnail
+                                      ? book.volumeInfo.imageLinks.thumbnail
+                                      : 'images/empty-book.png'
+                                  }
+                                  fill
+                                  alt={`${book.volumeInfo.title} cover`}
+                                />
+                              </div>
+                            </div>
+                          </Link>
+                        )
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className="flex items-center gap-1">
@@ -266,7 +331,7 @@ export default async function Home() {
               <div>
                 <Link
                   className="hover:underline 
-                  text-goodreads-mybooks-green cursor-pointer"
+                text-goodreads-mybooks-green cursor-pointer"
                   href="/books"
                 >
                   View all books
@@ -275,23 +340,24 @@ export default async function Home() {
             </HomeBox>
             <HomeBox heading="Bookshelves">
               <div className="pt-2 text-sm">
-                {userBookshelves?.map((bookshelf) => (
-                  <div key={bookshelf.id} className="flex gap-4 my-[2px]">
-                    <Link
-                      href={`/books?shelf=${bookshelf.name}`}
-                      className="hover:underline text-goodreads-mybooks-green cursor-pointer"
-                    >
-                      {bookshelf.books.length}
-                    </Link>
+                {userBookshelves &&
+                  userBookshelves.map((bookshelf) => (
+                    <div key={bookshelf.id} className="flex gap-4 my-[2px]">
+                      <Link
+                        href={`/books?shelf=${bookshelf.name}`}
+                        className="hover:underline text-goodreads-mybooks-green cursor-pointer"
+                      >
+                        {bookshelf.googleBooks.length}
+                      </Link>
 
-                    <Link
-                      href={`/books?shelf=${bookshelf.name}`}
-                      className="hover:underline text-goodreads-mybooks-green cursor-pointer"
-                    >
-                      {bookshelf.name}
-                    </Link>
-                  </div>
-                ))}
+                      <Link
+                        href={`/books?shelf=${bookshelf.name}`}
+                        className="hover:underline text-goodreads-mybooks-green cursor-pointer"
+                      >
+                        {bookshelf.name}
+                      </Link>
+                    </div>
+                  ))}
               </div>
             </HomeBox>
           </div>
@@ -321,7 +387,7 @@ export default async function Home() {
                 {mostRecentReviews.length === 0 ? (
                   <div className="text-sm text-center">No more updates</div>
                 ) : (
-                  updateDisplay
+                  desktopDisplay
                 )}
               </div>
             </div>
