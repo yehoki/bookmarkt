@@ -13,6 +13,7 @@ import HomeUpdateItemMobile from '@/components/home/HomeUpdateItemMobile';
 import SwitchWithFooter from '@/components/home/SwitchWithFooter';
 import Image from 'next/image';
 import Link from 'next/link';
+// import getCurrentUserBooks from '@/actions/googleRefactored/getCurrentUserBooks';
 
 export default async function Home() {
   const currentUser = await getCurrentUser();
@@ -24,6 +25,8 @@ export default async function Home() {
       </>
     );
   }
+
+  // const newCurrentUserBooks = await getCurrentUserBooks()
 
   const currentUserBooks = await getCurrentUserBooks();
   const firstTwoBooks = currentUserBooks.books.slice(0, 3);

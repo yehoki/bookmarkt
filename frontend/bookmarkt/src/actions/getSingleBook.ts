@@ -18,6 +18,8 @@ export interface SingleGoogleBookType {
   volumeInfo: GoogleBookVolumeInfoType;
 }
 
+// getSingleBook fetches an individual book and it's data from the Google Books API
+
 export async function getSingleBook(googleId: string) {
   const partialResponse =
     'id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers)';

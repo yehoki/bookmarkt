@@ -15,18 +15,17 @@ type UserBookData {
   bookProgress Int
 }
 
-
 type BookshelfBooks {
-  bookId String @db.ObjectId
+  bookId             String   @db.ObjectId
   addedToBookShelfAt DateTime @default(now())
 }
 
 model Bookshelf {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String  
-  books   BookshelfBooks[] 
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  books     BookshelfBooks[]
   isDefault Boolean
-  userId    String   @db.ObjectId
+  userId    String           @db.ObjectId
 
   user User @relation(fields: [userId], references: [id])
 }
@@ -43,12 +42,14 @@ model User {
   bookProgress   UserBookData[]
   bookshelfIds   String[]       @db.ObjectId
   bookIds        String[]       @db.ObjectId
+  googleBookIds  String[]
   reviewIds      String[]       @db.ObjectId
 
   books       Book[]      @relation(fields: [bookIds], references: [id])
   reviews     Review[]
   accounts    Account[]
   bookshelves Bookshelf[]
+  bookData    BookData[]  @relation(fields: [googleBookIds], references: [googleId])
 }
 
 model Account {
@@ -84,7 +85,17 @@ type ReviewData {
   averageReview Float //set it to 2 d.p. 
 }
 
-// TODO: Add reviewData as a field in books to store their review data instead of refetching it everytime
+// TODO: Remove the Book model and replace it everywhere with fetching the book from a google Book Id
+
+model BookData {
+  googleId   String     @id @map("_id")
+  userIds    String[]   @db.ObjectId
+  reviewIds  String[]   @db.ObjectId
+  reviewData ReviewData
+
+  users   User[]   @relation(fields: [userIds], references: [id])
+  reviews Review[]
+}
 
 model Book {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -105,13 +116,15 @@ model Book {
 }
 
 model Review {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  rating      Int
-  description String?
-  bookId      String   @db.ObjectId
-  userId      String   @db.ObjectId
-  createdAt   DateTime @default(now())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating       Int
+  description  String?
+  bookId       String   @db.ObjectId
+  googleBookId String
+  userId       String   @db.ObjectId
+  createdAt    DateTime @default(now())
 
-  book Book @relation(fields: [bookId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  book     Book     @relation(fields: [bookId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  bookData BookData @relation(fields: [googleBookId], references: [googleId])
 }
