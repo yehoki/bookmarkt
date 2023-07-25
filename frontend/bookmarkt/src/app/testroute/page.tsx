@@ -105,7 +105,7 @@ export default async function Page() {
   return (
     <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">
       <Navbar currentUser={currentUser} />
-      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] h-[100dvh]">
+      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] h-full">
         <div className="md:hidden mx-auto max-w-[625px] px-2">
           <div className="border-[#eeeeee] border-[1px] my-2">
             <div className="relative w-full aspect-[14/3] ">

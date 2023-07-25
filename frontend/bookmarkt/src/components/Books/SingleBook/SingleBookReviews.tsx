@@ -59,9 +59,15 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
           publishedDate: bookInfo.volumeInfo.publishedDate
             ? bookInfo.volumeInfo.publishedDate
             : '',
-          ISBN: bookInfo.volumeInfo.industryIdentifiers.find(
-            (isbn) => isbn.type === 'ISBN_13'
-          )?.identifier,
+          ISBN:
+            bookInfo.volumeInfo.industryIdentifiers &&
+            bookInfo.volumeInfo.industryIdentifiers.find(
+              (isbn) => isbn.type === 'ISBN_13'
+            )
+              ? bookInfo.volumeInfo.industryIdentifiers.find(
+                  (isbn) => isbn.type === 'ISBN_13'
+                )?.identifier
+              : '',
         }),
       });
     }
