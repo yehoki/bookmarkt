@@ -77,7 +77,6 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
     }
     return null;
   });
-  console.log(test);
 
   // const currentUserBookObject = () => {
 
@@ -203,25 +202,33 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
             <div className="flex-1 max-w-[700px]">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 flex-[1_1_100%] gap-[2px] sm:gap-1 lg:gap-2 pt-2">
                 <Suspense>
-                  {/* {currentUserBookObject().map((book) => (
-                    <MyBook
-                      key={book.id}
-                      bookshelves={book.bookshelves}
-                      title={book.title}
-                      authors={book.authors}
-                      id={book.id}
-                      googleId={book.googleId}
-                      thumbnailUrl={book.thumbnail}
-                      reviewData={book.reviewData}
-                      userReview={book.userBookReview}
-                      publishedDate={book.publishedDate}
-                      description={
-                        book.description === '' || !book.description
-                          ? 'This book does not have any description yet...'
-                          : book.description
-                      }
-                    />
-                  ))} */}
+                  {test.map((book) => (
+                    <>
+                      {book && (
+                        <MyBook
+                          key={book.id}
+                          bookshelves={
+                            currentUserBookshelves ? currentUserBookshelves : []
+                          }
+                          title={book.title}
+                          authors={book.authors}
+                          id={book.id}
+                          googleId={book.googleId}
+                          thumbnailUrl={book.thumbnail}
+                          reviewData={book.reviewData}
+                          userReview={book.userBookReview}
+                          publishedDate={
+                            book.publishedDate ? book.publishedDate : ''
+                          }
+                          description={
+                            book.description === '' || !book.description
+                              ? 'This book does not have any description yet...'
+                              : book.description
+                          }
+                        />
+                      )}
+                    </>
+                  ))}
                 </Suspense>
               </div>
             </div>

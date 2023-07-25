@@ -1,7 +1,14 @@
-import { ImageLinks } from '@prisma/client';
-
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API;
 const googleAPIBaseUrl = 'https://www.googleapis.com/books/v1';
+
+interface ImageLinks {
+  smallThumbnail?: string;
+  thumbnail?: string;
+  small?: string;
+  medium?: string;
+  large?: string;
+  extraLarge?: string;
+}
 
 export interface GoogleBookVolumeInfoType {
   title: string;
