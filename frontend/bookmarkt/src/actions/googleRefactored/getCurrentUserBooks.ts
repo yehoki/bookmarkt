@@ -5,7 +5,7 @@ export default async function getCurrentUserBooks() {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
     return {
-      books: [],
+      bookData: [],
       reviews: [],
     };
   }

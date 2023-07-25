@@ -18,7 +18,6 @@ export default async function getCurrentUserBooks() {
         books: true,
         reviews: true,
       },
-      
     });
     if (!currentUserBooks) {
       throw new Error('Books could not be retrieved');

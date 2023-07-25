@@ -25,7 +25,12 @@ export async function getSingleBook(googleId: string) {
     'id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers)';
 
   const res = await fetch(
-    `${googleAPIBaseUrl}/volumes/${googleId}?fields=${partialResponse}&key=${GOOGLE_API_KEY}`
+    `${googleAPIBaseUrl}/volumes/${googleId}?fields=${partialResponse}&key=${GOOGLE_API_KEY}`,
+    {
+      next: {
+        revalidate: 30,
+      },
+    }
   );
   if (!res.ok) {
     return null;
