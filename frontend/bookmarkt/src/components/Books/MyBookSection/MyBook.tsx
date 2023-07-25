@@ -59,12 +59,14 @@ const MyBook: React.FC<MyBookProps> = ({
   };
 
   const currentBookshelf = () => {
-    // const singleBookshelf = bookshelves.filter((bookshelf) => {
-    //   return bookshelf.googleBooks.find((book) => book.googleBookId === googleId);
-    // });
-    // if (singleBookshelf.length !== 0) {
-    //   return singleBookshelf[0].name;
-    // }
+    const singleBookshelf = bookshelves.filter((bookshelf) => {
+      return bookshelf.googleBooks.find(
+        (book) => book.googleBookId === googleId
+      );
+    });
+    if (singleBookshelf.length !== 0) {
+      return singleBookshelf[0].name;
+    }
     return '';
   };
 
