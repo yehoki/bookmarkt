@@ -18,7 +18,6 @@ const SingleBookPage: React.FC<PageProps> = async ({
 }) => {
   const bookId = params.id;
   const bookInfo = await getSingleBook(bookId);
-  // console.log(bookInfo?.volumeInfo.industryIdentifiers);
   const bookInDbInfo = await getSingleBookFromDb(bookId);
   const userReviewInfo = await getBookReview(bookId);
 

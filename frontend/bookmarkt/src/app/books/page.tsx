@@ -18,6 +18,20 @@ interface BookPageProps {
 }
 
 const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
+  const combineBookIdsAndReviewData = (bookIds: string[]) => {
+    return bookIds.map((googleId) => {
+      const bookReviewData = currentUserBooks.bookData.find(
+        (bookData) => bookData.googleId === googleId
+      );
+      return {
+        googleId: googleId,
+        reviewData: bookReviewData
+          ? bookReviewData.reviewData
+          : { averageReview: 0, totalReviews: 0 },
+      };
+    });
+  };
+
   const currentUserBooks = await getCurrentUserBooks();
   const currentUserBookshelves = await getCurrentUserBookshelves();
   const currentBookshelfBooks = async () => {
@@ -26,7 +40,14 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
     return books;
   };
   const bookshelfBooks = await currentBookshelfBooks();
-
+  const currentBookshelfGoogleIds = bookshelfBooks
+    ? bookshelfBooks.googleBooks.map(
+        (bookshelfBook) => bookshelfBook.googleBookId
+      )
+    : [];
+  const currentBookshelfBooksWithReviewData = combineBookIdsAndReviewData(
+    currentBookshelfGoogleIds
+  );
   // const googleBooks = await getGoogleBooksFromList(bookshelfBooks ? bookshelfBooks.googleBooks. : ['']);
 
   const googleBookIds: GoogleBookType[] = currentUserBooks.bookData.map(
@@ -36,6 +57,10 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
     })
   );
   const currentUserGoogleBooks = await getGoogleBooksFromList(googleBookIds);
+
+  const currentBookshelfGoogleBooks = await getGoogleBooksFromList(
+    currentBookshelfBooksWithReviewData
+  );
 
   const test = currentUserGoogleBooks.map((book) => {
     if (book) {
@@ -78,15 +103,148 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
     return null;
   });
 
+  const myBooksObject = () => {
+    if (
+      !searchParams ||
+      !searchParams.shelf ||
+      searchParams.shelf === '' ||
+      searchParams.shelf === 'All' ||
+      !bookshelfBooks
+    ) {
+      return currentUserGoogleBooks.map((book) => {
+        if (book) {
+          const findUserReview = currentUserBooks.reviews.find(
+            (review) => review.googleBookId === book.id
+          );
+          let userReview;
+          if (findUserReview) {
+            userReview = {
+              rating: findUserReview.rating,
+              review: findUserReview.description,
+            };
+          }
+          return {
+            bookshelves: currentUserBookshelves ? currentUserBookshelves : [],
+            id: book.id,
+            googleId: book.id,
+            title: book.volumeInfo.title,
+            authors: book.volumeInfo.authors,
+            reviewData: book.reviewData,
+            userBookReview: userReview
+              ? {
+                  rating: userReview.rating,
+                  review: userReview.review ? userReview.review : undefined,
+                }
+              : {
+                  rating: 0,
+                  review: undefined,
+                },
+            description: book.volumeInfo.description
+              ? book.volumeInfo.description
+              : '',
+            thumbnail:
+              book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail
+                ? book.volumeInfo.imageLinks.thumbnail
+                : '',
+            publishedDate: book.volumeInfo.publishedDate,
+          };
+        }
+        return null;
+      });
+    } else {
+      return currentBookshelfGoogleBooks.map((bookshelfBook) => {
+        if (bookshelfBook) {
+          const findUserReview = currentUserBooks.reviews.find(
+            (review) => review.googleBookId === bookshelfBook.id
+          );
+          let userReview;
+          if (findUserReview) {
+            userReview = {
+              rating: findUserReview.rating,
+              review: findUserReview.description,
+            };
+          }
+          return {
+            bookshelves: currentUserBookshelves ? currentUserBookshelves : [],
+            googleId: bookshelfBook.id,
+            title: bookshelfBook.volumeInfo.title,
+            authors: bookshelfBook.volumeInfo.authors
+              ? bookshelfBook.volumeInfo.authors
+              : [],
+            reviewData: bookshelfBook.reviewData,
+            userBookReview: userReview
+              ? {
+                  rating: userReview.rating,
+                  review: userReview.review ? userReview.review : undefined,
+                }
+              : {
+                  rating: 0,
+                  review: undefined,
+                },
+            description: bookshelfBook.volumeInfo.description
+              ? bookshelfBook.volumeInfo.description
+              : '',
+            thumbnail:
+              bookshelfBook.volumeInfo.imageLinks &&
+              bookshelfBook.volumeInfo.imageLinks.thumbnail
+                ? bookshelfBook.volumeInfo.imageLinks.thumbnail
+                : '',
+            publishedDate: bookshelfBook.volumeInfo.publishedDate
+              ? bookshelfBook.volumeInfo.publishedDate
+              : '',
+          };
+        }
+        return null;
+      });
+
+      //   return bookshelfBooks.map((book) => {
+      //     const findUserReview = currentUserBooks.reviews.find(
+      //       (review) => review.bookId === book.id
+      //     );
+      //     let userReview;
+      //     if (findUserReview) {
+      //       userReview = {
+      //         rating: findUserReview.rating,
+      //         review: findUserReview.description,
+      //       };
+      //     }
+      //     return {
+      //       bookshelves: currentUserBookshelves ? currentUserBookshelves : [],
+      //       id: book.id,
+      //       googleId: book.googleId,
+      //       title: book.title,
+      //       authors: book.author,
+      //       reviewData: book.reviewData,
+      //       userBookReview: userReview
+      //         ? {
+      //             rating: userReview.rating,
+      //             review: userReview.review ? userReview.review : undefined,
+      //           }
+      //         : {
+      //             rating: 0,
+      //             review: undefined,
+      //           },
+      //       description: book.description ? book.description : '',
+      //       thumbnail:
+      //         book.imageLinks && book.imageLinks.thumbnail
+      //           ? book.imageLinks.thumbnail
+      //           : '',
+      //       publishedDate: book.publishedDate,
+      //     };
+      //   });
+      // };
+    }
+  };
+
   // const currentUserBookObject = () => {
 
   //   // If there is no current filter applied from the URL
-  //   if (
-  //     !searchParams ||
-  //     !searchParams.shelf ||
-  //     searchParams.shelf === '' ||
-  //     searchParams.shelf === 'All'
-  //   ) {
+  // if (
+  //   !searchParams ||
+  //   !searchParams.shelf ||
+  //   searchParams.shelf === '' ||
+  //   searchParams.shelf === 'All'
+  // ) {
   //     return currentUserBooks.books.map((book) => {
   //       const findUserReview = currentUserBooks.reviews.find(
   //         (review) => review.bookId === book.id
@@ -202,17 +360,17 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
             <div className="flex-1 max-w-[700px]">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 flex-[1_1_100%] gap-[2px] sm:gap-1 lg:gap-2 pt-2">
                 <Suspense>
-                  {test.map((book) => (
+                  {myBooksObject().map((book) => (
                     <>
                       {book && (
                         <MyBook
-                          key={book.id}
+                          key={book.googleId}
                           bookshelves={
                             currentUserBookshelves ? currentUserBookshelves : []
                           }
                           title={book.title}
                           authors={book.authors ? book.authors : []}
-                          id={book.id}
+                          id={book.googleId}
                           googleId={book.googleId}
                           thumbnailUrl={book.thumbnail}
                           reviewData={book.reviewData}
@@ -238,5 +396,4 @@ const Page: React.FC<BookPageProps> = async ({ searchParams }) => {
     </>
   );
 };
-
 export default Page;
