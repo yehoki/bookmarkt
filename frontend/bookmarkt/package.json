@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development next dev",
     "build": "cross-env NODE_ENV=production next build",
+    "postinstall": "prisma generate",
     "start": "next start",
     "lint": "next lint",
     "server": "node src/index.ts",
