@@ -1,8 +1,8 @@
 import { UserType } from '@/models/user';
-
+import { SITE_URL } from '@/utils/config';
 // const BASEURL = process.env.SITE_URL;
 export async function userLogin(credentials: Partial<UserType>) {
-  const res = await fetch(`/api/login/`, {
+  const res = await fetch(`${SITE_URL}/api/login/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ export async function userLogin(credentials: Partial<UserType>) {
 }
 
 export async function registerUser(user: Partial<UserType>) {
-  const res = await fetch('/api/users/', {
+  const res = await fetch(`${SITE_URL}/api/users/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

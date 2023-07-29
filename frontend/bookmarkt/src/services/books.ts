@@ -4,7 +4,7 @@ import { SITE_URL } from '@/utils/config';
 const siteUrl = SITE_URL;
 
 export async function addBook(bookData: Partial<BookType>) {
-  const res = await fetch('/api/books', {
+  const res = await fetch(`${SITE_URL}/api/books`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
