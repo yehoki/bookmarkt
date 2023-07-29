@@ -11,7 +11,7 @@ const SITE_URL =
     ? process.env.NEXT_PUBLIC_PRODUCTION_URL !== undefined
       ? process.env.NEXT_PUBLIC_PRODUCTION_URL
       : ''
-    : 'http://localhost:3000';
+    : '';
 
 const JWT_SECRET =
   process.env.NEXT_PUBLIC_JWT_SECRET === undefined
