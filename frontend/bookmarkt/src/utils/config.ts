@@ -2,22 +2,29 @@ import dotenv from 'dotenv';
 const config = dotenv.config();
 
 const MONGODB_URI =
-  process.env.NODE_ENV === 'test'
-    ? process.env.TEST_MONGODB_URI
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_PRODUCTION_MONGODB_URI
     : process.env.NEXT_PUBLIC_MONGODB_URI;
 
 const SITE_URL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : 'SampleWebsite';
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_PRODUCTION_URL !== undefined
+      ? process.env.NEXT_PUBLIC_PRODUCTION_URL
+      : ''
+    : 'http://localhost:3000';
 
 const JWT_SECRET =
   process.env.NEXT_PUBLIC_JWT_SECRET === undefined
     ? 'secret'
     : process.env.NEXT_PUBLIC_JWT_SECRET;
 
+
 const GOOGLE_API_KEY =
-  process.env.NEXT_PUBLIC_GOOGLE_API !== undefined
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_PRODUCTION_GOOGLE_API !== undefined
+      ? process.env.NEXT_PUBLIC_PRODUCTION_GOOGLE_API
+      : ''
+    : process.env.NEXT_PUBLIC_GOOGLE_API !== undefined
     ? process.env.NEXT_PUBLIC_GOOGLE_API
     : '';
 

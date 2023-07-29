@@ -9,6 +9,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { BsGithub } from 'react-icons/bs';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { SITE_URL } from '@/utils/config';
 
 export interface ModalInput {
   label: string;
@@ -80,7 +81,7 @@ const Modal: React.FC<ModalProps> = ({
       if (!name || !email || !passOne || !passTwo) {
         throw new Error('Details missing');
       }
-      const callback = await fetch('http://localhost:3000/api/register', {
+      const callback = await fetch(`${SITE_URL}/api/register`, {
         method: 'POST',
         body: JSON.stringify({
           name: name,
@@ -105,7 +106,7 @@ const Modal: React.FC<ModalProps> = ({
         </Link>
       </div>
 
-      <div className="flex flex-col w-[350px] my-0 mx-auto">
+      <div className="flex flex-col w-[a50px] my-0 mx-auto">
         <div className="mx-auto text-4xl font-semibold font-serif mb-2">
           {mainLabel}
         </div>

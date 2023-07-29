@@ -1,8 +1,9 @@
-/*  @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 
 const nextConfig = {
   images: {
     domains: ['books.google.com'],
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {

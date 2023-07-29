@@ -1,8 +1,6 @@
-
-
 import { GoogleBookItemInterface } from "./getBooksFromSearch";
+import { GOOGLE_API_KEY } from "@/utils/config";
 
-const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API;
 const googleAPIISBNSearchUrl =
   'https://www.googleapis.com/books/v1/volumes?q=isbn:';
 

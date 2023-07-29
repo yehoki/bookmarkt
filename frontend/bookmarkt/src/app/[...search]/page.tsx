@@ -1,7 +1,7 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 
 import { getUserBookData } from '@/actions/getUserBookData';
-import getCurrentUserBookshelves from '@/actions/googleRefactored/getCurrentUserBookshelves';
+import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import SearchBookDisplay from '@/components/Books/SearchBooks/SearchBookDisplay';
 import SearchBox from '@/components/Books/SearchBooks/SearchBox';
 

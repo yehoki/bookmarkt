@@ -5,6 +5,7 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { FaCheck } from 'react-icons/fa';
 import BookshelfButton from './BookshelfButton';
+import { SITE_URL } from '@/utils/config';
 
 interface AddBookButtonProps {
   bookId: string;
@@ -27,7 +28,7 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   const handleChangeBookshelf = async (newBookshelfName: string) => {
     if (displayBookshelf !== '') {
       // When a current bookshelf exist, send it via a PUT request to update
-      const res = await fetch(`http://localhost:3000/api/users/bookshelves`, {
+      const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'PUT',
         body: JSON.stringify({
           currentBookshelf: displayBookshelf,
@@ -36,7 +37,7 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
         }),
       });
     } else {
-      const res = await fetch(`http://localhost:3000/api/users/bookshelves`, {
+      const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'POST',
         body: JSON.stringify({
           googleId: bookId,

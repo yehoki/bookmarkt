@@ -6,6 +6,7 @@ import useBookReviewModal from '@/hooks/useBookReviewModal';
 import { BookData, Review } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { SITE_URL } from '@/utils/config';
 
 interface SingleBookReviewsProps {
   bookId: string;
@@ -25,7 +26,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
   const bookReviewModal = useBookReviewModal();
   const handleAddRating = async () => {
     setIsLoading(true);
-    const getBooks = await fetch('http://localhost:3000/api/users/books');
+    const getBooks = await fetch(`${SITE_URL}/api/users/books`);
     if (!getBooks.ok) {
       setIsLoading(false);
       return null;
@@ -40,7 +41,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
         setIsLoading(false);
         return null;
       }
-      const addBook = await fetch('http://localhost:3000/api/users/books', {
+      const addBook = await fetch(`${SITE_URL}/api/users/books`, {
         method: 'POST',
         body: JSON.stringify({
           id: bookInfo.id,
@@ -73,7 +74,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
       });
     }
 
-    const res = await fetch('http://localhost:3000/api/review', {
+    const res = await fetch(`${SITE_URL}/api/review`, {
       method: 'POST',
       body: JSON.stringify({
         rating: stars,
