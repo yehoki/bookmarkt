@@ -1,6 +1,6 @@
 import { getSingleBook } from '@/actions/getSingleBook';
 import getBookReview from '@/actions/getBookReview';
-import { getSingleBookFromDb } from '@/actions/getSingleBookFromDb';
+import { getSingleBookFromDb } from '@/actions/getSingleBookFromDB';
 import EmptyBookState from '@/components/Books/EmptyBookState';
 import SingleBookReviews from '@/components/Books/SingleBook/SingleBookReviews';
 import Image from 'next/image';
