@@ -1,5 +1,5 @@
 import { parseQuery } from '@/utils/helper';
-const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API;
+import { GOOGLE_API_KEY } from '@/utils/config';
 const googleAPIBaseUrl = 'https://www.googleapis.com/books/v1';
 
 export interface GoogleBookItemsInterface {
