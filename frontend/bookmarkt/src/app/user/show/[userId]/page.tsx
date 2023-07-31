@@ -6,6 +6,8 @@ import UserReviewsMobile from '@/components/User/UserReviewsMobile';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import UserReviews from '@/components/User/UserReviews';
+import MobileBox from '@/components/User/Mobile/MobileBox';
+import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
 
 interface UserProfilePageProps {
   params: { userId: string };
@@ -24,6 +26,15 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
     return <div>ErrorState</div>;
   }
 
+  // const currentUserBookshelves = await getUserBookselvesByUserId(userId);
+
+  // const currentlyReadingBookshelf = currentUserBookshelves?.find(
+  //   (bookshelf) => bookshelf.name === 'Currently reading'
+  // );
+
+  // const currentlReadingGoogleBookIds =
+  //   currentlyReadingBookshelf?.googleBooks.map((book) => book.googleBookId);
+
   const numberOfRatings = userData.reviewIds.length;
   const numberOfReviews = userData.reviews.filter(
     (review) => review.description !== ''
@@ -35,8 +46,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
   return (
     <>
       <Navbar currentUser={currentUser} />
-      <div className="pt-[100px] navOne:pt-[50px]">
-        <div className="hidden md:flex mt-[15px] ml-[5px]">
+      <div className="pt-[100px] navOne:pt-[50px] md:w-[970px] mx-auto">
+        <div className="hidden md:flex mt-[15px] ml-[5px] ">
           <div className="flex flex-col  flex-1 ">
             <div className="flex flex-row ">
               <div className="mr-[10px]">
@@ -96,7 +107,12 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
               </div>
               <div className="py-2">
                 {currentUser && currentUser.id === userData.id ? (
-                  'Edit your profile'
+                  <button
+                    className="px-4 sm:px-8 py-2 bg-goodreads-beige hover:bg-[#ede6d6] 
+                           border-goodreads-brown/20 border rounded-sm"
+                  >
+                    Edit your profile
+                  </button>
                 ) : (
                   <button
                     className="px-4 sm:px-8 py-2 bg-goodreads-beige hover:bg-[#ede6d6] 
@@ -118,9 +134,10 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
               </div>
             </div>
           </div>
-          <div>Currently Reading</div>
-          <div>Reading challenge</div>
-          <div>Bookshelves</div>
+          <MobileBox>Currently Reading</MobileBox>
+          <MobileBox>Reading challenge</MobileBox>
+          <MobileBox>Bookshelves</MobileBox>
+          <MobileBox>Currently Reading</MobileBox>
         </div>
       </div>
 

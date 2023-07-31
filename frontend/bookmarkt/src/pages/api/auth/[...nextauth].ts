@@ -5,6 +5,8 @@ import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
+import createNewUserBookshelves from '@/actions/createNewUserBookshelves';
+import checkIfNewUser from '@/actions/checkIfNewUser';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -59,6 +61,31 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async redirect({ url, baseUrl }) {
       return baseUrl;
+    },
+    async signIn({ account, profile, user }) {
+      if (
+        (account?.provider === 'google' || account?.provider === 'github') &&
+        profile &&
+        profile.email &&
+        profile.name
+      ) {
+        const checkUser = await checkIfNewUser(
+          profile.email,
+          profile?.name,
+          account.provider,
+          account.providerAccountId,
+          account.access_token,
+          account.token_type,
+          account.scope,
+          profile?.image
+        );
+        await createNewUserBookshelves(
+          profile && profile.email ? profile.email : ''
+        );
+        return true;
+      }
+
+      return true;
     },
   },
 };
