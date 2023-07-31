@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { IconType } from 'react-icons';
 import { signOut } from 'next-auth/react';
 import { User } from '@prisma/client';
+import Image from 'next/image';
 interface NavIconDropdownProps {
   icon: IconType;
   currentUser: User;
@@ -29,17 +30,28 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
         onBlur={toggleOpen}
       >
         <div
-          className="
-    p-[5px]
+          className={`
+  ${currentUser.image ? 'p-0' : 'p-[5px]'}
     rounded-full 
     text-goodreads-brown/20
     bg-goodreads-beige
     border-[1px]
     border-[#D8D8D8]
     transition
-    "
+    `}
         >
-          <Icon size={20} />
+          {currentUser.image ? (
+            <div className="relative w-[30px] h-[30px]">
+              <Image
+                src={currentUser.image}
+                alt="Current user image"
+                fill
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <Icon size={20} />
+          )}
         </div>
       </div>
 

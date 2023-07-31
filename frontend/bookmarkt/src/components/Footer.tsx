@@ -9,7 +9,7 @@ const Footer = (props: Props) => {
   return (
     <footer className="w-[100dvw] bottom-0 fixed bg-goodreads-beige">
       <Container>
-        <div className=" flex flex-row items-center gap-1 py-8 navOne:w-[1200px] mx-auto">
+        <div className="px-2 navOne:px-0 flex flex-row items-center gap-1 py-8 navOne:w-[1200px] mx-auto">
           yehoki 2023
           <Link
             href="https://github.com/yehoki/"
