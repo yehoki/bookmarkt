@@ -6,6 +6,7 @@ import { AiFillCaretDown } from 'react-icons/ai';
 import { FaCheck } from 'react-icons/fa';
 import BookshelfButton from './BookshelfButton';
 import { SITE_URL } from '@/utils/config';
+import useAddBookButton from '@/hooks/useAddBookButton';
 
 interface AddBookButtonProps {
   bookId: string;
@@ -25,9 +26,14 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   // fetch if book is read
   const router = useRouter();
+  const addBookButton = useAddBookButton();
 
   const handleChangeBookshelf = async (newBookshelfName: string) => {
     setIsLoading(true);
+    if (!addBookButton.isEnabled) {
+      return;
+    }
+    addBookButton.onDisable();
     if (displayBookshelf !== '') {
       // When a current bookshelf exist, send it via a PUT request to update
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
@@ -50,6 +56,7 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
     setDisplayBookshelf(newBookshelfName);
     router.refresh();
     setIsLoading(false);
+    addBookButton.onEnable();
   };
 
   useEffect(() => {
