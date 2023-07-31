@@ -14,23 +14,71 @@ export async function POST(req: Request) {
   if (!googleId || !newBookshelf) {
     return NextResponse.error();
   }
+
   const googleBook = await getSingleBook(googleId);
   if (!googleBook) {
     return NextResponse.error();
   }
 
-  const newBookData = await prisma.bookData.create({
-    data: {
+  const checkIfBookExists = await prisma.bookData.findFirst({
+    where: {
       googleId: googleId,
-      reviewData: {
-        totalReviews: 0,
-        averageReview: 0,
-      },
     },
   });
 
+  if (!checkIfBookExists) {
+    const newBookData = await prisma.bookData.create({
+      data: {
+        googleId: googleId,
+        reviewData: {
+          totalReviews: 0,
+          averageReview: 0,
+        },
+      },
+    });
+
+    const updatedUserBooks =
+      [...currentUser.googleBookIds, newBookData.googleId] || [];
+
+    const getNewBookshelf = await prisma.bookshelf.findFirst({
+      where: {
+        userId: currentUser.id,
+        name: newBookshelf,
+      },
+    });
+    if (!getNewBookshelf) {
+      return NextResponse.error();
+    }
+
+    const newBookshelfBook: BookshelfBooks = {
+      googleBookId: newBookData.googleId,
+      addedToBookShelfAt: new Date(),
+    };
+    const bookshelfBooks = [...getNewBookshelf.googleBooks, newBookshelfBook];
+
+    // only add book to user's books if the bookshelf is found
+    const updateUserBooks = await prisma.user.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        googleBookIds: updatedUserBooks,
+      },
+    });
+
+    const updateUserBookshelf = await prisma.bookshelf.update({
+      where: {
+        id: getNewBookshelf.id,
+      },
+      data: {
+        googleBooks: bookshelfBooks,
+      },
+    });
+    return NextResponse.json(updateUserBookshelf);
+  }
+
   const updatedUserBooks =
-    [...currentUser.googleBookIds, newBookData.googleId] || [];
+    [...currentUser.googleBookIds, checkIfBookExists.googleId] || [];
 
   const getNewBookshelf = await prisma.bookshelf.findFirst({
     where: {
@@ -43,7 +91,7 @@ export async function POST(req: Request) {
   }
 
   const newBookshelfBook: BookshelfBooks = {
-    googleBookId: newBookData.googleId,
+    googleBookId: checkIfBookExists.googleId,
     addedToBookShelfAt: new Date(),
   };
   const bookshelfBooks = [...getNewBookshelf.googleBooks, newBookshelfBook];

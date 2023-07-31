@@ -71,16 +71,13 @@ export const authOptions: AuthOptions = {
       ) {
         const checkUser = await checkIfNewUser(
           profile.email,
-          profile?.name,
+          profile.name,
           account.provider,
           account.providerAccountId,
           account.access_token,
           account.token_type,
           account.scope,
-          profile?.image
-        );
-        await createNewUserBookshelves(
-          profile && profile.email ? profile.email : ''
+          user.image ? user.image : undefined
         );
         return true;
       }
