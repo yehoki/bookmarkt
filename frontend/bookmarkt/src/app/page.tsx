@@ -105,6 +105,7 @@ export default async function Page() {
       return (
         googleBook && {
           id: review.id,
+          userId: review.userId,
           bookshelves: userBookshelves ? userBookshelves : [],
           currentBookshelf: bookshelfName ? bookshelfName : '',
           reviewMadeAt: review.createdAt,
@@ -136,6 +137,7 @@ export default async function Page() {
       frontPageItem && (
         <HomeUpdateItemMobile
           key={frontPageItem.id}
+          userId={frontPageItem.userId}
           reviewMadeAt={frontPageItem.reviewMadeAt}
           userName={frontPageItem.userName}
           bookTitle={frontPageItem.bookTitle}
@@ -154,6 +156,7 @@ export default async function Page() {
       frontPageItem && (
         <HomeUpdateItem
           key={frontPageItem.id}
+          userId={frontPageItem.userId}
           bookshelves={frontPageItem.bookshelves}
           currentBookshelf={frontPageItem.currentBookshelf}
           reviewMadeAt={frontPageItem.reviewMadeAt}

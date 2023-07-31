@@ -2,10 +2,12 @@
 
 import { getTimeDifference } from '@/utils/helper';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 interface HomeUpdateItemMobileProps {
   userName: string;
+  userId: string;
   bookTitle: string;
   bookAuthors: string[];
   googleBookId: string;
@@ -17,6 +19,7 @@ interface HomeUpdateItemMobileProps {
 
 const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
   userName,
+  userId,
   bookTitle,
   bookAuthors,
   googleBookId,
@@ -52,7 +55,7 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
       </div>
       <div className="text-sm leading-1">
         <span className="text-goodreads-mybooks-green hover:underline cursor-pointer font-semibold">
-          {userName}
+          <Link href={`/user/show/${userId}`}>{userName}</Link>
         </span>{' '}
         rated a book {reviewRating}
       </div>

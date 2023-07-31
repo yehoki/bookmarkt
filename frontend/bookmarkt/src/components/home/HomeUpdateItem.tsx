@@ -10,6 +10,7 @@ import { Suspense } from 'react';
 
 interface HomeUpdateItemProps {
   userName: string;
+  userId: string;
   bookTitle: string;
   googleBookId: string;
   bookDescription: string;
@@ -25,6 +26,7 @@ interface HomeUpdateItemProps {
 
 const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   userName,
+  userId,
   reviewMadeAt,
   bookTitle,
   googleBookId,
@@ -72,7 +74,10 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         <Suspense fallback="...">{timeDifference}</Suspense>
       </div>
       <div className="flex gap-1 pr-10 ">
-        <Link href={'/'} className="font-semibold hover:underline text-sm">
+        <Link
+          href={`/user/show/${userId}`}
+          className="font-semibold hover:underline text-sm"
+        >
           {userName}
         </Link>
         {reviewDescription === '' ? (
