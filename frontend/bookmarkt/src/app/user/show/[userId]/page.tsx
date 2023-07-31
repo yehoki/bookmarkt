@@ -40,7 +40,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
           <div className="flex flex-col  flex-1 ">
             <div className="flex flex-row ">
               <div className="mr-[10px]">
-                <div className="relative w-[150px] h-[150px] rounded-full border border-black">
+                <div className="relative w-[150px] h-[150px] rounded-full border border-black mb-1">
                   <Image
                     src={
                       userData.image ? userData.image : '/images/empty-user.png'

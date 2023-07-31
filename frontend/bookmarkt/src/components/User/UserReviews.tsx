@@ -18,7 +18,7 @@ const UserReviews: React.FC<UserReviewsProps> = ({
       <Link
         href="/"
         className="flex flex-col justify-center items-center 
-        text-sm text-goodreads-mybooks-green hover:underline"
+        text-xs text-goodreads-mybooks-green hover:underline"
       >
         <div>
           {ratedTotal} {ratedTotal === 1 ? 'rating' : 'ratings'} (

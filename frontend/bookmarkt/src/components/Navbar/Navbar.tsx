@@ -49,7 +49,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
             <Links />
             <Search />
             <UserMenu currentUser={currentUser} />
-            <MobileUserMenu />
+            <MobileUserMenu
+              currentUserImage={
+                currentUser && currentUser.image ? currentUser.image : ''
+              }
+            />
           </div>
         </Container>
         <div className="navOne:hidden max-h-[50px]">
