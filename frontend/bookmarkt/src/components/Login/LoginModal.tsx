@@ -8,7 +8,7 @@ import { AiFillFacebook, AiOutlineAmazon } from 'react-icons/ai';
 
 const LoginModal = () => {
   return (
-    <div className="py-40 md:py-24 mx-auto max-w-[425px]">
+    <div className="py-[100px] md:py-[50px] mx-auto max-w-[425px]">
       <div className="relative block w-[425px] h-[300px]">
         <Image src={'/images/SummerReading.png'} alt="Book" fill />
       </div>

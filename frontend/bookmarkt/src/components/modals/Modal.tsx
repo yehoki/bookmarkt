@@ -99,7 +99,7 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="mx-auto w-[700px] py-[14px] px-[18px] ">
+    <div className="mx-auto w-full md:w-[700px] py-[14px] px-[18px] ">
       <div className="relative block w-[200px] h-[50px] mx-auto pt-4 mb-[22px]">
         <Link href={'/'}>
           <Image src={'/images/bookmarkt.svg'} alt="Bookmarkt logo" fill />
