@@ -7,6 +7,7 @@ interface HomeBoxProps {
   topBorder?: boolean;
   children: React.ReactNode;
   heading: string;
+  onlyTwoRows?: boolean;
 }
 
 const HomeBox: React.FC<HomeBoxProps> = ({
@@ -14,9 +15,15 @@ const HomeBox: React.FC<HomeBoxProps> = ({
   topBorder,
   children,
   heading,
+  onlyTwoRows,
 }) => {
   return (
-    <div className="py-2 border-b-[1px]">
+    <div
+      className={`
+    ${onlyTwoRows ? 'hidden md:block navOne:hidden' : ''}
+    py-2 
+    ${bottomBorder ? 'border-b-[1px]' : 'border-none'}`}
+    >
       <div className="uppercase font-semibold">{heading}</div>
       {children}
     </div>

@@ -1,23 +1,25 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import githubLogo from '../github-mark.svg';
-import styles from '../page.module.css';
 import Container from './Container';
+import { AiFillGithub } from 'react-icons/ai';
 type Props = {};
 
 const Footer = (props: Props) => {
   return (
-    <footer className="w-[100dvw] bottom-0 fixed bg-goodreads-beige mx-auto">
-      <div className="w-full flex flex-row mx-auto py-8">
-        Copyright © 2023 yehoki
-        <Link href="https://github.com/yehoki/">
-          {/* <Image
-            src={githubLogo}
-            alt="Github logo"
-          /> */}
-        </Link>
-      </div>
+    <footer className="w-[100dvw] bottom-0 fixed bg-goodreads-beige">
+      <Container>
+        <div className=" flex flex-row items-center gap-1 py-8 navOne:w-[1200px] mx-auto">
+          yehoki 2023
+          <Link
+            href="https://github.com/yehoki/"
+            className="hover:-translate-y-1 text-goodreads-brown/70
+          hover:text-goodreads-brown transition duration-300"
+          >
+            <AiFillGithub size={24} />
+          </Link>
+        </div>
+      </Container>
     </footer>
   );
 };

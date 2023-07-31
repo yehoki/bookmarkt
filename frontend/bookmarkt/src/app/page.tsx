@@ -16,6 +16,7 @@ import HomeUpdateItemMobile from '@/components/home/HomeUpdateItemMobile';
 import SwitchWithFooter from '@/components/home/SwitchWithFooter';
 import Image from 'next/image';
 import Link from 'next/link';
+import FooterGithubLink from '@/components/FooterGithubLink';
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
@@ -249,6 +250,9 @@ export default async function Page() {
                 <div>General update</div>
               </div>
             </HomeBox>
+            <HomeBox heading="News & Interviews" onlyTwoRows>
+              <div></div>
+            </HomeBox>
             <HomeBox heading="2023 Reading Challenge" bottomBorder>
               <div className="flex gap-2">
                 <div className="w-[110px] h-[130px] bg-[#7584e9]">
@@ -359,6 +363,15 @@ export default async function Page() {
                     </div>
                   ))}
               </div>
+            </HomeBox>
+            <HomeBox heading="Recommendations" onlyTwoRows>
+              <div></div>
+            </HomeBox>
+            <HomeBox heading="Improve Recommendations" onlyTwoRows>
+              <div></div>
+            </HomeBox>
+            <HomeBox heading="" onlyTwoRows>
+              <FooterGithubLink />
             </HomeBox>
           </div>
           <div className="w-[460px] navOne:w-[560px]">
