@@ -17,12 +17,16 @@ const UserReviews: React.FC<UserReviewsProps> = ({
     <div className="">
       <Link
         href="/"
-        className="flex flex-col justify-center items-center text-goodreads-mybooks-green hover:underline cursor-pointer"
+        className="flex flex-col justify-center items-center 
+        text-sm text-goodreads-mybooks-green hover:underline"
       >
         <div>
-          {ratedTotal} books rated · {averageRating.toFixed(2)} average rating
+          {ratedTotal} {ratedTotal === 1 ? 'rating' : 'ratings'} (
+          {averageRating.toFixed(2)} avg)
         </div>
-        <div>{reviewsTotal} revies written</div>
+        <div>
+          {reviewsTotal} {reviewsTotal === 1 ? 'review' : 'reviews'}
+        </div>
       </Link>
     </div>
   );

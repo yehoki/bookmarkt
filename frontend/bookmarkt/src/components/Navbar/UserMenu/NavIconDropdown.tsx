@@ -4,6 +4,7 @@ import { IconType } from 'react-icons';
 import { signOut } from 'next-auth/react';
 import { User } from '@prisma/client';
 import Image from 'next/image';
+import Link from 'next/link';
 interface NavIconDropdownProps {
   icon: IconType;
   currentUser: User;
@@ -81,7 +82,9 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
             </span>
           </div>
           <ul>
-            <li className="px-4">Profile</li>
+            <li className="px-4 cursor-pointer hover:underline">
+              <Link href={`/user/show/${currentUser.id}`}>Profile</Link>
+            </li>
             <li className="px-4">Friends</li>
             <li className="px-4">Groups</li>
             <li className="px-4">Discussions</li>
