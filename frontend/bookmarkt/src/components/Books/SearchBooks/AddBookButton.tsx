@@ -29,11 +29,11 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   const addBookButton = useAddBookButton();
 
   const handleChangeBookshelf = async (newBookshelfName: string) => {
-    setIsLoading(true);
     if (!addBookButton.isEnabled) {
       return;
     }
     addBookButton.onDisable();
+    setIsLoading(true);
     if (displayBookshelf !== '') {
       // When a current bookshelf exist, send it via a PUT request to update
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
