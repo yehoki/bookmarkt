@@ -75,13 +75,14 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                   reviewsTotal={numberOfReviews}
                 />
               </div>
-              <div className="pl-4 w-full">
+              <div className="pl-4 w-full flex flex-col gap-2">
                 <div
                   className="border-b-[1px] border-[#d8d8d8] 
                 text-2xl font-semibold tracking-wide text-goodreads-brown py-1 mb-1"
                 >
                   {userData.name}
                 </div>
+                <FriendButton userId={userId} isFriends={checkFriends()} />
                 <div className="flex flex-row gap-20">
                   <div className="font-semibold">Activity</div>
                   <div>Joined in {format(userData.createdAt, 'MMMM yyyy')}</div>
