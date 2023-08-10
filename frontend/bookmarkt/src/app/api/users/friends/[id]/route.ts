@@ -15,6 +15,10 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
 
+  if (currentUser.friendIds.includes(userId)) {
+    return NextResponse.json({ message: 'User is already a friend' });
+  }
+
   const getUserIdFriendIds = await prisma.user.findFirst({
     where: {
       id: userId,

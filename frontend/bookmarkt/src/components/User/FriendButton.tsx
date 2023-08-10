@@ -74,7 +74,8 @@ const FriendButton: React.FC<FriendButtonProps> = ({ isFriends, userId }) => {
           disabled={isDisabled}
           onClick={handleAddFriend}
           className="px-4 sm:px-8 py-2 bg-goodreads-beige hover:bg-[#ede6d6] 
-border-goodreads-brown/20 border rounded-sm mr-auto"
+          active:bg-goodreads-brown/20
+          border-goodreads-brown/20 border rounded-sm mr-auto "
         >
           Add Friend
         </button>

@@ -82,7 +82,17 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                 >
                   {userData.name}
                 </div>
-                <FriendButton userId={userId} isFriends={checkFriends()} />
+                {currentUser && currentUser.id === userData.id ? (
+                  <button
+                    className="px-4 sm:px-8 py-2 bg-goodreads-beige hover:bg-[#ede6d6] 
+                           border-goodreads-brown/20 border rounded-sm mr-auto
+                           "
+                  >
+                    Edit your profile
+                  </button>
+                ) : (
+                  <FriendButton isFriends={checkFriends()} userId={userId} />
+                )}
                 <div className="flex flex-row gap-20">
                   <div className="font-semibold">Activity</div>
                   <div>Joined in {format(userData.createdAt, 'MMMM yyyy')}</div>
