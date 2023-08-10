@@ -29,7 +29,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             <NavIcon icon={BsFillBellFill} />
             <NavIcon icon={BiConversation} />
             <NavIcon icon={IoIosMail} />
-            <NavIcon icon={BsFillPeopleFill} />
+            <NavIcon icon={BsFillPeopleFill} href="/friend" />
             <NavIconDropdown icon={HiUser} currentUser={currentUser} />
           </>
         ) : (
