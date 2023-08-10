@@ -1,6 +1,8 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserFriends from '@/actions/getCurrentUserFriends';
+import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar/Navbar';
+import MobileFriendListDisplay from '@/components/User/Friends/MobileFriendListDisplay';
 import { redirect } from 'next/navigation';
 
 export default async function FriendPage() {
@@ -38,10 +40,16 @@ export default async function FriendPage() {
             </div>
           </div>
 
-          <div>
+          <div className="py-2">
             {currentUserFriends ? (
               currentUserFriends.map((friend) => (
-                <div key={friend.id}>{friend.name}</div>
+                <MobileFriendListDisplay
+                  name={friend.name ? friend.name : ''}
+                  id={friend.id}
+                  bookCount={friend.googleBookIds.length}
+                  imageUrl={friend.image ? friend.image : ''}
+                  key={friend.id}
+                />
               ))
             ) : (
               <></>
@@ -49,6 +57,7 @@ export default async function FriendPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

@@ -59,7 +59,6 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
         </span>{' '}
         rated a book {reviewRating}
       </div>
-      <div className="text-xs text-neutral-300">When</div>
       <div className="flex items-center mt-2">
         <div className="relative w-[55px] h-[85px] aspect-[11/17] mr-1">
           <Image

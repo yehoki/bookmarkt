@@ -122,7 +122,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
             </div>
             <div className="flex flex-col justify-center items-center ">
               <div className="py-2 text-2xl font-bold tracking-wider">
-                UserName
+                {userData.name ? userData.name : 'Name'}
               </div>
               <div className="py-2">
                 {currentUser && currentUser.id === userData.id ? (
