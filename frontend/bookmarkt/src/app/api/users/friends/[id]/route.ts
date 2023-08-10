@@ -36,10 +36,11 @@ export async function POST(req: Request) {
   const currentUserNewFriendIds = [...currentUser.friendIds, userId] || [
     userId,
   ];
+
   const newFriendsFriendIds = [
     ...getUserIdFriendIds.friendIds,
-    getUserIdFriendIds.id,
-  ] || [getUserIdFriendIds.id];
+    currentUser.id,
+  ] || [currentUser.id];
 
   const updateCurrentUserFriends = await prisma.user.update({
     where: {
@@ -92,12 +93,14 @@ export async function DELETE(req: Request) {
   }
 
   const currentUserNewFriendIds =
-    [...currentUser.friendIds].filter((friendId) => friendId !== userId) || [];
+    currentUser.friendIds.filter((friendId) => friendId !== userId) || [];
+
 
   const newFriendsFriendIds =
-    [...getUserIdFriendIds.friendIds].filter(
+    getUserIdFriendIds.friendIds.filter(
       (friendsFriendId) => friendsFriendId !== currentUser.id
     ) || [];
+
 
   const updateCurrentUserFriends = await prisma.user.update({
     where: {
