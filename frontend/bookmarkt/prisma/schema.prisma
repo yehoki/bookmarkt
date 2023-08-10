@@ -15,18 +15,17 @@ type UserBookData {
   bookProgress Int
 }
 
-
 type BookshelfBooks {
   googleBookId       String
   addedToBookShelfAt DateTime @default(now())
 }
 
 model Bookshelf {
-  id        String           @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
   googleBooks BookshelfBooks[]
-  isDefault Boolean
-  userId    String           @db.ObjectId
+  isDefault   Boolean
+  userId      String           @db.ObjectId
 
   user User @relation(fields: [userId], references: [id])
 }
@@ -44,11 +43,14 @@ model User {
   bookshelfIds   String[]       @db.ObjectId
   googleBookIds  String[]
   reviewIds      String[]       @db.ObjectId
+  friendIds      String[]       @db.ObjectId
 
   reviews     Review[]
   accounts    Account[]
   bookshelves Bookshelf[]
   bookData    BookData[]  @relation(fields: [googleBookIds], references: [googleId])
+  friends   User[] @relation(name: "Friends", fields: [friendIds], references: [id])
+  friendsOf User[] @relation(name: "Friends", fields: [friendIds], references: [id])
 }
 
 model Account {

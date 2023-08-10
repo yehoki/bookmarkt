@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import UserReviews from '@/components/User/UserReviews';
 import MobileBox from '@/components/User/Mobile/MobileBox';
 import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
+import FriendButton from '@/components/User/FriendButton';
 
 interface UserProfilePageProps {
   params: { userId: string };
@@ -25,6 +26,13 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
   if (!userData) {
     return <div>ErrorState</div>;
   }
+
+  const checkFriends = () => {
+    if (currentUser && currentUser.friendIds.includes(userData.id)) {
+      return true;
+    }
+    return false;
+  };
 
   // const currentUserBookshelves = await getUserBookselvesByUserId(userId);
 
@@ -114,12 +122,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                     Edit your profile
                   </button>
                 ) : (
-                  <button
-                    className="px-4 sm:px-8 py-2 bg-goodreads-beige hover:bg-[#ede6d6] 
-                border-goodreads-brown/20 border rounded-sm"
-                  >
-                    Add Friend
-                  </button>
+                  <FriendButton isFriends={checkFriends()} userId={userId} />
                 )}
               </div>
               <div className="text-sm">

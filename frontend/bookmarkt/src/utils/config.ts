@@ -11,13 +11,14 @@ const SITE_URL =
     ? process.env.NEXT_PUBLIC_PRODUCTION_URL !== undefined
       ? process.env.NEXT_PUBLIC_PRODUCTION_URL
       : ''
-    : '';
+    : process.env.NEXT_PUBLIC_DEVELOPMENT_URL !== undefined
+    ? process.env.NEXT_PUBLIC_DEVELOPMENT_URL
+  : '';
 
 const JWT_SECRET =
   process.env.NEXT_PUBLIC_JWT_SECRET === undefined
     ? 'secret'
     : process.env.NEXT_PUBLIC_JWT_SECRET;
-
 
 const GOOGLE_API_KEY =
   process.env.NODE_ENV === 'production'

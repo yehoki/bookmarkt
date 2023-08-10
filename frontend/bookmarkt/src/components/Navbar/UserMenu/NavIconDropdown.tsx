@@ -58,14 +58,15 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
 
       <div
         className={`
-        ${isOpen ? 'block' : 'hidden'}
+        ${isOpen ? 'scale-100' : 'scale-0'}
+        transition origin-top-right
       absolute -right-2
       top-[50px]
       bg-white
       shadow-md
       overflow-hidden
       text-sm
-      py-2
+      pt-2 pb-1
       w-[250px]
       `}
       >
@@ -82,14 +83,16 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
             </span>
           </div>
           <ul>
-            <li className="px-4 cursor-pointer hover:underline">
-              <Link href={`/user/show/${currentUser.id}`}>Profile</Link>
-            </li>
+            <Link className="" href={`/user/show/${currentUser.id}`}>
+              <li className="cursor-pointer hover:underline px-4">Profile</li>
+            </Link>
             <li className="px-4">Friends</li>
             <li className="px-4">Groups</li>
             <li className="px-4">Discussions</li>
             <li
-              className="px-4 border-t-[1px] border-[#D8D8D8] cursor-pointer"
+              className="px-4 border-t-[1px] border-[#D8D8D8] cursor-pointer
+              hover:underline
+              "
               onClick={() => signOut()}
             >
               Sign out

@@ -10,7 +10,6 @@ import UserMenu from './UserMenu/UserMenu';
 import MobileUserMenu from './UserMenu/MobileUserMenu';
 import useUserStore from '@/hooks/useUserStore';
 import MobileDropdown from './MobileDropdown';
-import Link from 'next/link';
 
 interface NavbarProps {
   currentUser?: User | null;

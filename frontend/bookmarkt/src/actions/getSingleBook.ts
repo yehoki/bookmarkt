@@ -38,7 +38,7 @@ export async function getSingleBook(googleId: string) {
     `${googleAPIBaseUrl}/volumes/${googleId}?fields=${partialResponse}&key=${GOOGLE_API_KEY}`,
     {
       next: {
-        revalidate: 30,
+        revalidate: 60*60*24
       },
     }
   );
