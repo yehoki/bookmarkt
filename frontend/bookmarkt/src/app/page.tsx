@@ -180,7 +180,7 @@ export default async function Page() {
   return (
     <div className="w-full h-full bg-[rgba(244,241,234,0.5)]">
       <Navbar currentUser={currentUser} />
-      <div className="md:w-[780px] navOne:w-[1220px] mx-auto pt-[100px] navOne:pt-[50px] min-h-[100dvh] h-full">
+      <div className="md:w-[780px] navOne:w-[1200px] mx-auto pt-[100px] navOne:pt-[50px] min-h-[100dvh] h-full">
         <div className="md:hidden mx-auto max-w-[625px] px-2">
           <div className="border-[#eeeeee] border-[1px] my-2">
             <div className="relative w-full aspect-[14/3] ">
@@ -210,7 +210,7 @@ export default async function Page() {
           </div>
         </div>
         <div className="hidden md:flex flex-row justify-between mt-2 ">
-          <div className="w-[300px]">
+          <div className="w-[300px] pl-2">
             <HomeBox heading="Currently reading" bottomBorder>
               <div>
                 <div className="flex flex-col gap-2 py-2">

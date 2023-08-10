@@ -18,8 +18,20 @@ export default async function FriendPage() {
       <Navbar currentUser={currentUser} />
 
       <main className="pt-[100px] navOne:pt-[50px] px-2">
-        <div className="hidden md:block">1234</div>
-        <div className="md:hidden">
+        <div className="hidden lg:block pb-[25px]">
+          <div className="w-[970px] mx-auto mt-4">
+            <div>Friends</div>
+            <div>
+              <div className="w-[625px]">
+                <div>Search</div>
+                <div>Showing</div>
+                <div>FriendsGrid</div>
+              </div>
+              <div className="w-[300px]">Right</div>
+            </div>
+          </div>
+        </div>
+        <div className="lg:hidden">
           <div className="py-2 border-b-[1px] ">
             <div className="flex justify-between items-center">
               <div className="text-2xl ">
