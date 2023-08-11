@@ -6,15 +6,15 @@ import Link from 'next/link';
 interface MobileFriendListDisplayProps {
   name: string;
   id: string;
+  image: string;
   bookCount: number;
-  imageUrl: string;
 }
 
 const MobileFriendListDisplay: React.FC<MobileFriendListDisplayProps> = ({
   name,
   id,
+  image,
   bookCount,
-  imageUrl,
 }) => {
   return (
     <div className="flex items-center gap-2">
@@ -22,14 +22,14 @@ const MobileFriendListDisplay: React.FC<MobileFriendListDisplayProps> = ({
         <Link href={`/user/show/${id}`}>
           <Image
             className="rounded-md"
-            src={imageUrl !== '' ? imageUrl : '/images/empty-user.png'}
+            src={image !== '' ? image : '/images/empty-user.png'}
             fill
             alt={`${name} profile image`}
           />
         </Link>
       </div>
       <div>
-        <div className="text-sm font-semibold text-goodreads-mybooks-green hover:underline">
+        <div className="text-sm font-bold text-goodreads-mybooks-green hover:underline">
           <Link href={`/user/show/${id}`}>{name}</Link>
         </div>
         <div className="text-sm text-neutral-400">

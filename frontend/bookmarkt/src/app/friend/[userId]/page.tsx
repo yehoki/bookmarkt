@@ -1,32 +1,47 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserFriends from '@/actions/getCurrentUserFriends';
+import getFriendsByUserId from '@/actions/getFriendsByUserId';
 import { getSingleBook } from '@/actions/getSingleBook';
 import { getUserBooksByBookshelf } from '@/actions/getUserBooksByBookshelf';
 import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
+import getUserById from '@/actions/getUserById';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar/Navbar';
 import DesktopFriendListDisplay from '@/components/User/Friends/DesktopFriendListDisplay';
 import MobileFriendListDisplay from '@/components/User/Friends/MobileFriendListDisplay';
 import { redirect } from 'next/navigation';
 
-export default async function FriendPage() {
+interface UserFriendPageProps {
+  params: { userId: string };
+}
+
+const UserFriendPage: React.FC<UserFriendPageProps> = async ({ params }) => {
+  const userId = params.userId;
+
   const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    redirect('/user/sign_up');
+
+  if (!userId || userId === '') {
+    return <div>Error</div>;
   }
 
-  const currentUserFriends = await getCurrentUserFriends();
-  if (!currentUserFriends) {
+  const userData = await getUserById(userId);
+
+  if (!userData) {
+    return <div>Error</div>;
+  }
+
+  const userFriends = await getFriendsByUserId(userId);
+  if (!userFriends) {
     return <div>Could not get friend information (EmptyState)</div>;
   }
   // want to get the current user friends and what they are reading
   // - at least the first 20
 
-  const getCurrentUserFriendData = async () => {
+  const getUserFriendData = async () => {
     // For each friend we want to get their 'currently reading' bookshelf
     // and get information about their first 'currently reading' book
     const friendData = await Promise.all(
-      currentUserFriends.map(async (friend) => {
+      userFriends.map(async (friend) => {
         const friendBookshelves = await getUserBookselvesByUserId(friend.id);
         if (friendBookshelves) {
           const currentlyReadingBookshelf = friendBookshelves.filter(
@@ -68,7 +83,7 @@ export default async function FriendPage() {
     return friendData;
   };
 
-  const friendData = await getCurrentUserFriendData();
+  const friendData = await getUserFriendData();
 
   return (
     <>
@@ -124,7 +139,7 @@ export default async function FriendPage() {
           <div className="py-2 border-b-[1px] ">
             <div className="flex justify-between items-center">
               <div className="text-2xl ">
-                Friends ({currentUserFriends ? currentUserFriends.length : 0})
+                Friends ({userFriends ? userFriends.length : 0})
               </div>
               <div className="text-goodreads-mybooks-green font-bold">
                 Add friends
@@ -142,8 +157,8 @@ export default async function FriendPage() {
           </div>
 
           <div className="py-2">
-            {currentUserFriends ? (
-              currentUserFriends.map((friend) => (
+            {userFriends ? (
+              userFriends.map((friend) => (
                 <MobileFriendListDisplay
                   name={friend.name ? friend.name : ''}
                   id={friend.id}
@@ -161,4 +176,6 @@ export default async function FriendPage() {
       <Footer />
     </>
   );
-}
+};
+
+export default UserFriendPage;
