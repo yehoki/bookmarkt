@@ -14,6 +14,7 @@ interface NavIconDropdownNotificationProps {
 type notificationDisplayType = {
   notificationId: string;
   userId: string;
+  userName: string;
   userImage: string;
   notificationDetails: string;
   notificationCreatedAt: Date;
@@ -38,9 +39,7 @@ const NavIconDropdownNotification: React.FC<
           revalidate: 60,
         },
       });
-      console.log(res);
       const userData: UserNotificationType = await res.json();
-      console.log(userData);
       const userDataRefactored = userData.notifications.map((notification) => {
         return {
           notificationId: notification.id,
@@ -48,6 +47,7 @@ const NavIconDropdownNotification: React.FC<
           userImage: userData.image ? userData.image : '/images/empty-user.png',
           notificationDetails: notification.notificationInfo,
           notificationCreatedAt: notification.createdAt,
+          userName: notification.userName ? notification.userName : 'User',
         };
       });
       setNotifications(userDataRefactored);
@@ -85,7 +85,14 @@ const NavIconDropdownNotification: React.FC<
         <div className="max-h-[380px] overflow-y-scroll">
           <Suspense fallback="...">
             {notifications.map((notification) => (
-              <NavbarNotificationItem key={notification.notificationId} />
+              <NavbarNotificationItem
+                key={notification.notificationId}
+                userId={notification.userId}
+                userImage={notification.userImage}
+                notificationInfo={notification.notificationDetails}
+                notificationCreatedAt={notification.notificationCreatedAt}
+                userName={notification.userName}
+              />
             ))}
           </Suspense>
         </div>

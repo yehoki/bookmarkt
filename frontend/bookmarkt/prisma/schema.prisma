@@ -30,13 +30,20 @@ model Bookshelf {
   user User @relation(fields: [userId], references: [id])
 }
 
-model Notification {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String   @db.ObjectId
-  createdAt        DateTime @default(now())
-  notificationInfo String
+enum NotificationType {
+  FRIENDREQUEST
+}
 
-  User User @relation(fields: [userId], references: [id])
+model Notification {
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String           @db.ObjectId
+  userName         String?
+  createdAt        DateTime         @default(now())
+  notificationInfo String
+  notificationType NotificationType @default(FRIENDREQUEST)
+  fromUserId       String           @db.ObjectId
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -57,12 +64,12 @@ model User {
   friendRequestsReceived String[]       @db.ObjectId
   friendRequestsSent     String[]       @db.ObjectId
 
-  reviews      Review[]
-  accounts     Account[]
-  bookshelves  Bookshelf[]
-  bookData     BookData[]     @relation(fields: [googleBookIds], references: [googleId])
-  friends      User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
-  friendsOf    User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
+  reviews       Review[]
+  accounts      Account[]
+  bookshelves   Bookshelf[]
+  bookData      BookData[]     @relation(fields: [googleBookIds], references: [googleId])
+  friends       User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
+  friendsOf     User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
   notifications Notification[]
 }
 

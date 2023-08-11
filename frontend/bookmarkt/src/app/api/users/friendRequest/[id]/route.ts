@@ -48,6 +48,8 @@ export async function POST(req: Request) {
       notificationInfo: `You have received a new friend request from ${
         currentUser.name ? currentUser.name : 'User'
       }. Check out their profile.`,
+      userName: currentUser.name ? currentUser.name : 'User',
+      fromUserId: currentUser.id,
     },
   });
 
@@ -109,6 +111,18 @@ export async function DELETE(req: Request) {
       (friendsFriendId) => friendsFriendId !== currentUser.id
     ) || [];
 
+  const findRequestNotification = await prisma.notification.findFirst({
+    where: {
+      notificationType: 'FRIENDREQUEST',
+      userId: userId,
+      fromUserId: currentUser.id,
+    },
+  });
+
+  const newUserNotifications = userFriendRequests.notificationIds.filter(
+    (notificationId) => notificationId !== findRequestNotification?.id
+  );
+
   const updateCurrentUserRequestsSent = await prisma.user.update({
     where: {
       id: currentUser.id,
@@ -124,8 +138,16 @@ export async function DELETE(req: Request) {
     },
     data: {
       friendRequestsReceived: newFriendsFriendIds,
+      notificationIds: newUserNotifications,
     },
   });
+  if (findRequestNotification) {
+    const deleteNotification = await prisma.notification.delete({
+      where: {
+        id: findRequestNotification.id,
+      },
+    });
+  }
 
   return NextResponse.json(updateCurrentUserRequestsSent.friendRequestsSent);
 }

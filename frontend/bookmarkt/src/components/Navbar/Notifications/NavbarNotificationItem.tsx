@@ -2,9 +2,21 @@
 
 import Image from 'next/image';
 
-interface NavbarNotificationItemProps {}
+interface NavbarNotificationItemProps {
+  userId: string;
+  userName: string;
+  userImage: string;
+  notificationInfo: string;
+  notificationCreatedAt: Date;
+}
 
-const NavbarNotificationItem: React.FC<NavbarNotificationItemProps> = ({}) => {
+const NavbarNotificationItem: React.FC<NavbarNotificationItemProps> = ({
+  userId,
+  userImage,
+  notificationInfo,
+  notificationCreatedAt,
+  userName,
+}) => {
   return (
     <div className="border-t-[1px]">
       <div className="px-4 py-2 flex gap-4">
@@ -19,11 +31,7 @@ const NavbarNotificationItem: React.FC<NavbarNotificationItemProps> = ({}) => {
           </div>
         </div>
         <div className="text-sm font-normal leading-4">
-          <span className="font-bold">User,</span> Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Impedit laboriosam ducimus enim ipsam
-          corporis. Earum perferendis maxime excepturi ad voluptatem cum
-          laboriosam, pariatur necessitatibus ut, esse iure, quaerat deleniti.
-          Beatae?
+          <span className="font-bold">{userName}</span> {notificationInfo}
           <div className="text-xs text-neutral-400">When</div>
         </div>
       </div>
