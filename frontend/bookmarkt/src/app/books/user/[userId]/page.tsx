@@ -238,6 +238,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               <div className="border-b border-b-slate-300">
                 <h3 className="font-semibold">Bookshelves</h3>
                 <DisplayBookshelves
+                  currentUserId={userId}
                   bookshelves={
                     currentUserBookshelves ? currentUserBookshelves : []
                   }

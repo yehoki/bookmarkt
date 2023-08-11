@@ -242,7 +242,7 @@ export default async function Page() {
               </div>
               <div className="flex gap-[2px] text-xs py-2">
                 <Link
-                  href="/books"
+                  href={`/books/user/${currentUser.id}`}
                   className="text-goodreads-mybooks-green hover:underline"
                 >
                   View all books
@@ -339,7 +339,7 @@ export default async function Page() {
                 <Link
                   className="hover:underline 
                 text-goodreads-mybooks-green cursor-pointer"
-                  href="/books"
+                  href={`/books/user/${currentUser.id}`}
                 >
                   View all books
                 </Link>
@@ -351,14 +351,14 @@ export default async function Page() {
                   userBookshelves.map((bookshelf) => (
                     <div key={bookshelf.id} className="flex gap-4 my-[2px]">
                       <Link
-                        href={`/books?shelf=${bookshelf.name}`}
+                        href={`/books/user/${currentUser.id}?shelf=${bookshelf.name}`}
                         className="hover:underline text-goodreads-mybooks-green cursor-pointer"
                       >
                         {bookshelf.googleBooks.length}
                       </Link>
 
                       <Link
-                        href={`/books?shelf=${bookshelf.name}`}
+                        href={`/books/user/${currentUser.id}?shelf=${bookshelf.name}`}
                         className="hover:underline text-goodreads-mybooks-green cursor-pointer"
                       >
                         {bookshelf.name}

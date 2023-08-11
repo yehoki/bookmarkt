@@ -6,10 +6,12 @@ import { parseBookshelfName } from '@/utils/helper';
 
 interface DisplayBookshelvesProps {
   bookshelves: Bookshelf[];
+  currentUserId: string;
 }
 
 const DisplayBookshelves: React.FC<DisplayBookshelvesProps> = ({
   bookshelves,
+  currentUserId,
 }) => {
   const allBooksCount = bookshelves.reduce(
     (acc, currentValue) => acc + currentValue.googleBooks.length,
@@ -23,6 +25,7 @@ const DisplayBookshelves: React.FC<DisplayBookshelvesProps> = ({
         label={parseBookshelfName(bookshelf.name)}
         bookshelfName={bookshelf.name}
         bookshelfLength={bookshelf.googleBooks.length}
+        currentUserId={currentUserId}
       />
     ));
   };
@@ -32,6 +35,7 @@ const DisplayBookshelves: React.FC<DisplayBookshelvesProps> = ({
         label="all"
         bookshelfLength={allBooksCount}
         bookshelfName="All"
+        currentUserId={currentUserId}
       />
       {bookshelfDisplay()}
     </ul>

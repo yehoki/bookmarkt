@@ -9,12 +9,14 @@ interface DisplaySingleBookshelfProps {
   label: string;
   bookshelfName: string;
   bookshelfLength: number;
+  currentUserId: string;
 }
 
 const DisplaySingleBookshelf: React.FC<DisplaySingleBookshelfProps> = ({
   label,
   bookshelfName,
   bookshelfLength,
+  currentUserId,
 }) => {
   const params = useSearchParams();
   const router = useRouter();
@@ -30,12 +32,12 @@ const DisplaySingleBookshelf: React.FC<DisplaySingleBookshelfProps> = ({
       shelf: bookshelfName,
     };
     const url = qs.stringifyUrl({
-      url: '/books',
+      url: `/books/user/${currentUserId}`,
       query: updatedQuery,
     });
     router.push(url);
     router.refresh();
-  }, [params, router, bookshelfName]);
+  }, [params, router, bookshelfName, currentUserId]);
 
   return (
     <li
