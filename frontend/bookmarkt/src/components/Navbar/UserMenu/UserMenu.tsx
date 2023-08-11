@@ -10,6 +10,7 @@ import { HiUser } from 'react-icons/hi';
 import NavLink from '../LinkTabs/NavLink';
 import useRegisterMode from '@/hooks/useRegisterMode';
 import NavIconDropdown from './NavIconDropdown';
+import NavIconDropdownNotification from './NavIconDropdownNotification';
 
 interface UserMenuProps {
   currentUser?: User | null;
@@ -26,7 +27,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       <div className="flex flex-row">
         {currentUser ? (
           <>
-            <NavIcon icon={BsFillBellFill} />
+            <NavIconDropdownNotification icon={BsFillBellFill} />
             <NavIcon icon={BiConversation} />
             <NavIcon icon={IoIosMail} />
             <NavIcon icon={BsFillPeopleFill} href="/friend" />
