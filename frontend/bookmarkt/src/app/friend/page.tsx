@@ -1,5 +1,8 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import getCurrentUserFriends from '@/actions/getCurrentUserFriends';
+import { getSingleBook } from '@/actions/getSingleBook';
+import { getUserBooksByBookshelf } from '@/actions/getUserBooksByBookshelf';
+import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar/Navbar';
 import DesktopFriendListDisplay from '@/components/User/Friends/DesktopFriendListDisplay';
@@ -13,6 +16,59 @@ export default async function FriendPage() {
   }
 
   const currentUserFriends = await getCurrentUserFriends();
+  if (!currentUserFriends) {
+    return <div>Could not get friend information (EmptyState)</div>;
+  }
+  // want to get the current user friends and what they are reading
+  // - at least the first 20
+
+  const getCurrentUserFriendData = async () => {
+    // For each friend we want to get their 'currently reading' bookshelf
+    // and get information about their first 'currently reading' book
+    const friendData = await Promise.all(
+      currentUserFriends.map(async (friend) => {
+        const friendBookshelves = await getUserBookselvesByUserId(friend.id);
+        if (friendBookshelves) {
+          const currentlyReadingBookshelf = friendBookshelves.filter(
+            (bookshelf) => bookshelf.name === 'Currently reading'
+          );
+          if (currentlyReadingBookshelf[0].googleBooks.length > 0) {
+            const currentlyReadingGoogleBookInfo = await getSingleBook(
+              currentlyReadingBookshelf[0].googleBooks[0].googleBookId
+            );
+            if (currentlyReadingGoogleBookInfo) {
+              return {
+                name: friend.name,
+                id: friend.id,
+                image: friend.image,
+                bookCount: friend.googleBookIds.length,
+                friendCount: friend.friendIds.length,
+                bookData: {
+                  bookId:
+                    currentlyReadingBookshelf[0].googleBooks[0].googleBookId,
+                  imageLinks:
+                    currentlyReadingGoogleBookInfo?.volumeInfo.imageLinks,
+                  title: currentlyReadingGoogleBookInfo?.volumeInfo.title,
+                },
+              };
+            }
+          }
+          return {
+            name: friend.name,
+            id: friend.id,
+            image: friend.image,
+            bookCount: friend.googleBookIds.length,
+            friendCount: friend.friendIds.length,
+            bookData: null,
+          };
+        }
+        return null;
+      })
+    );
+    return friendData;
+  };
+
+  const friendData = await getCurrentUserFriendData();
 
   return (
     <>
@@ -41,20 +97,23 @@ export default async function FriendPage() {
 
                 <div className="text-xs border-b-[1px]">Showing</div>
                 <div className="py-2">
-                  {currentUserFriends ? (
-                    currentUserFriends.map((friend) => (
-                      <DesktopFriendListDisplay
-                        key={friend.id}
-                        name={friend.name ? friend.name : 'Username'}
-                        id={friend.id}
-                        image={friend.image ? friend.image : ''}
-                        bookCount={friend.googleBookIds.length}
-                        friendCount={friend.friendIds.length}
-                      />
-                    ))
-                  ) : (
-                    <></>
-                  )}
+                  {friendData.map((friend) => {
+                    if (friend) {
+                      return (
+                        <DesktopFriendListDisplay
+                          key={friend.id}
+                          name={friend.name ? friend.name : 'Username'}
+                          id={friend.id}
+                          image={friend.image ? friend.image : ''}
+                          bookCount={friend.bookCount}
+                          friendCount={friend.friendCount}
+                          bookData={
+                            friend.bookData ? friend.bookData : undefined
+                          }
+                        />
+                      );
+                    }
+                  })}
                 </div>
               </div>
               <div className="w-[300px]">Right</div>
