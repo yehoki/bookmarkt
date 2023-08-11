@@ -86,7 +86,9 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
             <Link className="" href={`/user/show/${currentUser.id}`}>
               <li className="cursor-pointer hover:underline px-4">Profile</li>
             </Link>
-            <li className="px-4">Friends</li>
+            <Link href={`/friend`}>
+              <li className="cursor-pointer hover:underline px-4">Friends</li>
+            </Link>
             <li className="px-4">Groups</li>
             <li className="px-4">Discussions</li>
             <li

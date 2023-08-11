@@ -75,19 +75,19 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
       >
         <Suspense fallback="...">{timeDifference}</Suspense>
       </div>
-      <div className="flex gap-1 pr-10 ">
+      <div className="pr-40">
         <Link
           href={`/user/show/${userId}`}
           className="font-semibold hover:underline text-sm"
         >
           {userName}
-        </Link>
+        </Link>{' '}
         {reviewDescription === '' ? (
-          <div className="flex gap-1 items-center">
+          <>
             rated a book <DisplayStars averageRating={reviewRating} />
-          </div>
+          </>
         ) : (
-          <div className="flex gap-1">
+          <>
             reviewed{' '}
             <Link
               href={`/books/${googleBookId}`}
@@ -95,7 +95,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
             >
               {bookTitle}
             </Link>
-          </div>
+          </>
         )}
       </div>
       {reviewDescription !== '' && (
