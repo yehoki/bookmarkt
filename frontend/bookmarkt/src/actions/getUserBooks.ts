@@ -8,12 +8,13 @@ export default async function getUserBooks(userId: string) {
       },
       select: {
         bookData: true,
+        reviews: true,
       },
     });
     if (!currentUserBooks) {
       throw new Error('Books could not be retrieved');
     }
-    return currentUserBooks.bookData;
+    return currentUserBooks;
   } catch (err: any) {
     throw new Error(err);
   }

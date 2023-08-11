@@ -27,6 +27,7 @@ interface MyBookProps {
     review?: string;
   };
   description: string;
+  isCurrentUser: boolean;
 }
 
 const MyBook: React.FC<MyBookProps> = ({
@@ -40,6 +41,7 @@ const MyBook: React.FC<MyBookProps> = ({
   userReview,
   description,
   publishedDate,
+  isCurrentUser,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isBookShowing, setIsBookShowing] = useState(false);
@@ -101,15 +103,17 @@ const MyBook: React.FC<MyBookProps> = ({
           />
         </div>
       </Link>
-      <div
-        className="hidden bg-white z-20 absolute
+      {isCurrentUser && (
+        <div
+          className="hidden bg-white z-20 absolute
   right-0 top-0 text-xs rounded-sm px-[3px] 
   text-goodreads-mybooks-green hover:underline group-hover:block
   cursor-pointer"
-        onClick={handleEditReview}
-      >
-        edit
-      </div>
+          onClick={handleEditReview}
+        >
+          edit
+        </div>
+      )}
       <div
         className={`
         ${

@@ -46,7 +46,10 @@ const DesktopFriendListDisplay: React.FC<DesktopFriendListDisplayProps> = ({
             </Link>
           </div>
           <div className="font-lighter">
-            {bookCount} Books | {friendCount} Friends
+            {bookCount} Books |{' '}
+            <Link className="hover:underline" href={`/friend/${id}`}>
+              {friendCount} Friends
+            </Link>
           </div>
         </div>
       </div>
