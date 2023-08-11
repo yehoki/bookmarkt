@@ -4,7 +4,11 @@ import useMobileSearch from '@/hooks/useMobileSearch';
 import NavLink from './LinkTabs/NavLink';
 import MobileSearchInput from './Search/MobileSearchInput';
 
-const MobileDropdown = () => {
+interface MobileDropdownProps {
+  currentUserId: string;
+}
+
+const MobileDropdown: React.FC<MobileDropdownProps> = ({ currentUserId }) => {
   const mobileSearch = useMobileSearch();
   return (
     <div className="md:mx-auto">
@@ -22,7 +26,11 @@ const MobileDropdown = () => {
               disabledBreakpoint="md:flex"
             />
             <NavLink
-              href="/books"
+              href={`${
+                currentUserId === ''
+                  ? '/user/sign_up'
+                  : `/books/user/${currentUserId}`
+              }`}
               label="My books"
               extraPadding="py-3 px-[15px]"
             />

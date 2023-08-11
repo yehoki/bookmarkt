@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
           >
             <MobileSearch />
             <Logo />
-            <Links />
+            <Links currentUserId={currentUser ? currentUser.id : ''} />
             <Search />
             <UserMenu currentUser={currentUser} />
             <MobileUserMenu
@@ -60,7 +60,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
           <div className="">
             <Container>
               <div className="">
-                <MobileDropdown />
+                <MobileDropdown
+                  currentUserId={currentUser ? currentUser.id : ''}
+                />
               </div>
             </Container>
           </div>
