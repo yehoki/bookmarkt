@@ -155,14 +155,22 @@ Otherwise, it will create the book and then add it to the user's list.
 
 Retrieves all books of a user with id `userId`.
 
-
 ## Issues
 
 ## License
 
 ## Acknowledgements
 
+- [Google Books API](https://developers.google.com/books)
+- [MongoDB](https://www.mongodb.com/)
+- [Next.js](https://nextjs.org/)
+- [NextAuth](https://next-auth.js.org/)
+- [Prisma](https://www.prisma.io/)
+- [React.js](https://react.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Zustand](https://github.com/pmndrs/zustand)
+
 ## Contact
 
 ## API Routes
-
