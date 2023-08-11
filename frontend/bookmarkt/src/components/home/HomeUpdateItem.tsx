@@ -22,6 +22,7 @@ interface HomeUpdateItemProps {
   bookshelves: Bookshelf[];
   currentBookshelf: string;
   userReview: number;
+  userImage: string;
 }
 
 const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
@@ -38,6 +39,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
   bookshelves,
   currentBookshelf,
   userReview,
+  userImage,
 }) => {
   const extractedText = extractTextFromDescription(bookDescription);
   const timeAtRender = new Date();
@@ -61,7 +63,7 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         >
           <Image
             fill
-            src="/images/empty-user.png"
+            src={userImage !== '' ? userImage : '/images/empty-user.png'}
             alt="User profile image"
             className="rounded-full"
           />

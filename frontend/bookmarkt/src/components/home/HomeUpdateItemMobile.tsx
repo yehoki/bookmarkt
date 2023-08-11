@@ -15,6 +15,7 @@ interface HomeUpdateItemMobileProps {
   reviewRating: number;
   reviewDescription: string;
   reviewMadeAt: Date;
+  userImage: string;
 }
 
 const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
@@ -27,6 +28,7 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
   imageUrl,
   reviewRating,
   reviewDescription,
+  userImage,
 }) => {
   const timeAtRender = new Date();
   const timeDifference = getTimeDifference(
@@ -40,7 +42,7 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
     >
       <div className="absolute rounded-full w-[30px] h-[30px] top-[10px] left-[10px] cursor-pointer border-[1px] border-neutral-300">
         <Image
-          src="/images/empty-user.png"
+          src={userImage !== '' ? userImage : '/images/empty-user.png'}
           alt="User image"
           fill
           sizes="100vw"

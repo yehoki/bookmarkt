@@ -17,6 +17,7 @@ import SwitchWithFooter from '@/components/home/SwitchWithFooter';
 import Image from 'next/image';
 import Link from 'next/link';
 import FooterGithubLink from '@/components/FooterGithubLink';
+import getUserById from '@/actions/getUserById';
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
@@ -88,7 +89,7 @@ export default async function Page() {
   const frontPageUpdateMap = await Promise.all(
     mostRecentReviews.map(async (review) => {
       const googleBook = await getSingleBook(review.googleBookId);
-
+      const userData = await getUserById(review.userId);
       const bookshelfName = currentUserBooks.bookData.find(
         (book) => book.googleId === review.bookData.googleId
       )
@@ -127,6 +128,7 @@ export default async function Page() {
             : '',
           userReview:
             userBookReview && userBookReview.rating ? userBookReview.rating : 0,
+          userImage: userData && userData.image ? userData.image : '',
         }
       );
     })
@@ -146,6 +148,7 @@ export default async function Page() {
           reviewRating={frontPageItem.reviewRating}
           reviewDescription={frontPageItem.reviewDescription}
           imageUrl={frontPageItem.imageUrl}
+          userImage={frontPageItem.userImage}
         />
       )
     );
@@ -169,6 +172,7 @@ export default async function Page() {
           authors={frontPageItem.authors}
           bookDescription={frontPageItem.bookDescription}
           userReview={frontPageItem.userReview}
+          userImage={frontPageItem.userImage}
         />
       )
     );
