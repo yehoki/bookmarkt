@@ -27,7 +27,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       <div className="flex flex-row">
         {currentUser ? (
           <>
-            <NavIconDropdownNotification icon={BsFillBellFill} />
+            <NavIconDropdownNotification
+              icon={BsFillBellFill}
+              currentUser={currentUser}
+            />
             <NavIcon icon={BiConversation} />
             <NavIcon icon={IoIosMail} />
             <NavIcon icon={BsFillPeopleFill} href="/friend" />

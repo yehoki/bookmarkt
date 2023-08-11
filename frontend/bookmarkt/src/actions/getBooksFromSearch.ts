@@ -92,7 +92,7 @@ export async function getBooksFromSearch(query: string, maxResults = 20) {
         'Content-Type': 'application/json',
       },
       next: {
-        revalidate: 30,
+        revalidate: 60*10,
       },
     }
   );

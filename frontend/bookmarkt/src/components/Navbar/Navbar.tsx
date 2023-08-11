@@ -1,5 +1,4 @@
-'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { User } from '@prisma/client';
 import Container from '../Container';
 import MobileSearch from './Search/MobileSearch';
@@ -8,21 +7,13 @@ import Links from './LinkTabs/Links';
 import Search from './Search/Search';
 import UserMenu from './UserMenu/UserMenu';
 import MobileUserMenu from './UserMenu/MobileUserMenu';
-import useUserStore from '@/hooks/useUserStore';
 import MobileDropdown from './MobileDropdown';
 
 interface NavbarProps {
   currentUser?: User | null;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
-  const userStore = useUserStore();
-  useEffect(() => {
-    if (currentUser?.email) {
-      userStore.setUser(currentUser.email);
-    }
-  }, []);
-
+const Navbar: React.FC<NavbarProps> = async ({ currentUser }) => {
   return (
     <>
       <div

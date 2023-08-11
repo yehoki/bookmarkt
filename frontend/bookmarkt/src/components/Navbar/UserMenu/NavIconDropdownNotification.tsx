@@ -1,20 +1,55 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { IconType } from 'react-icons';
 import NavbarNotificationItem from '../Notifications/NavbarNotificationItem';
+import { Notification, User } from '@prisma/client';
 
 interface NavIconDropdownNotificationProps {
   icon: IconType;
+  currentUser?: User | null;
 }
+
+type notificationDisplayType = {
+  notificationId: string;
+  userId: string;
+  userImage: string;
+  notificationDetails: string;
+  notificationCreatedAt: Date;
+};
+
+type UserNotificationType = User & {
+  notifications: Notification[];
+};
 
 const NavIconDropdownNotification: React.FC<
   NavIconDropdownNotificationProps
-> = ({ icon: Icon }) => {
+> = ({ icon: Icon, currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<notificationDisplayType[]>(
+    []
+  );
 
-  const toggleOpen = useCallback(() => {
+  const toggleOpen = useCallback(async () => {
+    if (currentUser && !isOpen) {
+      const res = await fetch(`/api/users/notifications/${currentUser.id}`, {
+        next: {
+          revalidate: 60,
+        },
+      });
+      const userData: UserNotificationType = await res.json();
+      const userDataRefactored = userData.notifications.map((notification) => {
+        return {
+          notificationId: notification.id,
+          userId: userData.id,
+          userImage: userData.image ? userData.image : '/images/empty-user.png',
+          notificationDetails: notification.notificationInfo,
+          notificationCreatedAt: notification.createdAt,
+        };
+      });
+      setNotifications(userDataRefactored);
+    }
     setIsOpen((value) => !value);
   }, []);
   return (
@@ -46,11 +81,11 @@ const NavIconDropdownNotification: React.FC<
           Notifications
         </div>
         <div className="max-h-[380px] overflow-y-scroll">
-          {/* Notification Item */}
-          <NavbarNotificationItem />
-          <NavbarNotificationItem />
-          <NavbarNotificationItem />
-          <NavbarNotificationItem />
+          <Suspense fallback="...">
+            {notifications.map((notification) => (
+              <NavbarNotificationItem key={notification.notificationId} />
+            ))}
+          </Suspense>
         </div>
       </div>
     </>

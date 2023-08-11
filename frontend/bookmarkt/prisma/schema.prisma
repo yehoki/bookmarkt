@@ -30,9 +30,13 @@ model Bookshelf {
   user User @relation(fields: [userId], references: [id])
 }
 
-type Notification {
+model Notification {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
   createdAt        DateTime @default(now())
   notificationInfo String
+
+  User User @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -49,16 +53,17 @@ model User {
   googleBookIds          String[]
   reviewIds              String[]       @db.ObjectId
   friendIds              String[]       @db.ObjectId
-  notifications          Notification[]
+  notificationIds        String[]       @db.ObjectId
   friendRequestsReceived String[]       @db.ObjectId
   friendRequestsSent     String[]       @db.ObjectId
-  
-  reviews                Review[]
-  accounts               Account[]
-  bookshelves            Bookshelf[]
-  bookData               BookData[]     @relation(fields: [googleBookIds], references: [googleId])
-  friends                User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
-  friendsOf              User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
+
+  reviews      Review[]
+  accounts     Account[]
+  bookshelves  Bookshelf[]
+  bookData     BookData[]     @relation(fields: [googleBookIds], references: [googleId])
+  friends      User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
+  friendsOf    User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
+  notifications Notification[]
 }
 
 model Account {
