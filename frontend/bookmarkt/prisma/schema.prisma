@@ -30,27 +30,35 @@ model Bookshelf {
   user User @relation(fields: [userId], references: [id])
 }
 
-model User {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String?        @unique
-  emailVerified  DateTime?
-  image          String?
-  hashedPassword String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  bookProgress   UserBookData[]
-  bookshelfIds   String[]       @db.ObjectId
-  googleBookIds  String[]
-  reviewIds      String[]       @db.ObjectId
-  friendIds      String[]       @db.ObjectId
+type Notification {
+  createdAt        DateTime @default(now())
+  notificationInfo String
+}
 
-  reviews     Review[]
-  accounts    Account[]
-  bookshelves Bookshelf[]
-  bookData    BookData[]  @relation(fields: [googleBookIds], references: [googleId])
-  friends   User[] @relation(name: "Friends", fields: [friendIds], references: [id])
-  friendsOf User[] @relation(name: "Friends", fields: [friendIds], references: [id])
+model User {
+  id                     String         @id @default(auto()) @map("_id") @db.ObjectId
+  name                   String?
+  email                  String?        @unique
+  emailVerified          DateTime?
+  image                  String?
+  hashedPassword         String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  bookProgress           UserBookData[]
+  bookshelfIds           String[]       @db.ObjectId
+  googleBookIds          String[]
+  reviewIds              String[]       @db.ObjectId
+  friendIds              String[]       @db.ObjectId
+  notifications          Notification[]
+  friendRequestsReceived String[]       @db.ObjectId
+  friendRequestsSent     String[]       @db.ObjectId
+  
+  reviews                Review[]
+  accounts               Account[]
+  bookshelves            Bookshelf[]
+  bookData               BookData[]     @relation(fields: [googleBookIds], references: [googleId])
+  friends                User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
+  friendsOf              User[]         @relation(name: "Friends", fields: [friendIds], references: [id])
 }
 
 model Account {

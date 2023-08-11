@@ -28,8 +28,25 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
   }
 
   const checkFriends = () => {
-    if (currentUser && currentUser.friendIds.includes(userData.id)) {
+    if (
+      currentUser &&
+      currentUser.friendIds &&
+      currentUser.friendIds.includes(userData.id)
+    ) {
       return true;
+    }
+    return false;
+  };
+
+  const checkRequest = () => {
+    if (!checkFriends()) {
+      if (
+        currentUser &&
+        currentUser.friendRequestsSent &&
+        currentUser.friendRequestsSent.includes(userData.id)
+      ) {
+        return true;
+      }
     }
     return false;
   };
@@ -91,7 +108,11 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                     Edit your profile
                   </button>
                 ) : (
-                  <FriendButton isFriends={checkFriends()} userId={userId} />
+                  <FriendButton
+                    isFriends={checkFriends()}
+                    userId={userId}
+                    isRequestSent={checkRequest()}
+                  />
                 )}
                 <div className="flex flex-row gap-20">
                   <div className="font-semibold">Activity</div>
@@ -133,7 +154,11 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                     Edit your profile
                   </button>
                 ) : (
-                  <FriendButton isFriends={checkFriends()} userId={userId} />
+                  <FriendButton
+                    isFriends={checkFriends()}
+                    userId={userId}
+                    isRequestSent={checkRequest()}
+                  />
                 )}
               </div>
               <div className="text-sm">
