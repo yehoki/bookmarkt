@@ -20,6 +20,7 @@ export async function GET(req: Request, { params }: { params: IParams }) {
       notifications: true,
     },
   });
+  console.log(userNotifications)
   if (userNotifications) {
     return NextResponse.json(userNotifications);
   }

@@ -38,7 +38,9 @@ const NavIconDropdownNotification: React.FC<
           revalidate: 60,
         },
       });
+      console.log(res);
       const userData: UserNotificationType = await res.json();
+      console.log(userData);
       const userDataRefactored = userData.notifications.map((notification) => {
         return {
           notificationId: notification.id,

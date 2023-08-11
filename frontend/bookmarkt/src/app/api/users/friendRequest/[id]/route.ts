@@ -42,6 +42,15 @@ export async function POST(req: Request) {
     currentUser.id,
   ] || [currentUser.id];
 
+  const newNotification = await prisma.notification.create({
+    data: {
+      userId: userId,
+      notificationInfo: `You have received a new friend request from ${
+        currentUser.name ? currentUser.name : 'User'
+      }. Check out their profile.`,
+    },
+  });
+
   const updateCurrentUserFriends = await prisma.user.update({
     where: {
       id: currentUser.id,
@@ -57,6 +66,8 @@ export async function POST(req: Request) {
     },
     data: {
       friendRequestsReceived: newFriendsFriendIds,
+      notificationIds:
+        [...getUserIdFriendIds.notificationIds, newNotification.id] || [],
     },
   });
   return NextResponse.json(updateCurrentUserFriends.friendIds);
