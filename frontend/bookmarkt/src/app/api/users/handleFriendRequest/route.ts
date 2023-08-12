@@ -57,6 +57,20 @@ export async function POST(req: Request) {
         notificationType: NotificationType.REQUESTACCEPTED,
       },
     });
+    // Remove the notification about the friend request
+    const findcurrentUserNotification = await prisma.notification.findFirst({
+      where: {
+        userId: currentUser.id,
+        fromUserId: fromUser.id,
+        notificationType: NotificationType.FRIENDREQUEST,
+      },
+    });
+
+    await prisma.notification.delete({
+      where: {
+        id: findcurrentUserNotification?.id,
+      },
+    });
 
     const updateFromUser = await prisma.user.update({
       where: {
