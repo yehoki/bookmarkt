@@ -15,6 +15,7 @@ interface NavIconDropdownNotificationProps {
 type notificationDisplayType = {
   notificationId: string;
   userId: string;
+  fromUserId: string;
   userName: string;
   userImage: string;
   notificationDetails: string;
@@ -48,6 +49,7 @@ const NavIconDropdownNotification: React.FC<
         return {
           notificationId: notification.id,
           userId: userData.id,
+          fromUserId: notification.fromUserId,
           userImage: userData.image ? userData.image : '/images/empty-user.png',
           notificationDetails: notification.notificationInfo,
           notificationCreatedAt: notification.createdAt,
@@ -107,6 +109,7 @@ const NavIconDropdownNotification: React.FC<
               <NavbarNotificationItem
                 key={notification.notificationId}
                 userId={notification.userId}
+                fromUserId={notification.fromUserId}
                 userImage={notification.userImage}
                 notificationInfo={notification.notificationDetails}
                 notificationCreatedAt={notification.notificationCreatedAt}
