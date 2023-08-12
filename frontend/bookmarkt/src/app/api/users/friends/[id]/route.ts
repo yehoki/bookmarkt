@@ -1,5 +1,6 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import prisma from '@/lib/prismadb';
+import { NotificationType } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -95,12 +96,30 @@ export async function DELETE(req: Request) {
   const currentUserNewFriendIds =
     currentUser.friendIds.filter((friendId) => friendId !== userId) || [];
 
-
   const newFriendsFriendIds =
     getUserIdFriendIds.friendIds.filter(
       (friendsFriendId) => friendsFriendId !== currentUser.id
     ) || [];
 
+  const removeNewFriendNotifications = await prisma.notification.deleteMany({
+    where: {
+      userId: userId,
+      fromUserId: currentUser.id,
+      notificationType: {
+        in: [NotificationType.FRIENDREQUEST, NotificationType.REQUESTACCEPTED],
+      },
+    },
+  });
+
+  const removeCurrentUserNotifications = await prisma.notification.deleteMany({
+    where: {
+      userId: currentUser.id,
+      fromUserId: userId,
+      notificationType: {
+        in: [NotificationType.FRIENDREQUEST, NotificationType.REQUESTACCEPTED],
+      },
+    },
+  });
 
   const updateCurrentUserFriends = await prisma.user.update({
     where: {
