@@ -51,6 +51,19 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
     return false;
   };
 
+  const checkRequestReceived = () => {
+    if (!checkFriends()) {
+      if (
+        currentUser &&
+        currentUser.friendRequestsReceived &&
+        currentUser.friendRequestsReceived.includes(userData.id)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // const currentUserBookshelves = await getUserBookselvesByUserId(userId);
 
   // const currentlyReadingBookshelf = currentUserBookshelves?.find(
@@ -112,6 +125,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                     isFriends={checkFriends()}
                     userId={userId}
                     isRequestSent={checkRequest()}
+                    isRequestReceived={checkRequestReceived()}
                   />
                 )}
                 <div className="flex flex-row gap-20">
@@ -158,6 +172,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                     isFriends={checkFriends()}
                     userId={userId}
                     isRequestSent={checkRequest()}
+                    isRequestReceived={checkRequestReceived()}
                   />
                 )}
               </div>
