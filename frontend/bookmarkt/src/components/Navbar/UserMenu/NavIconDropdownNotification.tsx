@@ -5,6 +5,7 @@ import { Suspense, useCallback, useState } from 'react';
 import { IconType } from 'react-icons';
 import NavbarNotificationItem from '../Notifications/NavbarNotificationItem';
 import { Notification, User } from '@prisma/client';
+import useNavbarDropdown, { NavbarSelection } from '@/hooks/useNavbarDropdown';
 
 interface NavIconDropdownNotificationProps {
   icon: IconType;
@@ -27,13 +28,16 @@ type UserNotificationType = User & {
 const NavIconDropdownNotification: React.FC<
   NavIconDropdownNotificationProps
 > = ({ icon: Icon, currentUser }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<notificationDisplayType[]>(
     []
   );
+  const navbarDropdown = useNavbarDropdown();
 
   const toggleOpen = useCallback(async () => {
-    if (currentUser && !isOpen) {
+    if (
+      currentUser &&
+      navbarDropdown.selection !== NavbarSelection.NOTIFICATION
+    ) {
       const res = await fetch(`/api/users/notifications/${currentUser.id}`, {
         next: {
           revalidate: 60,
@@ -52,16 +56,27 @@ const NavIconDropdownNotification: React.FC<
       });
       setNotifications(userDataRefactored);
     }
-    setIsOpen((value) => !value);
-  }, []);
+    if (navbarDropdown.selection === NavbarSelection.NONE) {
+      navbarDropdown.onOpen(NavbarSelection.NOTIFICATION);
+    } else if (navbarDropdown.selection === NavbarSelection.NOTIFICATION) {
+      navbarDropdown.onClose();
+    } else {
+      navbarDropdown.onOpen(NavbarSelection.NOTIFICATION);
+    }
+  }, [navbarDropdown, currentUser]);
   return (
     <>
       <div
         onClick={toggleOpen}
-        onBlur={toggleOpen}
-        className="flex items-center p-2 
+        className={`flex items-center p-2 
     hover:bg-goodreads-brown cursor-pointer 
-    relative"
+    relative
+    ${
+      navbarDropdown.selection === NavbarSelection.NOTIFICATION
+        ? 'bg-goodreads-brown'
+        : 'bg-transparent'
+    }
+    `}
       >
         <div
           className="p-[5px] text-goodreads-beige rounded-full bg-[#754E30]
@@ -72,7 +87,11 @@ const NavIconDropdownNotification: React.FC<
       </div>
       <div
         className={`
-    ${isOpen ? 'scale-100' : 'scale-0'}
+    ${
+      navbarDropdown.selection === NavbarSelection.NOTIFICATION
+        ? 'scale-100'
+        : 'scale-0'
+    }
     absolute 
     transition origin-top-right
     top-[50px] right-[186px] bg-white

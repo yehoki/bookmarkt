@@ -5,6 +5,7 @@ import { signOut } from 'next-auth/react';
 import { User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
+import useNavbarDropdown, { NavbarSelection } from '@/hooks/useNavbarDropdown';
 interface NavIconDropdownProps {
   icon: IconType;
   currentUser: User;
@@ -14,21 +15,30 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
   icon: Icon,
   currentUser,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const navbarDropdown = useNavbarDropdown();
   const toggleOpen = useCallback(() => {
-    setIsOpen((value) => !value);
-  }, []);
+    if (navbarDropdown.selection === NavbarSelection.NONE) {
+      navbarDropdown.onOpen(NavbarSelection.USERMENU);
+    } else if (navbarDropdown.selection === NavbarSelection.USERMENU) {
+      navbarDropdown.onClose();
+    } else {
+      navbarDropdown.onOpen(NavbarSelection.USERMENU);
+    }
+  }, [navbarDropdown]);
 
   return (
     <>
       <div
         className={`flex p-2 items-center
         hover:bg-goodreads-brown
-        ${isOpen ? 'bg-goodreads-brown' : 'bg-transparent'} outline-none
+        ${
+          navbarDropdown.selection === NavbarSelection.USERMENU
+            ? 'bg-goodreads-brown'
+            : 'bg-transparent'
+        } outline-none
     cursor-pointer
         `}
         onClick={toggleOpen}
-        onBlur={toggleOpen}
       >
         <div
           className={`
@@ -55,10 +65,13 @@ const NavIconDropdown: React.FC<NavIconDropdownProps> = ({
           )}
         </div>
       </div>
-
       <div
         className={`
-        ${isOpen ? 'scale-100' : 'scale-0'}
+        ${
+          navbarDropdown.selection === NavbarSelection.USERMENU
+            ? 'scale-100'
+            : 'scale-0'
+        }
         transition origin-top-right
       absolute -right-2
       top-[50px]
