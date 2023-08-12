@@ -4,12 +4,14 @@ interface RegLogInputProps {
   type: string;
   label: string;
   placeholder?: string;
+  min?: number;
 }
 
 const RegLogInput: React.FC<RegLogInputProps> = ({
   type,
   label,
   placeholder,
+  min,
 }) => {
   return (
     <div className="flex flex-col w-full gap-2">
@@ -21,6 +23,7 @@ const RegLogInput: React.FC<RegLogInputProps> = ({
         type={type}
         name={label}
         id={label}
+        minLength={min ? min : 0}
         placeholder={placeholder ? placeholder : ''}
       />
     </div>

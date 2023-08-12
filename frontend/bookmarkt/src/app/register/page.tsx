@@ -18,10 +18,12 @@ export default async function Page() {
       label: 'Password',
       type: 'password',
       placeholder: 'At least 6 characters',
+      min: 6,
     },
     {
       label: 'Re-enter password',
       type: 'password',
+      min: 6,
     },
   ];
   const currentUser = await getCurrentUser();

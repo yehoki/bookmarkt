@@ -15,6 +15,7 @@ export interface ModalInput {
   label: string;
   type: string;
   placeholder?: string;
+  min?: number;
 }
 
 interface ModalProps {
@@ -41,6 +42,7 @@ const Modal: React.FC<ModalProps> = ({
         placeholder={modalInput.placeholder}
         type={modalInput.type}
         key={modalInput.label}
+        min={modalInput.min}
       />
     );
   });
@@ -76,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({
       const passOne = registerForm.get('Password');
       const passTwo = registerForm.get('Re-enter password');
       if (passOne !== passTwo) {
-        throw new Error('Passwords do not match');
+        return window.alert('Passwords do not match');
       }
       if (!name || !email || !passOne || !passTwo) {
         throw new Error('Details missing');
