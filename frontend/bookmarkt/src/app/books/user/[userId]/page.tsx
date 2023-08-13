@@ -10,6 +10,8 @@ import DisplayBookshelves from '@/components/Books/MyBookSection/DisplayBookshel
 import MyBook from '@/components/Books/MyBookSection/MyBook';
 import BookReviewModal from '@/components/modals/BookReviewModal';
 import { Suspense } from 'react';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { MdOutlineClear } from 'react-icons/md';
 
 interface UserBooksPageProps {
   params: {
@@ -217,7 +219,32 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   return (
     <>
       <BookReviewModal />
-      <div className="pt-6 px-1 mx-auto max-w-[1000px] pb-[100px]">
+      {/* Mobile mode: < medium breakpoint */}
+      <main className="md:hidden pb-[100px] px-4">
+        <h1 className="text-2xl py-4">My Books</h1>
+        <section>
+          <div className="relative mb-4">
+            <input
+              className="border rounded-sm border-neutral-400
+            flex items-center
+            py-1 px-8
+            w-full
+            placeholder-neutral-400
+            "
+              placeholder="Search my shelves"
+            />
+            <AiOutlineSearch className="absolute top-2 left-1" size={18} />
+            <MdOutlineClear className="absolute top-2 right-1" size={18} />
+          </div>
+        </section>
+        <div
+          className="-mx-4 h-6 bg-[#f9f8f4] 
+        border border-[#D8D8D8]"
+        ></div>
+        <section>Book display</section>
+        <section>Bookshelves</section>
+      </main>
+      <main className="hidden md:block pt-6 px-1 mx-auto max-w-[1000px] pb-[100px]">
         <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
           <h2
             className="
@@ -257,9 +284,8 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
             {/* Right col */}
             <div className="flex-1 max-w-[700px] mx-auto">
               <div
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 flex-[1_1_100%] gap-[2px] sm:gap-1 lg:gap-4 pt-2
-              
-              "
+                className="grid grid-cols-2 lg:grid-cols-3 navOne:grid-cols-4 2xl:grid-cols-6 flex-[1_1_100%] 
+                gap-[2px] sm:gap-1 lg:gap-4 pt-2"
               >
                 <Suspense>
                   {myBooksObject().map((book) => (
@@ -299,7 +325,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </>
   );
 };
