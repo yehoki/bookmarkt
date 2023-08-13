@@ -8,6 +8,7 @@ export default async function getUserBooks(userId: string) {
       },
       select: {
         bookData: true,
+        bookProgress:true, 
         reviews: true,
       },
     });

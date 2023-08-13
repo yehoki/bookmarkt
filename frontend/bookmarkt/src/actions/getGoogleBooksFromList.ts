@@ -1,4 +1,4 @@
-import { ReviewData } from '@prisma/client';
+import { ReviewData, UserBookData } from '@prisma/client';
 import { getSingleBook } from './getSingleBook';
 
 export interface GoogleBookType {

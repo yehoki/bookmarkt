@@ -1,11 +1,18 @@
 'use client';
 
-import { Bookshelf, ReviewData } from '@prisma/client';
+import { Bookshelf, ReviewData, UserBookData } from '@prisma/client';
 import MobileMyBook from './MobileMyBook';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { MdOutlineClear } from 'react-icons/md';
 import useMobileUpdateProgressModal from '@/hooks/useMobileUpdateProgressModal';
-import { FormEvent, useState } from 'react';
+import {
+  FormEvent,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
+import { useRouter } from 'next/navigation';
 
 interface MobileMyBookDisplayProps {
   myBooks: ({
@@ -16,6 +23,7 @@ interface MobileMyBookDisplayProps {
     authors: string[];
     reviewData: ReviewData;
     pageCount: number;
+    currentUserBookProgress: UserBookData | undefined;
     userBookReview: {
       rating: number;
       review: string | undefined;
@@ -24,15 +32,24 @@ interface MobileMyBookDisplayProps {
     thumbnail: string;
     publishedDate: string | undefined;
   } | null)[];
+  isCurrentUser: boolean;
 }
 
 const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
   myBooks,
+  isCurrentUser,
 }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const mobileUpdateProgressModal = useMobileUpdateProgressModal();
   const [bookProgress, setBookProgress] = useState(0);
   const [bookProgressComment, setBookProgressComment] = useState('');
+
+  const router = useRouter();
+
+  useLayoutEffect(() => {
+    setBookProgress(mobileUpdateProgressModal.currentProgress);
+    setBookProgressComment(mobileUpdateProgressModal.currentComment);
+  }, [mobileUpdateProgressModal.isOn]);
 
   const handleCloseModal = () => {
     mobileUpdateProgressModal.onDisable();
@@ -53,66 +70,72 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
       }),
     });
     const updateBookProgress = await res.json();
+    router.refresh();
     handleCloseModal();
     setIsDisabled(false);
   };
 
   return (
     <>
-      {mobileUpdateProgressModal.isOn && (
-        <>
-          <h2 className="px-2 py-1">Update your status</h2>
-          <section className="px-2">
-            <form onSubmit={handleUpdateProgress}>
-              <div className="text-xs text-[#D8D8D8] my-2">
-                I&apos;m on page{' '}
-                <input
-                  className="w-10 text-goodreads-brown"
-                  min={0}
-                  max={mobileUpdateProgressModal.currentPageCount}
-                  type="number"
-                  value={bookProgress}
+      <Suspense>
+        {mobileUpdateProgressModal.isOn && (
+          <>
+            <h2 className="px-2 py-1">Update your status</h2>
+            <section className="px-2">
+              <form onSubmit={handleUpdateProgress}>
+                <div className="text-xs text-[#D8D8D8] my-2">
+                  I&apos;m on page{' '}
+                  <input
+                    className="w-10 text-goodreads-brown"
+                    min={0}
+                    max={mobileUpdateProgressModal.currentPageCount}
+                    type="number"
+                    value={bookProgress}
+                    onChange={(e) =>
+                      setBookProgress(parseInt(e.currentTarget.value))
+                    }
+                  />{' '}
+                  of {mobileUpdateProgressModal.currentPageCount}
+                </div>
+                <textarea
+                  value={bookProgressComment}
                   onChange={(e) =>
-                    setBookProgress(parseInt(e.currentTarget.value))
+                    setBookProgressComment(e.currentTarget.value)
                   }
-                />{' '}
-                of {mobileUpdateProgressModal.currentPageCount}
-              </div>
-              <textarea
-                value={bookProgressComment}
-                onChange={(e) => setBookProgressComment(e.currentTarget.value)}
-                rows={4}
-                placeholder="What are your thoughts?"
-                maxLength={420}
-                className="w-full border rounded-sm border-[#D8D8D8] p-1 text-sm"
-              />
-              <div className="flex items-center justify-between gap-4">
-                <button
-                  disabled={isDisabled}
-                  onClick={handleCloseModal}
-                  className="w-full border py-1
+                  rows={4}
+                  placeholder="What are your thoughts?"
+                  maxLength={420}
+                  className="w-full border rounded-sm border-[#D8D8D8] p-1 text-sm"
+                />
+                <div className="flex items-center justify-between gap-4">
+                  <button
+                    disabled={isDisabled}
+                    onClick={handleCloseModal}
+                    className="w-full border py-1
               border-goodreads-brown rounded-md
               hover:text-white
               hover:bg-goodreads-brown
               "
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isDisabled}
-                  className="w-full border py-1 rounded-md
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isDisabled}
+                    className="w-full border py-1 rounded-md
               bg-goodreads-brown text-white
               hover:bg-[#583720]
               "
-                >
-                  Save Progress
-                </button>
-              </div>
-            </form>
-          </section>
-        </>
-      )}
+                  >
+                    Save Progress
+                  </button>
+                </div>
+              </form>
+            </section>
+          </>
+        )}
+      </Suspense>
+
       {!mobileUpdateProgressModal.isOn && (
         <>
           <h1 className="text-2xl py-4 px-4">My Books</h1>
@@ -149,6 +172,7 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
                       reviewData={book.reviewData}
                       thumbnail={book.thumbnail}
                       pageCount={book.pageCount}
+                      bookProgress={book.currentUserBookProgress}
                       googleId={book.googleId}
                     />
                   )}

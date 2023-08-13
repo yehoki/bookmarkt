@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import DisplayStars from '../../Ratings/DisplayStars';
-import { ReviewData } from '@prisma/client';
+import { ReviewData, UserBookData } from '@prisma/client';
 import useMobileUpdateProgressModal from '@/hooks/useMobileUpdateProgressModal';
 import Link from 'next/link';
 
@@ -12,6 +12,7 @@ interface MobileMyBookProps {
   reviewData: ReviewData;
   thumbnail: string;
   pageCount: number;
+  bookProgress: UserBookData | undefined;
   googleId: string;
 }
 
@@ -21,6 +22,7 @@ const MobileMyBook: React.FC<MobileMyBookProps> = ({
   reviewData,
   thumbnail,
   pageCount,
+  bookProgress,
   googleId,
 }) => {
   const mobileUpdateProgressModal = useMobileUpdateProgressModal();
@@ -28,6 +30,12 @@ const MobileMyBook: React.FC<MobileMyBookProps> = ({
   const handleOpenProgressModal = () => {
     mobileUpdateProgressModal.setCurrentGoogleId(googleId);
     mobileUpdateProgressModal.setCurrentPageCount(pageCount);
+    if (bookProgress) {
+      mobileUpdateProgressModal.setCurrentProgress(bookProgress.bookProgress);
+      if (bookProgress.comment && bookProgress.comment !== '') {
+        mobileUpdateProgressModal.setCurrentComment(bookProgress.comment);
+      }
+    }
     mobileUpdateProgressModal.onEnable();
   };
   return (

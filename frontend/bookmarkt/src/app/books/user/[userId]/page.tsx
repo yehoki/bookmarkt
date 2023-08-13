@@ -3,6 +3,7 @@ import {
   GoogleBookType,
   getGoogleBooksFromList,
 } from '@/actions/getGoogleBooksFromList';
+import getReviewsByUserId from '@/actions/getReviewsByUserId';
 import getUserBooks from '@/actions/getUserBooks';
 import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
 import { getUsersBooksFromBookshelf } from '@/actions/getUsersBooksFromBookshelf';
@@ -12,6 +13,7 @@ import MobileMyBookDisplay from '@/components/Books/MyBookSection/Mobile/MobileM
 import MyBook from '@/components/Books/MyBookSection/MyBook';
 import DisplayStars from '@/components/Books/Ratings/DisplayStars';
 import BookReviewModal from '@/components/modals/BookReviewModal';
+import { UserBookData } from '@prisma/client';
 import Image from 'next/image';
 import { Suspense } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -37,15 +39,22 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   }
 
   const currentUser = await getCurrentUser();
-
+  const currentUserReviews = await getReviewsByUserId(
+    currentUser ? currentUser.id : ''
+  );
   const userBooks = await getUserBooks(userId);
   const currentUserBookshelves = await getUserBookselvesByUserId(userId);
+  const loggedInUserBookshelves = await getUserBookselvesByUserId(
+    currentUser ? currentUser.id : ''
+  );
   const currentBookshelfBooks = async () => {
     const queryShelf = searchParams.shelf;
     const books = await getUsersBooksFromBookshelf(queryShelf, userId);
     return books;
   };
 
+  // Combines bookIds with the relevant review data
+  // for the current user
   const combineBookIdsAndReviewData = (bookIds: string[]) => {
     return bookIds.map((googleId) => {
       const bookReviewData = userBooks.bookData.find(
@@ -134,15 +143,26 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
     ) {
       return currentUserGoogleBooks.map((book) => {
         if (book) {
-          const findUserReview = userBooks.reviews.find(
-            (review) => review.googleBookId === book.id
-          );
           let userReview;
-          if (findUserReview) {
-            userReview = {
-              rating: findUserReview.rating,
-              review: findUserReview.description,
-            };
+          if (currentUserReviews) {
+            const findUserReview = currentUserReviews.find(
+              (review) => review.googleBookId === book.id
+            );
+            if (findUserReview) {
+              userReview = {
+                rating: findUserReview.rating,
+                review: findUserReview.description,
+              };
+            }
+          }
+          let currentUserProgress: UserBookData | undefined;
+          if (currentUser) {
+            const findCurrentUserProgress = currentUser.bookProgress.find(
+              (bookProgress) => bookProgress.googleBookId === book.id
+            );
+            if (findCurrentUserProgress) {
+              currentUserProgress = findCurrentUserProgress;
+            }
           }
           return {
             bookshelves: currentUserBookshelves ? currentUserBookshelves : [],
@@ -152,6 +172,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
             authors: book.volumeInfo.authors ? book.volumeInfo.authors : [],
             reviewData: book.reviewData,
             pageCount: book.volumeInfo.pageCount,
+            currentUserBookProgress: currentUserProgress,
             userBookReview: userReview
               ? {
                   rating: userReview.rating,
@@ -176,16 +197,28 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
     } else {
       return currentBookshelfGoogleBooks.map((bookshelfBook) => {
         if (bookshelfBook) {
-          const findUserReview = userBooks.reviews.find(
-            (review) => review.googleBookId === bookshelfBook.id
-          );
           let userReview;
-          if (findUserReview) {
-            userReview = {
-              rating: findUserReview.rating,
-              review: findUserReview.description,
-            };
+          if (currentUserReviews) {
+            const findUserReview = currentUserReviews.find(
+              (review) => review.googleBookId === bookshelfBook.id
+            );
+            if (findUserReview) {
+              userReview = {
+                rating: findUserReview.rating,
+                review: findUserReview.description,
+              };
+            }
           }
+          let currentUserProgress: UserBookData | undefined;
+          if (currentUser) {
+            const findCurrentUserProgress = currentUser.bookProgress.find(
+              (bookProgress) => bookProgress.googleBookId === bookshelfBook.id
+            );
+            if (findCurrentUserProgress) {
+              currentUserProgress = findCurrentUserProgress;
+            }
+          }
+
           return {
             bookshelves: currentUserBookshelves ? currentUserBookshelves : [],
             googleId: bookshelfBook.id,
@@ -195,6 +228,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               : [],
             reviewData: bookshelfBook.reviewData,
             pageCount: bookshelfBook.volumeInfo.pageCount,
+            currentUserBookProgress: currentUserProgress,
             userBookReview: userReview
               ? {
                   rating: userReview.rating,
@@ -227,7 +261,10 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
       <BookReviewModal />
       {/* Mobile mode: < medium breakpoint */}
       <main className="md:hidden pb-[100px]">
-        <MobileMyBookDisplay myBooks={myBooksObject()} />
+        <MobileMyBookDisplay
+          myBooks={myBooksObject()}
+          isCurrentUser={currentUser ? userId === currentUser.id : false}
+        />
       </main>
       <main className="hidden md:block pt-6 px-1 mx-auto max-w-[1000px] pb-[100px]">
         <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
@@ -279,7 +316,9 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                         <MyBook
                           key={book.googleId}
                           bookshelves={
-                            currentUserBookshelves ? currentUserBookshelves : []
+                            loggedInUserBookshelves
+                              ? loggedInUserBookshelves
+                              : []
                           }
                           title={book.title}
                           authors={book.authors ? book.authors : []}
