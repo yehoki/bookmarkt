@@ -234,7 +234,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
         <div>
           <div className="flex flex-row">
             {/* Left col */}
-            <div className="max-w-[200px]">
+            <div className="max-w-[200px] mr-5">
               <div className="border-b border-b-slate-300">
                 <h3 className="font-semibold">Bookshelves</h3>
                 <DisplayBookshelves
@@ -255,8 +255,12 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               </div>
             </div>
             {/* Right col */}
-            <div className="flex-1 max-w-[700px]">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 flex-[1_1_100%] gap-[2px] sm:gap-1 lg:gap-2 pt-2">
+            <div className="flex-1 max-w-[700px] mx-auto">
+              <div
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 flex-[1_1_100%] gap-[2px] sm:gap-1 lg:gap-4 pt-2
+              
+              "
+              >
                 <Suspense>
                   {myBooksObject().map((book) => (
                     <>

@@ -49,7 +49,7 @@ const HomeReadingChallenge: React.FC<HomeReadingChallengeProps> = ({
         </div>
       )}
       <div className="flex gap-4 mt-2">
-        <div className="w-[110px] h-[130px] bg-[#7584e9] relative">
+        <div className="w-[110px] h-[130px] bg-[#7584e9] relative px-2">
           {readingChallenge && booksReadThisYear >= readingChallenge.target && (
             <div className="absolute top-0 left-0 z-50">
               <div className="relative w-[67px] h-[67px]">
@@ -64,7 +64,7 @@ const HomeReadingChallenge: React.FC<HomeReadingChallengeProps> = ({
           <div className="text-white text-4xl font-semibold text-center pb-1">
             2023
           </div>
-          <div className="w-[105px] h-[40px] relative mx-auto">
+          <div className="w-[95px] h-[40px] relative ">
             <Image
               src="/images/2023-reading-challenge.svg"
               alt="Reading challenge"

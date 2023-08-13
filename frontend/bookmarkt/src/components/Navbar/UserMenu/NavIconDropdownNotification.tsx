@@ -81,7 +81,8 @@ const NavIconDropdownNotification: React.FC<
     `}
       >
         <div
-          className="p-[5px] text-goodreads-beige rounded-full bg-[#754E30]
+          className="p-[5px] text-goodreads-beige rounded-full 
+          bg-[#bbaf9d]
       "
         >
           <Icon size={20} />
