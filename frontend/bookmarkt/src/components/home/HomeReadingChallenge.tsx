@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 interface HomeReadingChallengeProps {}
 
@@ -16,6 +16,21 @@ const HomeReadingChallenge: React.FC<HomeReadingChallengeProps> = ({}) => {
       setIsDisabled(false);
     }
   }, [challengeNumber]);
+
+  const handleReadingChallengeSubmit = async (
+    e: FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    setIsDisabled(true);
+    const res = await fetch('/api/users/readingChallenge', {
+      method: 'POST',
+      body: JSON.stringify({
+        target: challengeNumber,
+      }),
+    });
+    const userUpdated = await res.json();
+    console.log(userUpdated);
+  };
 
   return (
     <>
@@ -44,7 +59,7 @@ const HomeReadingChallenge: React.FC<HomeReadingChallengeProps> = ({}) => {
           </div>
         </div>
         <div className="text-sm">
-          <form className="">
+          <form onSubmit={handleReadingChallengeSubmit} className="">
             <p className="mb-1">I want to read</p>
             <input
               type="number"

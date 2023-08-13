@@ -47,23 +47,29 @@ model Notification {
   User User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+type ReadingChallenge {
+  target  Int
+  current Int
+}
+
 model User {
-  id                     String         @id @default(auto()) @map("_id") @db.ObjectId
+  id                     String           @id @default(auto()) @map("_id") @db.ObjectId
   name                   String?
-  email                  String?        @unique
+  email                  String?          @unique
   emailVerified          DateTime?
   image                  String?
   hashedPassword         String?
-  createdAt              DateTime       @default(now())
-  updatedAt              DateTime       @updatedAt
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
   bookProgress           UserBookData[]
-  bookshelfIds           String[]       @db.ObjectId
+  readingChallenge       ReadingChallenge?
+  bookshelfIds           String[]         @db.ObjectId
   googleBookIds          String[]
-  reviewIds              String[]       @db.ObjectId
-  friendIds              String[]       @db.ObjectId
-  notificationIds        String[]       @db.ObjectId
-  friendRequestsReceived String[]       @db.ObjectId
-  friendRequestsSent     String[]       @db.ObjectId
+  reviewIds              String[]         @db.ObjectId
+  friendIds              String[]         @db.ObjectId
+  notificationIds        String[]         @db.ObjectId
+  friendRequestsReceived String[]         @db.ObjectId
+  friendRequestsSent     String[]         @db.ObjectId
 
   reviews       Review[]
   accounts      Account[]
