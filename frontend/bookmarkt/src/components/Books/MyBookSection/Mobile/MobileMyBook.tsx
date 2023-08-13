@@ -9,6 +9,7 @@ interface MobileMyBookProps {
   author: string[];
   reviewData: ReviewData;
   thumbnail: string;
+  pageCount: number;
 }
 
 const MobileMyBook: React.FC<MobileMyBookProps> = ({
@@ -16,9 +17,10 @@ const MobileMyBook: React.FC<MobileMyBookProps> = ({
   author,
   reviewData,
   thumbnail,
+  pageCount,
 }) => {
   return (
-    <li className="flex gap-4 py-4 border-b-[1px] px-4">
+    <li className="flex gap-2 py-4 border-b-[1px] px-4 min-h-[184px]">
       <div className="relative w-[75px] h-[120px] aspect-[8/5] border">
         <Image
           src={thumbnail === '' ? '/images/empty-book.png' : thumbnail}

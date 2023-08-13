@@ -17,6 +17,7 @@ export interface GoogleBookVolumeInfoType {
   title: string;
   subtitle?: string;
   authors: string[];
+  pageCount: number;
   publishedDate?: string;
   description?: string;
   imageLinks?: ImageLinks;
@@ -32,7 +33,7 @@ export interface SingleGoogleBookType {
 
 export async function getSingleBook(googleId: string) {
   const partialResponse =
-    'id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers)';
+    'id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers,pageCount)';
 
   const res = await fetch(
     `${googleAPIBaseUrl}/volumes/${googleId}?fields=${partialResponse}&key=${GOOGLE_API_KEY}`,

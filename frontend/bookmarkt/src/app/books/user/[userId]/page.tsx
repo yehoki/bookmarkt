@@ -150,6 +150,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
             title: book.volumeInfo.title,
             authors: book.volumeInfo.authors ? book.volumeInfo.authors : [],
             reviewData: book.reviewData,
+            pageCount: book.volumeInfo.pageCount,
             userBookReview: userReview
               ? {
                   rating: userReview.rating,
@@ -192,6 +193,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               ? bookshelfBook.volumeInfo.authors
               : [],
             reviewData: bookshelfBook.reviewData,
+            pageCount: bookshelfBook.volumeInfo.pageCount,
             userBookReview: userReview
               ? {
                   rating: userReview.rating,
@@ -257,6 +259,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                     author={book.authors}
                     reviewData={book.reviewData}
                     thumbnail={book.thumbnail}
+                    pageCount={book.pageCount}
                   />
                 )}
               </>
@@ -305,7 +308,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
             {/* Right col */}
             <div className="flex-1 max-w-[700px] mx-auto">
               <div
-                className="grid grid-cols-2 lg:grid-cols-3 navOne:grid-cols-4 2xl:grid-cols-6 flex-[1_1_100%] 
+                className="grid md:grid-cols-3 navOne:grid-cols-4 2xl:grid-cols-6 flex-[1_1_100%] 
                 gap-[2px] sm:gap-1 lg:gap-4 pt-2"
               >
                 <Suspense>

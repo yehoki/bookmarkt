@@ -59,6 +59,7 @@ export interface VolumeInfo {
   authors?: string[];
   description?: string;
   imageLinks?: ImageLinks;
+  pageCount: number;
   publishedDate?: string;
   subtitle?: string;
   title: string;
