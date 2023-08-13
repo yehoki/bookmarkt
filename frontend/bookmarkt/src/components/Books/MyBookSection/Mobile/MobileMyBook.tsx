@@ -4,6 +4,7 @@ import Image from 'next/image';
 import DisplayStars from '../../Ratings/DisplayStars';
 import { ReviewData } from '@prisma/client';
 import useMobileUpdateProgressModal from '@/hooks/useMobileUpdateProgressModal';
+import Link from 'next/link';
 
 interface MobileMyBookProps {
   title: string;
@@ -11,6 +12,7 @@ interface MobileMyBookProps {
   reviewData: ReviewData;
   thumbnail: string;
   pageCount: number;
+  googleId: string;
 }
 
 const MobileMyBook: React.FC<MobileMyBookProps> = ({
@@ -19,19 +21,30 @@ const MobileMyBook: React.FC<MobileMyBookProps> = ({
   reviewData,
   thumbnail,
   pageCount,
+  googleId,
 }) => {
   const mobileUpdateProgressModal = useMobileUpdateProgressModal();
+
+  const handleOpenProgressModal = () => {
+    mobileUpdateProgressModal.setCurrentGoogleId(googleId);
+    mobileUpdateProgressModal.setCurrentPageCount(pageCount);
+    mobileUpdateProgressModal.onEnable();
+  };
   return (
     <li className="flex gap-2 py-4 border-b-[1px] px-4 min-h-[184px]">
       <div className="relative w-[75px] h-[120px] aspect-[8/5] border">
-        <Image
-          src={thumbnail === '' ? '/images/empty-book.png' : thumbnail}
-          fill
-          alt="Book image"
-        />
+        <Link href={`/books/${googleId}`}>
+          <Image
+            src={thumbnail === '' ? '/images/empty-book.png' : thumbnail}
+            fill
+            alt="Book image"
+          />
+        </Link>
       </div>
       <div className="text-sm">
-        <h3 className="py-1 text-base ">{title}</h3>
+        <h3 className="py-1 text-base hover:underline">
+          <Link href={`/books/${googleId}`}>{title}</Link>
+        </h3>
         <h4 className="text-xs text-neutral-400 pb-1">
           By <span className="text-goodreads-mybooks-green">{author[0]}</span>
         </h4>
@@ -43,7 +56,7 @@ const MobileMyBook: React.FC<MobileMyBookProps> = ({
           </span>
         </div>
         <button
-          onClick={() => mobileUpdateProgressModal.onEnable()}
+          onClick={handleOpenProgressModal}
           className="
                   mt-2
                 px-3 py-3 leading-none

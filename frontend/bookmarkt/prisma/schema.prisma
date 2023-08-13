@@ -11,8 +11,8 @@ datasource db {
 }
 
 type UserBookData {
-  bookId       String @db.ObjectId
-  bookProgress Int
+  googleBookId  String
+  bookProgress  Int
 }
 
 type BookshelfBooks {
@@ -53,23 +53,23 @@ type ReadingChallenge {
 }
 
 model User {
-  id                     String           @id @default(auto()) @map("_id") @db.ObjectId
+  id                     String            @id @default(auto()) @map("_id") @db.ObjectId
   name                   String?
-  email                  String?          @unique
+  email                  String?           @unique
   emailVerified          DateTime?
   image                  String?
   hashedPassword         String?
-  createdAt              DateTime         @default(now())
-  updatedAt              DateTime         @updatedAt
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
   bookProgress           UserBookData[]
   readingChallenge       ReadingChallenge?
-  bookshelfIds           String[]         @db.ObjectId
+  bookshelfIds           String[]          @db.ObjectId
   googleBookIds          String[]
-  reviewIds              String[]         @db.ObjectId
-  friendIds              String[]         @db.ObjectId
-  notificationIds        String[]         @db.ObjectId
-  friendRequestsReceived String[]         @db.ObjectId
-  friendRequestsSent     String[]         @db.ObjectId
+  reviewIds              String[]          @db.ObjectId
+  friendIds              String[]          @db.ObjectId
+  notificationIds        String[]          @db.ObjectId
+  friendRequestsReceived String[]          @db.ObjectId
+  friendRequestsSent     String[]          @db.ObjectId
 
   reviews       Review[]
   accounts      Account[]

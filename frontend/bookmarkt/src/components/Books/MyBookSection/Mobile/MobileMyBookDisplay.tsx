@@ -30,22 +30,32 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
 }) => {
   const mobileUpdateProgressModal = useMobileUpdateProgressModal();
 
+  const handleCloseModal = () => {
+    mobileUpdateProgressModal.onDisable();
+    mobileUpdateProgressModal.onModalClose();
+  };
+
+  const handleUpdateProgress = () => {};
+
   return (
     <>
       {mobileUpdateProgressModal.isOn && (
         <>
           <h2 className="px-2 py-1">Update your status</h2>
           <section className="px-2">
-            <div>I&apos;m on page ### of ###</div>
+            <div>
+              I&apos;m on page ### of{' '}
+              {mobileUpdateProgressModal.currentPageCount}
+            </div>
             <textarea
               rows={4}
               placeholder="What are your thoughts?"
               maxLength={420}
-              className="w-full border rounded-sm border-[#D8D8D8]"
+              className="w-full border rounded-sm border-[#D8D8D8] p-1"
             />
             <div className="flex items-center justify-between gap-4">
               <button
-                onClick={() => mobileUpdateProgressModal.onDisable()}
+                onClick={handleCloseModal}
                 className="w-full border py-1
               border-goodreads-brown rounded-md
               hover:text-white
@@ -102,6 +112,7 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
                       reviewData={book.reviewData}
                       thumbnail={book.thumbnail}
                       pageCount={book.pageCount}
+                      googleId={book.googleId}
                     />
                   )}
                 </>
