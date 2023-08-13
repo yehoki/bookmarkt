@@ -7,8 +7,11 @@ import getUserBooks from '@/actions/getUserBooks';
 import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
 import { getUsersBooksFromBookshelf } from '@/actions/getUsersBooksFromBookshelf';
 import DisplayBookshelves from '@/components/Books/MyBookSection/DisplayBookshelves';
+import MobileMyBook from '@/components/Books/MyBookSection/Mobile/MobileMyBook';
 import MyBook from '@/components/Books/MyBookSection/MyBook';
+import DisplayStars from '@/components/Books/Ratings/DisplayStars';
 import BookReviewModal from '@/components/modals/BookReviewModal';
+import Image from 'next/image';
 import { Suspense } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { MdOutlineClear } from 'react-icons/md';
@@ -145,7 +148,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
             id: book.id,
             googleId: book.id,
             title: book.volumeInfo.title,
-            authors: book.volumeInfo.authors,
+            authors: book.volumeInfo.authors ? book.volumeInfo.authors : [],
             reviewData: book.reviewData,
             userBookReview: userReview
               ? {
@@ -220,9 +223,9 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
     <>
       <BookReviewModal />
       {/* Mobile mode: < medium breakpoint */}
-      <main className="md:hidden pb-[100px] px-4">
-        <h1 className="text-2xl py-4">My Books</h1>
-        <section>
+      <main className="md:hidden pb-[100px]">
+        <h1 className="text-2xl py-4 px-4">My Books</h1>
+        <section className="px-4">
           <div className="relative mb-4">
             <input
               className="border rounded-sm border-neutral-400
@@ -241,7 +244,25 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
           className="-mx-4 h-6 bg-[#f9f8f4] 
         border border-[#D8D8D8]"
         ></div>
-        <section>Book display</section>
+        <section>
+          <h2 className="uppercase font-semibold my-3 text-sm px-4">
+            Currently Reading
+          </h2>
+          <ul>
+            {myBooksObject().map((book) => (
+              <>
+                {book && (
+                  <MobileMyBook
+                    title={book.title}
+                    author={book.authors}
+                    reviewData={book.reviewData}
+                    thumbnail={book.thumbnail}
+                  />
+                )}
+              </>
+            ))}
+          </ul>
+        </section>
         <section>Bookshelves</section>
       </main>
       <main className="hidden md:block pt-6 px-1 mx-auto max-w-[1000px] pb-[100px]">
