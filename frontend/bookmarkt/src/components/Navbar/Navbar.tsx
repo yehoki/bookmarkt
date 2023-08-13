@@ -8,6 +8,7 @@ import Search from './Search/Search';
 import UserMenu from './UserMenu/UserMenu';
 import MobileUserMenu from './UserMenu/MobileUserMenu';
 import MobileDropdown from './MobileDropdown';
+import RoutingHandle from '../RoutingHandle';
 
 interface NavbarProps {
   currentUser?: User | null;
@@ -16,6 +17,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = async ({ currentUser }) => {
   return (
     <>
+      <RoutingHandle />
       <div
         id="top-navbar"
         className={`
