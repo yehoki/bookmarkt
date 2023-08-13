@@ -253,7 +253,10 @@ export default async function Page() {
               <div></div>
             </HomeBox>
             <HomeBox heading="2023 Reading Challenge" bottomBorder>
-              <HomeReadingChallenge />
+              <HomeReadingChallenge
+                readingChallenge={currentUser.readingChallenge}
+                booksReadThisYear={readThisYearGoogleBookIds.length}
+              />
             </HomeBox>
             <HomeBox heading="Want to read" bottomBorder>
               <div>

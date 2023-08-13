@@ -11,11 +11,9 @@ export async function POST(req: Request) {
 
   const body = await req.json();
   const { target } = body;
-  console.log(body, target, typeof target);
   if (!target || typeof target !== 'number') {
     return NextResponse.error();
   }
-  console.log('POST');
   const readingChallengeInfo: ReadingChallenge = {
     target: target,
     current: 0,
@@ -28,10 +26,8 @@ export async function POST(req: Request) {
       readingChallenge: readingChallengeInfo,
     },
   });
-  console.log('POST 2');
   if (!setUserReadingChallenge) {
     return NextResponse.error();
   }
-  console.log('POST 3');
   return NextResponse.json(setUserReadingChallenge);
 }
