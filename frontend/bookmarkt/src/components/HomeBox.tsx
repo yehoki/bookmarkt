@@ -24,7 +24,7 @@ const HomeBox: React.FC<HomeBoxProps> = ({
     py-2 
     ${bottomBorder ? 'border-b-[1px]' : 'border-none'}`}
     >
-      <div className="uppercase font-semibold">{heading}</div>
+      <div className="text-sm uppercase font-semibold">{heading}</div>
       {children}
     </div>
   );

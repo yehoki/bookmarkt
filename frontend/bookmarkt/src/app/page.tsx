@@ -18,6 +18,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import FooterGithubLink from '@/components/FooterGithubLink';
 import getUserById from '@/actions/getUserById';
+import HomeReadingChallenge from '@/components/home/HomeReadingChallenge';
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
@@ -214,7 +215,7 @@ export default async function Page() {
           </div>
         </div>
         <div className="hidden md:flex flex-row justify-between mt-2 ">
-          <div className="w-[300px] pl-2">
+          <div className="w-[300px] pl-2 mr-5">
             <HomeBox heading="Currently reading" bottomBorder>
               <div>
                 <div className="flex flex-col gap-2 py-2">
@@ -233,15 +234,6 @@ export default async function Page() {
                       }
                     />
                   )}
-                  {/* <HomeBook
-                  title={firstTwoBooks[1].title}
-                  authors={firstTwoBooks[1].author}
-                  imgsrc={
-                    firstTwoBooks[1].imageLinks.thumbnail
-                      ? firstTwoBooks[1].imageLinks.thumbnail
-                      : undefined
-                  }
-                /> */}
                 </div>
               </div>
               <div className="flex gap-[2px] text-xs py-2">
@@ -257,42 +249,11 @@ export default async function Page() {
                 <div>General update</div>
               </div>
             </HomeBox>
-            <HomeBox heading="News & Interviews" onlyTwoRows>
+            <HomeBox heading="News & Interviews" onlyTwoRows bottomBorder>
               <div></div>
             </HomeBox>
             <HomeBox heading="2023 Reading Challenge" bottomBorder>
-              <div className="flex gap-2">
-                <div className="w-[110px] h-[130px] bg-[#7584e9]">
-                  <div className="text-white text-4xl font-semibold text-center pb-1">
-                    2023
-                  </div>
-                  <div className="w-[105px] h-[40px] relative mx-auto">
-                    <Image
-                      src="/images/2023-reading-challenge.svg"
-                      alt="Reading challenge"
-                      fill
-                    />
-                  </div>
-                  <div>
-                    <div className="text-white text-[22px] font-semibold uppercase text-center leading-none">
-                      Reading
-                    </div>
-                    <div className="text-white text-md font-semibold uppercase text-center leading-none">
-                      Challenge
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="text-2xl">
-                    {booksReadFromThisYear ? booksReadFromThisYear.length : 0}
-                  </div>
-                  <div className="text-lg">
-                    {booksReadFromThisYear && booksReadFromThisYear.length > 1
-                      ? 'books completed'
-                      : 'book completed'}
-                  </div>
-                </div>
-              </div>
+              <HomeReadingChallenge />
             </HomeBox>
             <HomeBox heading="Want to read" bottomBorder>
               <div>
