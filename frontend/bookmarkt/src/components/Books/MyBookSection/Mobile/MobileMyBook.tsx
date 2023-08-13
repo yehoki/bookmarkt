@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import DisplayStars from '../../Ratings/DisplayStars';
 import { ReviewData } from '@prisma/client';
+import useMobileUpdateProgressModal from '@/hooks/useMobileUpdateProgressModal';
 
 interface MobileMyBookProps {
   title: string;
@@ -19,6 +20,7 @@ const MobileMyBook: React.FC<MobileMyBookProps> = ({
   thumbnail,
   pageCount,
 }) => {
+  const mobileUpdateProgressModal = useMobileUpdateProgressModal();
   return (
     <li className="flex gap-2 py-4 border-b-[1px] px-4 min-h-[184px]">
       <div className="relative w-[75px] h-[120px] aspect-[8/5] border">
@@ -41,6 +43,7 @@ const MobileMyBook: React.FC<MobileMyBookProps> = ({
           </span>
         </div>
         <button
+          onClick={() => mobileUpdateProgressModal.onEnable()}
           className="
                   mt-2
                 px-3 py-3 leading-none

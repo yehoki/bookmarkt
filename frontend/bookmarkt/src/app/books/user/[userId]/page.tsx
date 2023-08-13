@@ -8,6 +8,7 @@ import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId'
 import { getUsersBooksFromBookshelf } from '@/actions/getUsersBooksFromBookshelf';
 import DisplayBookshelves from '@/components/Books/MyBookSection/DisplayBookshelves';
 import MobileMyBook from '@/components/Books/MyBookSection/Mobile/MobileMyBook';
+import MobileMyBookDisplay from '@/components/Books/MyBookSection/Mobile/MobileMyBookDisplay';
 import MyBook from '@/components/Books/MyBookSection/MyBook';
 import DisplayStars from '@/components/Books/Ratings/DisplayStars';
 import BookReviewModal from '@/components/modals/BookReviewModal';
@@ -226,47 +227,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
       <BookReviewModal />
       {/* Mobile mode: < medium breakpoint */}
       <main className="md:hidden pb-[100px]">
-        <h1 className="text-2xl py-4 px-4">My Books</h1>
-        <section className="px-4">
-          <div className="relative mb-4">
-            <input
-              className="border rounded-sm border-neutral-400
-            flex items-center
-            py-1 px-8
-            w-full
-            placeholder-neutral-400
-            "
-              placeholder="Search my shelves"
-            />
-            <AiOutlineSearch className="absolute top-2 left-1" size={18} />
-            <MdOutlineClear className="absolute top-2 right-1" size={18} />
-          </div>
-        </section>
-        <div
-          className="-mx-4 h-6 bg-[#f9f8f4] 
-        border border-[#D8D8D8]"
-        ></div>
-        <section>
-          <h2 className="uppercase font-semibold my-3 text-sm px-4">
-            Currently Reading
-          </h2>
-          <ul>
-            {myBooksObject().map((book) => (
-              <>
-                {book && (
-                  <MobileMyBook
-                    title={book.title}
-                    author={book.authors}
-                    reviewData={book.reviewData}
-                    thumbnail={book.thumbnail}
-                    pageCount={book.pageCount}
-                  />
-                )}
-              </>
-            ))}
-          </ul>
-        </section>
-        <section>Bookshelves</section>
+        <MobileMyBookDisplay myBooks={myBooksObject()} />
       </main>
       <main className="hidden md:block pt-6 px-1 mx-auto max-w-[1000px] pb-[100px]">
         <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
