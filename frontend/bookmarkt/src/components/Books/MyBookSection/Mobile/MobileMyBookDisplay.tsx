@@ -5,6 +5,7 @@ import MobileMyBook from './MobileMyBook';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { MdOutlineClear } from 'react-icons/md';
 import useMobileUpdateProgressModal from '@/hooks/useMobileUpdateProgressModal';
+import { FormEvent, useState } from 'react';
 
 interface MobileMyBookDisplayProps {
   myBooks: ({
@@ -28,14 +29,33 @@ interface MobileMyBookDisplayProps {
 const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
   myBooks,
 }) => {
+  const [isDisabled, setIsDisabled] = useState(false);
   const mobileUpdateProgressModal = useMobileUpdateProgressModal();
+  const [bookProgress, setBookProgress] = useState(0);
+  const [bookProgressComment, setBookProgressComment] = useState('');
 
   const handleCloseModal = () => {
     mobileUpdateProgressModal.onDisable();
     mobileUpdateProgressModal.onModalClose();
+    setBookProgress(0);
+    setBookProgressComment('');
   };
 
-  const handleUpdateProgress = () => {};
+  const handleUpdateProgress = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsDisabled(true);
+    const res = await fetch('/api/users/bookProgress', {
+      method: 'POST',
+      body: JSON.stringify({
+        googleBookId: mobileUpdateProgressModal.currentGoogleId,
+        bookProgress: bookProgress,
+        comment: bookProgressComment,
+      }),
+    });
+    const updateBookProgress = await res.json();
+    handleCloseModal();
+    setIsDisabled(false);
+  };
 
   return (
     <>
@@ -43,36 +63,53 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
         <>
           <h2 className="px-2 py-1">Update your status</h2>
           <section className="px-2">
-            <div>
-              I&apos;m on page ### of{' '}
-              {mobileUpdateProgressModal.currentPageCount}
-            </div>
-            <textarea
-              rows={4}
-              placeholder="What are your thoughts?"
-              maxLength={420}
-              className="w-full border rounded-sm border-[#D8D8D8] p-1"
-            />
-            <div className="flex items-center justify-between gap-4">
-              <button
-                onClick={handleCloseModal}
-                className="w-full border py-1
+            <form onSubmit={handleUpdateProgress}>
+              <div className="text-xs text-[#D8D8D8] my-2">
+                I&apos;m on page{' '}
+                <input
+                  className="w-10 text-goodreads-brown"
+                  min={0}
+                  max={mobileUpdateProgressModal.currentPageCount}
+                  type="number"
+                  value={bookProgress}
+                  onChange={(e) =>
+                    setBookProgress(parseInt(e.currentTarget.value))
+                  }
+                />{' '}
+                of {mobileUpdateProgressModal.currentPageCount}
+              </div>
+              <textarea
+                value={bookProgressComment}
+                onChange={(e) => setBookProgressComment(e.currentTarget.value)}
+                rows={4}
+                placeholder="What are your thoughts?"
+                maxLength={420}
+                className="w-full border rounded-sm border-[#D8D8D8] p-1 text-sm"
+              />
+              <div className="flex items-center justify-between gap-4">
+                <button
+                  disabled={isDisabled}
+                  onClick={handleCloseModal}
+                  className="w-full border py-1
               border-goodreads-brown rounded-md
               hover:text-white
               hover:bg-goodreads-brown
               "
-              >
-                Cancel
-              </button>
-              <button
-                className="w-full border py-1 rounded-md
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isDisabled}
+                  className="w-full border py-1 rounded-md
               bg-goodreads-brown text-white
               hover:bg-[#583720]
               "
-              >
-                Save Progress
-              </button>
-            </div>
+                >
+                  Save Progress
+                </button>
+              </div>
+            </form>
           </section>
         </>
       )}

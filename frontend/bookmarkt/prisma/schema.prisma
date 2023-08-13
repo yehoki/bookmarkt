@@ -13,6 +13,7 @@ datasource db {
 type UserBookData {
   googleBookId  String
   bookProgress  Int
+  comment String?
 }
 
 type BookshelfBooks {
