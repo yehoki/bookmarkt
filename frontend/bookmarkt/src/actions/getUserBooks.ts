@@ -13,7 +13,7 @@ export default async function getUserBooks(userId: string) {
       },
     });
     if (!currentUserBooks) {
-      throw new Error('Books could not be retrieved');
+      return null;
     }
     return currentUserBooks;
   } catch (err: any) {

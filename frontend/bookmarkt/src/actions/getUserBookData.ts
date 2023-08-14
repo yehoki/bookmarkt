@@ -5,17 +5,17 @@ import getUserBooks from './getUserBooks';
 
 export const getUserBookData = async (query: string, userId: string) => {
   const userBooks = await getUserBooks(userId);
-  const userBookData = userBooks.bookData;
-  const userGoogleBooks = userBookData.map((book) => book.googleId);
+  const userBookData = userBooks?.bookData;
+  const userGoogleBooks = userBookData?.map((book) => book.googleId);
   const booksFromSearch = await getBooksFromSearch(query);
   const ownedBooks = booksFromSearch?.items.map((book) => {
-    return userGoogleBooks.includes(book.id);
+    return userGoogleBooks?.includes(book.id);
   });
   const userBookshelves = await getCurrentUserBookshelves();
 
   if (booksFromSearch && userBookshelves) {
     const returnBooks = booksFromSearch.items.map((googleBook) => {
-      const foundBook = userBookData.find(
+      const foundBook = userBookData?.find(
         (userBook) => userBook.googleId === googleBook.id
       );
       if (foundBook) {
