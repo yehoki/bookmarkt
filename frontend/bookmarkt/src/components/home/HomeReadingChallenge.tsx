@@ -90,7 +90,6 @@ const HomeReadingChallenge: React.FC<HomeReadingChallengeProps> = ({
                     px-1 py-[2px] outline-none focus:shadow-md 
                     mb-1"
                 min={0}
-                defaultValue={0}
                 value={challengeNumber}
                 onChange={(e) =>
                   setChallengeNumber(parseInt(e.currentTarget.value))

@@ -16,36 +16,6 @@ export interface GoogleBookItemsInterface {
   };
 }
 
-// export interface GoogleBookInterface {
-//   totalItems: number;
-//   items: GoogleBookItemsInterface[];
-// }
-
-export interface GoogleBookReturnItemsInterface {
-  id: string;
-  isOwned?: boolean;
-  bookshelf?: string;
-  volumeInfo: {
-    authors?: string[];
-    description?: string;
-    imageLinks?: {
-      thumbnail?: string;
-    };
-    publishedDate?: string;
-    subtitle?: string;
-    title: string;
-    industryIdentifiers?: {
-      type: 'ISBN_10' | 'ISBN_13';
-      identifier: string;
-    }[];
-  };
-}
-
-export interface GoogleBookReturnInterface {
-  totalItems: number;
-  items: GoogleBookReturnItemsInterface[];
-}
-
 export interface ImageLinks {
   smallThumbnail?: string;
   thumbnail?: string;
