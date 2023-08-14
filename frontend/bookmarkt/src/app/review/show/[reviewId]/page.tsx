@@ -21,6 +21,40 @@ const SingleReviewPage: React.FC<SingleReviewPageProps> = async ({
   const bookInfo = await getSingleBook(review.googleBookId);
   return (
     <>
+      <main className="hidden md:block w-[970px] mx-auto mt-4 ">
+        <h1 className="text-2xl my-2">{bookInfo?.volumeInfo.title}</h1>
+        <section className="flex gap-8 px-2 w-[625px] text-sm">
+          <div>
+            <div className="relative w-[140px] aspect-[2/3]">
+              <Image
+                src={`${
+                  bookInfo &&
+                  bookInfo.volumeInfo.imageLinks &&
+                  bookInfo.volumeInfo.imageLinks.thumbnail
+                    ? bookInfo.volumeInfo.imageLinks.thumbnail
+                    : '/images/empty-book.png'
+                }`}
+                alt="Book cover"
+                fill
+                className="border"
+              />
+            </div>
+          </div>
+          <div className="relative">
+            <h3>{bookInfo?.volumeInfo.title}</h3>
+            <h4>
+              By{' '}
+              {bookInfo?.volumeInfo.authors
+                ? bookInfo?.volumeInfo.authors[0]
+                : ''}
+            </h4>
+            <div>User and review info</div>
+            <div>{review.description}</div>
+          </div>
+        </section>
+        <section>Reading progress</section>
+        <section>Comments</section>
+      </main>
       <main className="md:hidden">
         <section className="flex py-3 px-3 gap-3">
           <div className="relative w-[30px] h-[30px]">
