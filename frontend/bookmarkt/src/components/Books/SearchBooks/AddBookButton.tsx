@@ -88,8 +88,9 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
           <>
             <Suspense fallback="...">
               <div
-                className={`w-[105px] pr-1 pl-2 py-[5px] border-r-[1px] 
+                className={`min-w-[105px] pr-1 pl-2 py-[5px] border-r-[1px] 
         font-lato text-left overflow-hidden text-ellipsis whitespace-nowrap
+        flex-1
         ${
           currentBookshelf === ''
             ? 'hover:bg-[#409D69] border-neutral-600'
@@ -114,12 +115,6 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
               onClick={(e) => {
                 setIsBookshelfDropdown(!isBookshelfDropdown);
               }}
-              // onMouseEnter={() => setIsBookshelfDropdown(true)}
-              // onMouseLeave={() => {
-              //   setTimeout(() => {
-              //     setIsBookshelfDropdown(false);
-              //   }, 500);
-              // }}
             >
               <AiFillCaretDown size={10} className="fill-white" />
               <div
