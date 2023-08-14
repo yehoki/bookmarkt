@@ -57,7 +57,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   // for the current user
   const combineBookIdsAndReviewData = (bookIds: string[]) => {
     return bookIds.map((googleId) => {
-      const bookReviewData = userBooks.bookData.find(
+      const bookReviewData = userBooks?.bookData.find(
         (bookData) => bookData.googleId === googleId
       );
       return {
@@ -80,12 +80,12 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   );
   // const googleBooks = await getGoogleBooksFromList(bookshelfBooks ? bookshelfBooks.googleBooks. : ['']);
 
-  const googleBookIds: GoogleBookType[] = userBooks.bookData.map(
-    (bookDataItem) => ({
-      googleId: bookDataItem.googleId,
-      reviewData: bookDataItem.reviewData,
-    })
-  );
+  const googleBookIds: GoogleBookType[] = userBooks
+    ? userBooks.bookData.map((bookDataItem) => ({
+        googleId: bookDataItem.googleId,
+        reviewData: bookDataItem.reviewData,
+      }))
+    : [];
   const currentUserGoogleBooks = await getGoogleBooksFromList(googleBookIds);
 
   const currentBookshelfGoogleBooks = await getGoogleBooksFromList(
@@ -94,9 +94,9 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
 
   const test = currentUserGoogleBooks.map((book) => {
     if (book) {
-      const findUserReview = userBooks.reviews.find(
-        (review) => review.googleBookId === book.id
-      );
+      const findUserReview = userBooks
+        ? userBooks.reviews.find((review) => review.googleBookId === book.id)
+        : undefined;
       let userReview;
       if (findUserReview) {
         userReview = {
