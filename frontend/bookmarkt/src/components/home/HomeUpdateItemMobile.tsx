@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 
 interface HomeUpdateItemMobileProps {
   userName: string;
+  reviewId: string;
   userId: string;
   bookTitle: string;
   bookAuthors: string[];
@@ -20,6 +21,7 @@ interface HomeUpdateItemMobileProps {
 
 const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
   userName,
+  reviewId,
   userId,
   bookTitle,
   bookAuthors,
@@ -53,7 +55,9 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
         className="absolute right-1 top-1 text-sm text-neutral-500
       hover:underline cursor-pointer"
       >
-        <Suspense fallback="">{timeDifference}</Suspense>
+        <Suspense fallback="">
+          <Link href={`/review/show/${reviewId}`}>{timeDifference}</Link>
+        </Suspense>
       </div>
       <div className="text-sm leading-1">
         <span className="text-goodreads-mybooks-green hover:underline cursor-pointer font-semibold">

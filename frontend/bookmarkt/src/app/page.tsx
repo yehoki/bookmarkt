@@ -140,6 +140,7 @@ export default async function Page() {
       frontPageItem && (
         <HomeUpdateItemMobile
           key={frontPageItem.id}
+          reviewId={frontPageItem.id}
           userId={frontPageItem.userId}
           reviewMadeAt={frontPageItem.reviewMadeAt}
           userName={frontPageItem.userName}
@@ -160,6 +161,7 @@ export default async function Page() {
       frontPageItem && (
         <HomeUpdateItem
           key={frontPageItem.id}
+          reviewId={frontPageItem.id}
           userId={frontPageItem.userId}
           bookshelves={frontPageItem.bookshelves}
           currentBookshelf={frontPageItem.currentBookshelf}

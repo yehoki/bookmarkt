@@ -9,6 +9,7 @@ import { Bookshelf } from '@prisma/client';
 import { Suspense } from 'react';
 
 interface HomeUpdateItemProps {
+  reviewId: string;
   userName: string;
   userId: string;
   bookTitle: string;
@@ -26,6 +27,7 @@ interface HomeUpdateItemProps {
 }
 
 const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
+  reviewId,
   userName,
   userId,
   reviewMadeAt,
@@ -73,7 +75,9 @@ const HomeUpdateItem: React.FC<HomeUpdateItemProps> = ({
         className="absolute right-1 top-1 text-neutral-500
       hover:underline cursor-pointer"
       >
-        <Suspense fallback="...">{timeDifference}</Suspense>
+        <Suspense fallback="...">
+          <Link href={`/review/show/${reviewId}`}>{timeDifference}</Link>
+        </Suspense>
       </div>
       <div className="pr-40">
         <Link
