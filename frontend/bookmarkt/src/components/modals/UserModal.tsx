@@ -14,8 +14,8 @@ interface UserModalInterface {
 
 const UserModal: React.FC<UserModalInterface> = ({ title, subtitle, mode }) => {
   return (
-    <div className="flex flex-row">
-      <div className="relative block w-[200px] h-[50px] pt-4 mb-[22px] ml-2 mt-2">
+    <div className="flex md:flex-row flex-col gap-10">
+      <div className="relative block w-[200px] h-[50px] pt-4 md:mb-[22px] mx-auto md:mr-0 md:ml-2 mt-2">
         <Link href={'/'}>
           <Image src={'/images/bookmarkt.svg'} alt="Bookmarkt logo" fill />
         </Link>

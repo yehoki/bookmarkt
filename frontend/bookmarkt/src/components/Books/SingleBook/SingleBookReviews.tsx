@@ -32,6 +32,14 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
       return null;
     }
     // Make API route to fetch from - otherwise server component
+    const checkReroute = await getBooks.json();
+    if (
+      checkReroute &&
+      checkReroute.message &&
+      checkReroute.message === 'No user'
+    ) {
+      return router.push('/user/sign_up');
+    }
     const data: { bookData: BookData[]; reviews: Review[] } =
       await getBooks.json();
 

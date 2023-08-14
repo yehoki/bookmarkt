@@ -7,7 +7,10 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
-    return NextResponse.error();
+    console.log('No current user');
+    return NextResponse.json({
+      message: 'No user',
+    });
   }
 
   const currentUserBooks = await prisma.user.findFirst({
@@ -31,10 +34,7 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
   const body = await req.json();
-  const {
-    id,
-    title,
-  } = body;
+  const { id, title } = body;
   if (!id || !title) {
     return NextResponse.error();
   }
