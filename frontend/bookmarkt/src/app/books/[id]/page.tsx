@@ -81,7 +81,9 @@ const SingleBookPage: React.FC<PageProps> = async ({
         <div className="flex gap-4 items-center">
           <SingleBookReviews
             bookId={bookInfo.id}
-            reviewRating={userReviewInfo[0] ? userReviewInfo[0].rating : 0}
+            reviewRating={
+              userReviewInfo && userReviewInfo[0] ? userReviewInfo[0].rating : 0
+            }
           />
           <div className="text-xl font-semibold">
             {reviewData.averageReview}
@@ -89,7 +91,6 @@ const SingleBookPage: React.FC<PageProps> = async ({
         </div>
 
         <div className="flex flex-col gap-2">
-          <div></div>
           <div>
             <a
               href={`https://www.amazon.co.uk/s?k=${

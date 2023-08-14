@@ -4,9 +4,8 @@ import getCurrentUser from './getCurrentUser';
 export default async function getBookReview(bookId: string) {
   try {
     const currentUser = await getCurrentUser();
-
     if (!currentUser) {
-      throw new Error('Could not get user');
+      return null
     }
     const findBookId = await prisma.bookData.findFirst({
       where: {
@@ -31,7 +30,7 @@ export default async function getBookReview(bookId: string) {
     } else if (userReviews && userReviews.reviews) {
       return [];
     }
-    throw new Error('Something went wrong');
+    return null;
   } catch (err: any) {
     throw new Error(err);
   }
