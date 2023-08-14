@@ -41,8 +41,13 @@ const SingleReviewPage: React.FC<SingleReviewPageProps> = async ({
   return (
     <>
       <main className="hidden md:block w-[970px] mx-auto mt-4 ">
-        <h1 className="text-2xl my-2">{bookInfo?.volumeInfo.title}</h1>
-        <section className="flex gap-8 px-2 w-[625px] text-sm">
+        <h1
+          className="text-2xl my-2
+        ml-3"
+        >
+          {bookInfo?.volumeInfo.title}
+        </h1>
+        <section className="flex gap-8 px-2 w-[750px] text-sm ml-3">
           <div>
             <div className="relative w-[140px] aspect-[2/3] mb-2">
               <Image
@@ -158,18 +163,17 @@ const SingleReviewPage: React.FC<SingleReviewPageProps> = async ({
                     {bookInfo?.volumeInfo.title}
                   </Link>
                 </h4>
-                <h5 className="text-neutral-400">
+                <h5 className="text-neutral-400 text-xs">
                   by{' '}
                   {bookInfo && bookInfo.volumeInfo.authors
                     ? bookInfo?.volumeInfo.authors[0]
                     : ''}
                 </h5>
-                <div>
-                  {/* <AddBookButton
-                  
-                  /> */}
-                  Add book button
-                </div>
+                <AddBookButton
+                  bookId={review.googleBookId}
+                  bookshelves={currentUser ? currentUser.bookshelves : []}
+                  currentBookshelf={findCurrentBookshelf()}
+                />
               </div>
             </div>
             {/* <div className="text-neutral-400">Read in ####</div> */}

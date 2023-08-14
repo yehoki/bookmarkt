@@ -98,7 +98,7 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
   ));
 
   return (
-    <div className="bg-[#409D69]/90 text-[13px] text-white rounded-sm">
+    <div className="bg-[#409D69]/90 text-[13px] text-white rounded-sm max-w-[150px]">
       <div className="flex items-center justify-between">
         {isLoading ? (
           <div className="px-2 py-[5px]">Saving...</div>
