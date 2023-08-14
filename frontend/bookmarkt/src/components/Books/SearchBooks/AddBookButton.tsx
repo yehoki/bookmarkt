@@ -44,6 +44,15 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
           bookId: bookId,
         }),
       });
+      const checkReroute = await res.json();
+      if (
+        checkReroute &&
+        checkReroute.message &&
+        checkReroute.message === 'Need to login'
+      ) {
+        setIsLoading(false);
+        return router.push('/user/sign_up');
+      }
     } else {
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'POST',
@@ -52,6 +61,15 @@ const AddBookButton: React.FC<AddBookButtonProps> = ({
           newBookshelf: newBookshelfName,
         }),
       });
+      const checkReroute = await res.json();
+      if (
+        checkReroute &&
+        checkReroute.message &&
+        checkReroute.message === 'Need to login'
+      ) {
+        setIsLoading(false);
+        return router.push('/user/sign_up');
+      }
     }
     setDisplayBookshelf(newBookshelfName);
     router.refresh();

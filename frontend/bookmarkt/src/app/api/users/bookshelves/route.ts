@@ -7,7 +7,10 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
-    return NextResponse.error();
+    console.log('No current user');
+    return NextResponse.json({
+      message: 'Need to login',
+    });
   }
   const body = await req.json();
   const { googleId, newBookshelf } = body;
@@ -120,7 +123,10 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
-    return NextResponse.error();
+    console.log('No current user');
+    return NextResponse.json({
+      message: 'Need to login',
+    });
   }
 
   const body = await req.json();
