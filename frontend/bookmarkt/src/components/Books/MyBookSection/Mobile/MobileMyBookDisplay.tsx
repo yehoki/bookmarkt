@@ -70,8 +70,8 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
       }),
     });
     const updateBookProgress = await res.json();
-    router.refresh();
     handleCloseModal();
+    router.refresh();
     setIsDisabled(false);
   };
 

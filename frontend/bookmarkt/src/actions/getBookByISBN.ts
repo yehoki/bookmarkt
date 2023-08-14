@@ -1,5 +1,5 @@
-import { GoogleBookItemInterface } from "./getBooksFromSearch";
-import { GOOGLE_API_KEY } from "@/utils/config";
+import { GoogleBookItemInterface, GoogleSearchBooksInterface } from './getBooksFromSearch';
+import { GOOGLE_API_KEY } from '@/utils/config';
 
 const googleAPIISBNSearchUrl =
   'https://www.googleapis.com/books/v1/volumes?q=isbn:';
@@ -13,6 +13,6 @@ export async function getBookByISBN(ISBN: string) {
   if (!res.ok) {
     return null;
   }
-  const bookData:GoogleBookItemInterface = await res.json();
-  return bookData;
+  const bookData: GoogleSearchBooksInterface = await res.json();
+  return bookData.items[0];
 }
