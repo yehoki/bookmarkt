@@ -25,7 +25,8 @@ interface UserBooksPageProps {
   };
   searchParams: {
     shelf: string;
-    perPage: string;
+    perPage: number;
+    page: number;
   };
 }
 
@@ -37,7 +38,6 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   if (!userId || userId === '') {
     return <div>Error: incorrect userID</div>;
   }
-
   const currentUser = await getCurrentUser();
   const currentUserReviews = await getReviewsByUserId(
     currentUser ? currentUser.id : ''
@@ -91,47 +91,6 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   const currentBookshelfGoogleBooks = await getGoogleBooksFromList(
     currentBookshelfBooksWithReviewData
   );
-
-  const test = currentUserGoogleBooks.map((book) => {
-    if (book) {
-      const findUserReview = userBooks
-        ? userBooks.reviews.find((review) => review.googleBookId === book.id)
-        : undefined;
-      let userReview;
-      if (findUserReview) {
-        userReview = {
-          rating: findUserReview.rating,
-          review: findUserReview.description,
-        };
-      }
-      return {
-        bookshelves: currentUserBookshelves ? currentUserBookshelves : [],
-        id: book.id,
-        googleId: book.id,
-        title: book.volumeInfo.title,
-        authors: book.volumeInfo.authors,
-        reviewData: book.reviewData,
-        userBookReview: userReview
-          ? {
-              rating: userReview.rating,
-              review: userReview.review ? userReview.review : undefined,
-            }
-          : {
-              rating: 0,
-              review: undefined,
-            },
-        description: book.volumeInfo.description
-          ? book.volumeInfo.description
-          : '',
-        thumbnail:
-          book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail
-            ? book.volumeInfo.imageLinks.thumbnail
-            : '',
-        publishedDate: book.volumeInfo.publishedDate,
-      };
-    }
-    return null;
-  });
 
   const myBooksObject = () => {
     if (
