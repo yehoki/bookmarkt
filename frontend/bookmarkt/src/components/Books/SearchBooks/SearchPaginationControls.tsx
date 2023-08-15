@@ -3,7 +3,7 @@
 import useResultsStore from '@/hooks/useResultsStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'query-string';
-import { MouseEvent, useCallback, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 
 interface SearchPaginationControlsProps {
   resultSize: number;
@@ -21,6 +21,59 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
   const hasPrev = Number(page) > 1;
 
   const [isSelected, setIsSelected] = useState(Number(page));
+
+  useEffect(() => {
+    const currentPage = searchParams?.get('page') ?? '1';
+    setIsSelected(Number(currentPage));
+  }, [searchParams]);
+
+  const createPages = () => {
+    if (Number(page) < 6) {
+      const pageArray = [];
+      for (let i = 0; i < 9; i++) {
+        pageArray.push(i + 1);
+      }
+      return pageArray.map((numb) => (
+        <li key={numb}>
+          <button
+            onClick={handleGoToPage}
+            value={numb}
+            disabled={isSelected === numb}
+            className={`${
+              isSelected !== numb
+                ? 'text-goodreads-mybooks-green hover:underline'
+                : ''
+            }
+        `}
+          >
+            {numb}
+          </button>
+        </li>
+      ));
+    } else if (Number(page) >= 6 && Number(page) < maxPages) {
+      const pageArray = [];
+      for (let i = Number(page) - 3; i < Number(page) + 3; i++) {
+        pageArray.push(i);
+      }
+      return pageArray.map((numb) => (
+        <li key={numb}>
+          <button
+            onClick={handleGoToPage}
+            value={numb}
+            disabled={isSelected === numb}
+            className={`${
+              isSelected !== numb
+                ? 'text-goodreads-mybooks-green hover:underline'
+                : ''
+            }
+        `}
+          >
+            {numb}
+          </button>
+        </li>
+      ));
+    }
+  };
 
   const handlePreviousClick = useCallback(() => {
     let currentQuery = {};
@@ -91,37 +144,44 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
         </button>
       </span>
       <ul className="flex gap-[2px]">
-        <li>
-          <button
-            onClick={handleGoToPage}
-            value={1}
-            disabled={isSelected === 1}
-            className={`${
-              isSelected !== 1
-                ? 'text-goodreads-mybooks-green hover:underline'
-                : ''
-            }
-          `}
-          >
-            1
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={handleGoToPage}
-            value={2}
-            disabled={isSelected === 2}
-            className={`${
-              isSelected !== 2
-                ? 'text-goodreads-mybooks-green hover:underline'
-                : ''
-            }
-          `}
-          >
-            2
-          </button>
-        </li>
+        {isSelected > 5 && (
+          <>
+            <li>
+              <button
+                onClick={handleGoToPage}
+                value={1}
+                disabled={isSelected === 1}
+                className={`${
+                  isSelected !== 1
+                    ? 'text-goodreads-mybooks-green hover:underline'
+                    : ''
+                }
+        `}
+              >
+                1
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={handleGoToPage}
+                value={2}
+                disabled={isSelected === 2}
+                className={`${
+                  isSelected !== 2
+                    ? 'text-goodreads-mybooks-green hover:underline'
+                    : ''
+                }
+        `}
+              >
+                2
+              </button>
+            </li>
+            <span>...</span>
+          </>
+        )}
+        {createPages()}
       </ul>
+      <span>...</span>
       <span>
         <button
           onClick={handleNextClick}

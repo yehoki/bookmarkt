@@ -57,7 +57,7 @@ export const getTimeDifference = (timeNow: number, timeThen: number) => {
   if (timeDifference / 60 >= 1 && timeDifference / 3600 < 1) {
     return `${Math.floor(timeDifference / 60)}m`;
   }
-  if (timeDifference / 3600 >= 1 && timeDifference / (3600 * 60) < 1) {
+  if (timeDifference / 3600 >= 1 && timeDifference / (3600 * 24) < 1) {
     return `${Math.floor(timeDifference / 3600)}h`;
   } else {
     return `Over a day ago`;
