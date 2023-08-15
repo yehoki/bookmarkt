@@ -8,13 +8,15 @@ import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
 
 interface PageProps {
   params: { search: string };
-  searchParams?: {
+  searchParams: {
     [key: string]: string | string[] | undefined;
   };
 }
 
 const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
   const currentUser = await getCurrentUser();
+
+  const page = searchParams['page'] ?? '1';
 
   const query =
     searchParams && searchParams.q && typeof searchParams.q === 'string'
@@ -23,7 +25,11 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
   const userId = currentUser ? currentUser.id : '';
 
   if (!currentUser) {
-    const booksFromSearch = await getBooksFromSearch(query);
+    const booksFromSearch = await getBooksFromSearch(
+      query,
+      10,
+      Number(page) - 1
+    );
     const returnBooks = booksFromSearch?.items.map((book) => ({
       ...book,
       reviewData: {
@@ -37,9 +43,9 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
       <div className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2">
         <div className="flex flex-row mt-[15px]">
           <div className="w-[625px]">
-            <div className="font-bold text-xl text-goodreads-brown mb-4">
+            <h1 className="font-bold text-xl text-goodreads-brown mb-4">
               Search
-            </div>
+            </h1>
             <div>
               <SearchBox query={query} />
               <div>
@@ -60,7 +66,7 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
     );
   }
 
-  const finalBooks = await getUserBookData(query, userId);
+  const finalBooks = await getUserBookData(query, userId, Number(page) - 1);
   const userBookshelves = await getCurrentUserBookshelves();
   return (
     <div className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2">

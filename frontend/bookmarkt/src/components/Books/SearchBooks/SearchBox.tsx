@@ -33,7 +33,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ query }) => {
           </div>
         </form>
       </div>
-      <div>Select</div>
+      {/* <div>Select</div> */}
     </div>
   );
 };

@@ -3,11 +3,11 @@ import getCurrentUserBookshelves from './getCurrentUserBookshelves';
 import getReviewsByUserId from './getReviewsByUserId';
 import getUserBooks from './getUserBooks';
 
-export const getUserBookData = async (query: string, userId: string) => {
+export const getUserBookData = async (query: string, userId: string, page: number) => {
   const userBooks = await getUserBooks(userId);
   const userBookData = userBooks?.bookData;
   const userGoogleBooks = userBookData?.map((book) => book.googleId);
-  const booksFromSearch = await getBooksFromSearch(query);
+  const booksFromSearch = await getBooksFromSearch(query, 10, page);
   const ownedBooks = booksFromSearch?.items.map((book) => {
     return userGoogleBooks?.includes(book.id);
   });

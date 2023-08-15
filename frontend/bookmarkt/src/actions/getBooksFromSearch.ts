@@ -49,25 +49,29 @@ export interface GoogleSearchBooksInterface {
   items: GoogleBookItemInterface[];
 }
 
-export async function getBooksFromSearch(query: string, maxResults = 10) {
+export async function getBooksFromSearch(
+  query: string,
+  maxResults = 10,
+  startIndex = 1
+) {
   const partialResponse =
     'totalItems,items(id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers))';
 
   const res = await fetch(
     `${googleAPIBaseUrl}/volumes/?q=${parseQuery(
       query
-    )}&fields=${partialResponse}&key=${GOOGLE_API_KEY}&maxResults=${maxResults}`,
+    )}&fields=${partialResponse}&key=${GOOGLE_API_KEY}&startIndex=${startIndex}&maxResults=${maxResults}`,
     {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
       next: {
-        revalidate: 60*10,
+        revalidate: 60 * 10,
       },
     }
   );
-
+  console.log(res.url)
   if (!res.ok) {
     return null;
   }

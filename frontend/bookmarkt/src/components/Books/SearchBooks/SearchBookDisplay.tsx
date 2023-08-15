@@ -29,11 +29,11 @@ const SearchBookDisplay: React.FC<SearchBookDisplayProps> = ({
     );
   });
   return (
-    <div>
-      <div>Page 1 of about {resultSize} results</div>
+    <>
+      <div className="text-sm pt-4">Page 1 of about {resultSize} results</div>
       <hr className="border-[1px]" />
       <div className="flex flex-col text-sm">{allBooks}</div>
-    </div>
+    </>
   );
 };
 
