@@ -16,6 +16,7 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
   const searchParams = useSearchParams();
   const searchResults = useResultsStore();
   const maxPages = Math.floor(resultSize / 10);
+
   const page = searchParams?.get('page') ?? '1';
   const hasNext = Number(page) < maxPages;
   const hasPrev = Number(page) > 1;
@@ -30,7 +31,7 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
   const createPages = () => {
     if (Number(page) < 6) {
       const pageArray = [];
-      for (let i = 0; i < 9; i++) {
+      for (let i = 0; i < Math.min(maxPages, 9); i++) {
         pageArray.push(i + 1);
       }
       return pageArray.map((numb) => (
@@ -50,9 +51,31 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
           </button>
         </li>
       ));
-    } else if (Number(page) >= 6 && Number(page) < maxPages) {
+    } else if (Number(page) >= 6 && Number(page) < 93) {
       const pageArray = [];
       for (let i = Number(page) - 3; i < Number(page) + 3; i++) {
+        pageArray.push(i);
+      }
+      return pageArray.map((numb) => (
+        <li key={numb}>
+          <button
+            onClick={handleGoToPage}
+            value={numb}
+            disabled={isSelected === numb}
+            className={`${
+              isSelected !== numb
+                ? 'text-goodreads-mybooks-green hover:underline'
+                : ''
+            }
+        `}
+          >
+            {numb}
+          </button>
+        </li>
+      ));
+    } else if (Number(page) >= 6 && Number(page) <= 100) {
+      const pageArray = [];
+      for (let i = Number(page) - 3; i <= 100; i++) {
         pageArray.push(i);
       }
       return pageArray.map((numb) => (
@@ -129,6 +152,10 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
     return router.refresh();
   }, [searchParams, router, page]);
 
+  if (maxPages < 1) {
+    return <></>;
+  }
+
   return (
     <div className="float-right flex gap-1 items-center text-xs py-8">
       <span>
@@ -180,8 +207,77 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
           </>
         )}
         {createPages()}
+        {maxPages < 100 && isSelected < maxPages - 5 && (
+          <>
+            <span>...</span>
+            <li>
+              <button
+                onClick={handleGoToPage}
+                value={maxPages - 1}
+                disabled={isSelected === maxPages - 1}
+                className={`${
+                  isSelected !== maxPages - 1
+                    ? 'text-goodreads-mybooks-green hover:underline'
+                    : ''
+                }
+        `}
+              >
+                {maxPages - 1}
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={handleGoToPage}
+                value={maxPages}
+                disabled={isSelected === maxPages}
+                className={`${
+                  isSelected !== maxPages
+                    ? 'text-goodreads-mybooks-green hover:underline'
+                    : ''
+                }
+        `}
+              >
+                {maxPages}
+              </button>
+            </li>
+          </>
+        )}
+        {maxPages >= 100 && isSelected < 93 && (
+          <>
+            <span>...</span>
+            <li>
+              <button
+                onClick={handleGoToPage}
+                value={99}
+                disabled={isSelected === 99}
+                className={`${
+                  isSelected !== maxPages - 99
+                    ? 'text-goodreads-mybooks-green hover:underline'
+                    : ''
+                }
+        `}
+              >
+                99
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={handleGoToPage}
+                value={100}
+                disabled={isSelected === 100}
+                className={`${
+                  isSelected !== 100
+                    ? 'text-goodreads-mybooks-green hover:underline'
+                    : ''
+                }
+        `}
+              >
+                100
+              </button>
+            </li>
+          </>
+        )}
       </ul>
-      <span>...</span>
       <span>
         <button
           onClick={handleNextClick}

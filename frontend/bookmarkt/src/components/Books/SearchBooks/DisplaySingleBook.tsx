@@ -58,7 +58,9 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({
         border-goodreads-brown/20 border rounded-sm"
             target="_blank"
             href={`https://www.amazon.co.uk/s?k=${
-              book.volumeInfo.industryIdentifiers
+              book.volumeInfo.industryIdentifiers &&
+              book.volumeInfo.industryIdentifiers[1] &&
+              book.volumeInfo.industryIdentifiers[1].identifier
                 ? book.volumeInfo.industryIdentifiers[1].identifier
                 : '/'
             }`}
