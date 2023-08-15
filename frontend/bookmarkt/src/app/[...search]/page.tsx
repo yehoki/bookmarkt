@@ -5,6 +5,7 @@ import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import SearchBookDisplay from '@/components/Books/SearchBooks/SearchBookDisplay';
 import SearchBox from '@/components/Books/SearchBooks/SearchBox';
 import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
+import Footer from '@/components/Footer';
 
 interface PageProps {
   params: { search: string };
@@ -40,54 +41,70 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
       bookshelf: '',
     }));
     return (
-      <div className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2">
-        <div className="flex flex-row mt-[15px]">
-          <div className="w-[625px]">
-            <h1 className="font-bold text-xl text-goodreads-brown mb-4">
-              Search
-            </h1>
-            <div>
-              <SearchBox query={query} />
+      <>
+        <div
+          className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2
+        pb-[100px]
+        "
+        >
+          <div className="flex flex-row mt-[15px]">
+            <div className="w-[625px]">
+              <h1 className="font-bold text-xl text-goodreads-brown mb-4">
+                Search
+              </h1>
               <div>
-                <SearchBookDisplay
-                  resultSize={
-                    booksFromSearch?.totalItems
-                      ? booksFromSearch?.totalItems
-                      : 0
-                  }
-                  books={returnBooks ? returnBooks : []}
-                  bookshelves={[]}
-                />
+                <SearchBox query={query} />
+                <div>
+                  <SearchBookDisplay
+                    resultSize={
+                      booksFromSearch?.totalItems
+                        ? booksFromSearch?.totalItems
+                        : 0
+                    }
+                    books={returnBooks ? returnBooks : []}
+                    bookshelves={[]}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   const finalBooks = await getUserBookData(query, userId, Number(page) - 1);
   const userBookshelves = await getCurrentUserBookshelves();
   return (
-    <div className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2">
-      <div className="flex flex-row mt-[15px]">
-        <div className="w-[625px]">
-          <div className="font-bold text-xl text-goodreads-brown mb-4">
-            Search
-          </div>
-          <div>
-            <SearchBox query={query} />
+    <>
+      <div
+        className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2
+      pb-[100px]
+      "
+      >
+        <div className="flex flex-row mt-[15px]">
+          <div className="w-[625px]">
+            <div className="font-bold text-xl text-goodreads-brown mb-4">
+              Search
+            </div>
             <div>
-              <SearchBookDisplay
-                resultSize={finalBooks?.totalItems ? finalBooks?.totalItems : 0}
-                books={finalBooks?.items ? finalBooks?.items : []}
-                bookshelves={userBookshelves ? userBookshelves : []}
-              />
+              <SearchBox query={query} />
+              <div>
+                <SearchBookDisplay
+                  resultSize={
+                    finalBooks?.totalItems ? finalBooks?.totalItems : 0
+                  }
+                  books={finalBooks?.items ? finalBooks?.items : []}
+                  bookshelves={userBookshelves ? userBookshelves : []}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

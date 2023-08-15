@@ -5,6 +5,7 @@ import Image from 'next/image';
 import DisplaySingleBook from './DisplaySingleBook';
 import { Bookshelf, ReviewData } from '@prisma/client';
 import { GoogleBookItemInterface } from '@/actions/getBooksFromSearch';
+import SearchPaginationControls from './SearchPaginationControls';
 
 export interface SearchDisplayBook extends GoogleBookItemInterface {
   bookshelf?: string;
@@ -33,6 +34,7 @@ const SearchBookDisplay: React.FC<SearchBookDisplayProps> = ({
       <div className="text-sm pt-4">Page 1 of about {resultSize} results</div>
       <hr className="border-[1px]" />
       <div className="flex flex-col text-sm">{allBooks}</div>
+      <SearchPaginationControls resultSize={resultSize} />
     </>
   );
 };

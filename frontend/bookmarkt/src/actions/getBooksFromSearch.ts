@@ -70,8 +70,7 @@ export async function getBooksFromSearch(
         revalidate: 60 * 10,
       },
     }
-  );
-  console.log(res.url)
+  )
   if (!res.ok) {
     return null;
   }
