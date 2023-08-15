@@ -309,7 +309,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                   ))}
                 </Suspense>
               </div>
-              <MyBooksPaginationControls />
+              <MyBooksPaginationControls userId={userId} />
             </div>
           </div>
         </div>

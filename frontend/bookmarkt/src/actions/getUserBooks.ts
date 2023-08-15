@@ -2,8 +2,8 @@ import prisma from '@/lib/prismadb';
 
 export default async function getUserBooks(
   userId: string,
-  page?: 0,
-  perPage?: 20
+  page = 0,
+  perPage = 20
 ) {
   try {
     const currentUserBooks = await prisma.user.findFirst({
@@ -12,8 +12,8 @@ export default async function getUserBooks(
       },
       select: {
         bookData: {
-          skip: page ? page : 0,
-          take: perPage ? perPage : 20,
+          skip: page,
+          take: perPage,
         },
         bookProgress: true,
         reviews: true,
