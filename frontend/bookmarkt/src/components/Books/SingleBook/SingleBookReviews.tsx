@@ -40,8 +40,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
     ) {
       return router.push('/user/sign_up');
     }
-    const data: { bookData: BookData[]; reviews: Review[] } =
-      await getBooks.json();
+    const data: { bookData: BookData[]; reviews: Review[] } = checkReroute;
 
     if (!data.bookData.map((book) => book.googleId).includes(bookId)) {
       const bookInfo = await getSingleBook(bookId);

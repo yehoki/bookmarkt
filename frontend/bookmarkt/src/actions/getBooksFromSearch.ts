@@ -49,7 +49,7 @@ export interface GoogleSearchBooksInterface {
   items: GoogleBookItemInterface[];
 }
 
-export async function getBooksFromSearch(query: string, maxResults = 20) {
+export async function getBooksFromSearch(query: string, maxResults = 10) {
   const partialResponse =
     'totalItems,items(id,volumeInfo(title,subtitle,authors,publishedDate,description,imageLinks,industryIdentifiers))';
 

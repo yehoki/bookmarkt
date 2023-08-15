@@ -7,6 +7,7 @@ import Link from 'next/link';
 import RatingAndPublish from '../Ratings/RatingAndPublish';
 import { Bookshelf } from '@prisma/client';
 import { SearchDisplayBook } from './SearchBookDisplay';
+import SingleBookReviews from '../SingleBook/SingleBookReviews';
 
 interface DisplaySingleBookProps {
   book: SearchDisplayBook;
@@ -52,7 +53,14 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({
             currentBookshelf={book.bookshelf ? book.bookshelf : ''}
           />
         </div>
-        <div>Rate this book</div>
+        <div className="flex flex-col pl-4 items-start w-fit py-2">
+          <p className="text-xs text-neutral-400">Rate this book</p>
+          <SingleBookReviews
+            bookId={book.id}
+            reviewRating={book.userRating}
+            size={20}
+          />
+        </div>
       </div>
     </div>
   );

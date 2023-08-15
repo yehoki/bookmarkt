@@ -9,6 +9,7 @@ import { GoogleBookItemInterface } from '@/actions/getBooksFromSearch';
 export interface SearchDisplayBook extends GoogleBookItemInterface {
   bookshelf?: string;
   reviewData: ReviewData;
+  userRating: number;
 }
 
 interface SearchBookDisplayProps {
