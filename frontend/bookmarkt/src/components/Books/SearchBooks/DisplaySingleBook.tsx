@@ -52,6 +52,19 @@ const DisplaySingleBook: React.FC<DisplaySingleBookProps> = ({
             bookshelves={bookshelves}
             currentBookshelf={book.bookshelf ? book.bookshelf : ''}
           />
+          <a
+            className="px-6 py-1 bg-goodreads-beige hover:bg-[#ede6d6]
+        active:bg-goodreads-brown/20
+        border-goodreads-brown/20 border rounded-sm"
+            target="_blank"
+            href={`https://www.amazon.co.uk/s?k=${
+              book.volumeInfo.industryIdentifiers
+                ? book.volumeInfo.industryIdentifiers[1].identifier
+                : '/'
+            }`}
+          >
+            Get a copy
+          </a>
         </div>
         <div className="flex flex-col pl-4 items-start w-fit py-2">
           <p className="text-xs text-neutral-400">Rate this book</p>
