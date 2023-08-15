@@ -11,6 +11,7 @@ import DisplayBookshelves from '@/components/Books/MyBookSection/DisplayBookshel
 import MobileMyBook from '@/components/Books/MyBookSection/Mobile/MobileMyBook';
 import MobileMyBookDisplay from '@/components/Books/MyBookSection/Mobile/MobileMyBookDisplay';
 import MyBook from '@/components/Books/MyBookSection/MyBook';
+import MyBooksPaginationControls from '@/components/Books/MyBookSection/MyBooksPaginationControls';
 import DisplayStars from '@/components/Books/Ratings/DisplayStars';
 import BookReviewModal from '@/components/modals/BookReviewModal';
 import { UserBookData } from '@prisma/client';
@@ -25,8 +26,8 @@ interface UserBooksPageProps {
   };
   searchParams: {
     shelf: string;
-    perPage: number;
-    page: number;
+    perPage: string;
+    page: string;
   };
 }
 
@@ -42,7 +43,10 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   const currentUserReviews = await getReviewsByUserId(
     currentUser ? currentUser.id : ''
   );
-  const userBooks = await getUserBooks(userId);
+
+  const page = searchParams['page'] ?? '1';
+  const perPage = searchParams['perPage'] ?? '20';
+  const userBooks = await getUserBooks(userId, Number(page), Number(perPage));
   const currentUserBookshelves = await getUserBookselvesByUserId(userId);
   const loggedInUserBookshelves = await getUserBookselvesByUserId(
     currentUser ? currentUser.id : ''
@@ -305,6 +309,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                   ))}
                 </Suspense>
               </div>
+              <MyBooksPaginationControls />
             </div>
           </div>
         </div>

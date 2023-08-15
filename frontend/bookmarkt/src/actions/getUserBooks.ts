@@ -22,7 +22,6 @@ export default async function getUserBooks(
     if (!currentUserBooks) {
       return null;
     }
-    console.log(currentUserBooks.bookData.length);
     return currentUserBooks;
   } catch (err: any) {
     throw new Error(err);
