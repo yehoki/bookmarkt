@@ -36,6 +36,7 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
   useEffect(() => {
     // Sets the current page as state
     setIsSelected(Number(searchParams?.get('page') ?? '1'));
+    setPerPage(Number(searchParams?.get('perPage') ?? '20'));
   }, [searchParams]);
 
   const createPages = () => {
@@ -113,6 +114,40 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
     }
   };
 
+  const handlePreviousClick = useCallback(() => {
+    let currentQuery = {};
+    if (searchParams) {
+      currentQuery = qs.parse(searchParams.toString());
+    }
+    const updatedQuery: any = {
+      ...currentQuery,
+      page: Number(page) - 1,
+    };
+    const url = qs.stringifyUrl({
+      url: `/books/user/${userId}`,
+      query: updatedQuery,
+    });
+    router.push(url);
+    return router.refresh();
+  }, [searchParams, router, page, userId]);
+
+  const handleNextClick = useCallback(() => {
+    let currentQuery = {};
+    if (searchParams) {
+      currentQuery = qs.parse(searchParams.toString());
+    }
+    const updatedQuery: any = {
+      ...currentQuery,
+      page: Number(page) + 1,
+    };
+    const url = qs.stringifyUrl({
+      url: `/books/user/${userId}`,
+      query: updatedQuery,
+    });
+    router.push(url);
+    return router.refresh();
+  }, [searchParams, router, page, userId]);
+
   // Changing how many results to show per page
   const handlePerPageChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
@@ -123,6 +158,7 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
       }
       const updatedQuery: any = {
         ...currentQuery,
+        page: undefined,
         perPage: e.currentTarget.value,
       };
       const url = qs.stringifyUrl({
@@ -156,30 +192,32 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
   );
 
   return (
-    <div className="mt-4 text-sm text-neutral-400">
-      <span className="mr-2">per page</span>
-      <select
-        name="per-page"
-        id="per-page"
-        className="pl-1 pr-16 border rounded-sm
-    border-black text-black"
-        value={perPage}
-        onChange={handlePerPageChange}
-      >
-        <option value={10}>10</option>
-        <option value={20}>20</option>
-        <option value={30}>30</option>
-        <option value={40}>40</option>
-        <option value={50}>50</option>
-      </select>
-      <div className="float-right flex gap-1 items-center text-xs py-8">
+    <div className="mt-4 text-sm text-neutral-400 flex items-center justify-between">
+      <div>
+        <span className="mr-2">per page</span>
+        <select
+          name="per-page"
+          id="per-page"
+          className="pl-1 pr-16 border rounded-sm
+        border-black text-black"
+          value={perPage}
+          onChange={handlePerPageChange}
+        >
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+          <option value={30}>30</option>
+          <option value={40}>40</option>
+          <option value={50}>50</option>
+        </select>
+      </div>
+      <div className="flex gap-1 items-center text-xs">
         <span>
           <button
             className={`${
               hasPrev ? 'text-goodreads-mybooks-green hover:underline' : ''
             }
 `}
-            // onClick={handlePreviousClick}
+            onClick={handlePreviousClick}
             disabled={!hasPrev}
           >
             « previous
@@ -295,7 +333,7 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
         </ul>
         <span>
           <button
-            // onClick={handleNextClick}
+            onClick={handleNextClick}
             disabled={!hasNext}
             className={`${
               hasNext ? 'text-goodreads-mybooks-green hover:underline' : ''
