@@ -47,18 +47,12 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
 
   const page = searchParams['page'] ?? '1';
   const perPage = searchParams['perPage'] ?? '20';
+  const currentBookshelf = searchParams['shelf'] ?? 'All';
   const userBooks = await getUserBooks(userId, Number(page), Number(perPage));
   const currentUserBookshelves = await getUserBookselvesByUserId(userId);
   const loggedInUserBookshelves = await getUserBookselvesByUserId(
     currentUser ? currentUser.id : ''
   );
-
-  const currentUserBookLength = currentUserBookshelves
-    ? currentUserBookshelves.reduce(
-        (acc, val) => acc + val.googleBooks.length,
-        0
-      )
-    : 0;
 
   const currentBookshelfBooks = async () => {
     const queryShelf = searchParams.shelf;
@@ -83,6 +77,18 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   };
 
   const bookshelfBooks = await currentBookshelfBooks();
+
+  const currentUserBookLength = currentUserBookshelves
+    ? currentBookshelf === ''
+      ? currentUserBookshelves.reduce(
+          (acc, val) => acc + val.googleBooks.length,
+          0
+        )
+      : bookshelfBooks
+      ? bookshelfBooks.googleBooks.length
+      : 0
+    : 0;
+
   const currentBookshelfGoogleIds = bookshelfBooks
     ? bookshelfBooks.googleBooks.map(
         (bookshelfBook) => bookshelfBook.googleBookId
@@ -238,50 +244,50 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
           isCurrentUser={currentUser ? userId === currentUser.id : false}
         />
       </main>
-      <main className="hidden md:block pt-6 px-1 mx-auto max-w-[1000px] pb-[100px]">
-        <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
-          <h2
-            className="
+      <Suspense>
+        <main className="hidden md:block pt-6 px-1 mx-auto max-w-[1000px] pb-[100px]">
+          <div className="pb-2 border-b border-b-slate-300 flex items-center justify-between">
+            <h2
+              className="
     font-bold
     text-xl
     text-goodreads-mybooks-green
     "
-          >
-            My Books
-          </h2>
-          <div>Search</div>
-        </div>
-        {/* below header */}
-        <div>
-          <div className="flex flex-row">
-            {/* Left col */}
-            <div className="max-w-[200px] mr-5">
-              <div className="border-b border-b-slate-300">
-                <h3 className="font-semibold">Bookshelves</h3>
-                <DisplayBookshelves
-                  currentUserId={userId}
-                  bookshelves={
-                    currentUserBookshelves ? currentUserBookshelves : []
-                  }
-                />
+            >
+              My Books
+            </h2>
+            <div>Search</div>
+          </div>
+          {/* below header */}
+          <div>
+            <div className="flex flex-row">
+              {/* Left col */}
+              <div className="max-w-[200px] mr-5">
+                <div className="border-b border-b-slate-300">
+                  <h3 className="font-semibold">Bookshelves</h3>
+                  <DisplayBookshelves
+                    currentUserId={userId}
+                    bookshelves={
+                      currentUserBookshelves ? currentUserBookshelves : []
+                    }
+                  />
+                </div>
+                <div>
+                  <h3>Your reading activity</h3>
+                </div>
+                <div>
+                  <h3>Add books</h3>
+                </div>
+                <div>
+                  <h3>Tools</h3>
+                </div>
               </div>
-              <div>
-                <h3>Your reading activity</h3>
-              </div>
-              <div>
-                <h3>Add books</h3>
-              </div>
-              <div>
-                <h3>Tools</h3>
-              </div>
-            </div>
-            {/* Right col */}
-            <div className="flex-1 max-w-[700px] mx-auto">
-              <div
-                className="grid md:grid-cols-3 navOne:grid-cols-4 2xl:grid-cols-6 flex-[1_1_100%] 
+              {/* Right col */}
+              <div className="flex-1 max-w-[700px] mx-auto">
+                <div
+                  className="grid md:grid-cols-3 navOne:grid-cols-4 2xl:grid-cols-6 flex-[1_1_100%] 
                 gap-[2px] sm:gap-1 lg:gap-4 pt-2"
-              >
-                <Suspense>
+                >
                   {myBooksObject().map((book) => (
                     <>
                       {book && (
@@ -316,18 +322,18 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                       )}
                     </>
                   ))}
-                </Suspense>
+                </div>
+                <ClientOnly>
+                  <MyBooksPaginationControls
+                    resultSize={currentUserBookLength}
+                    userId={userId}
+                  />
+                </ClientOnly>
               </div>
-              <ClientOnly>
-                <MyBooksPaginationControls
-                  resultSize={currentUserBookLength}
-                  userId={userId}
-                />
-              </ClientOnly>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </Suspense>
     </>
   );
 };

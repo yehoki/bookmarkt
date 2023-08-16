@@ -151,8 +151,8 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
   // Changing how many results to show per page
   const handlePerPageChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
-      setPerPage(parseInt(e.currentTarget.value));
       let currentQuery = {};
+      const newPerPage = parseInt(e.currentTarget.value);
       if (searchParams) {
         currentQuery = qs.parse(searchParams.toString());
       }
@@ -166,6 +166,11 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
         query: updatedQuery,
       });
       router.push(url);
+      // Handles changing the route to prevent early hydration
+      setTimeout(() => {
+        setPerPage(newPerPage);
+      }, 700);
+
       return router.refresh();
     },
     [searchParams, router, userId]
@@ -210,140 +215,143 @@ const MyBooksPaginationControls: React.FC<MyBooksPaginationControlsProps> = ({
           <option value={50}>50</option>
         </select>
       </div>
-      <div className="flex gap-1 items-center text-xs">
-        <span>
-          <button
-            className={`${
-              hasPrev ? 'text-goodreads-mybooks-green hover:underline' : ''
-            }
+      {maxPages <= 1 && <></>}
+      {maxPages > 1 && (
+        <div className="flex gap-1 items-center text-xs">
+          <span>
+            <button
+              className={`${
+                hasPrev ? 'text-goodreads-mybooks-green hover:underline' : ''
+              }
 `}
-            onClick={handlePreviousClick}
-            disabled={!hasPrev}
-          >
-            « previous
-          </button>
-        </span>
-        <ul className="flex gap-[2px]">
-          {isSelected > 5 && (
-            <>
-              <li>
-                <button
-                  onClick={handleGoToPage}
-                  value={1}
-                  disabled={isSelected === 1}
-                  className={`${
-                    isSelected !== 1
-                      ? 'text-goodreads-mybooks-green hover:underline'
-                      : ''
-                  }
+              onClick={handlePreviousClick}
+              disabled={!hasPrev}
+            >
+              « previous
+            </button>
+          </span>
+          <ul className="flex gap-[2px]">
+            {isSelected > 5 && (
+              <>
+                <li>
+                  <button
+                    onClick={handleGoToPage}
+                    value={1}
+                    disabled={isSelected === 1}
+                    className={`${
+                      isSelected !== 1
+                        ? 'text-goodreads-mybooks-green hover:underline'
+                        : ''
+                    }
         `}
-                >
-                  1
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={handleGoToPage}
-                  value={2}
-                  disabled={isSelected === 2}
-                  className={`${
-                    isSelected !== 2
-                      ? 'text-goodreads-mybooks-green hover:underline'
-                      : ''
-                  }
+                  >
+                    1
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={handleGoToPage}
+                    value={2}
+                    disabled={isSelected === 2}
+                    className={`${
+                      isSelected !== 2
+                        ? 'text-goodreads-mybooks-green hover:underline'
+                        : ''
+                    }
         `}
-                >
-                  2
-                </button>
-              </li>
-              <span>...</span>
-            </>
-          )}
-          {createPages()}
-          {maxPages < 100 && isSelected < maxPages - 5 && (
-            <>
-              <span>...</span>
-              <li>
-                <button
-                  onClick={handleGoToPage}
-                  value={maxPages - 1}
-                  disabled={isSelected === maxPages - 1}
-                  className={`${
-                    isSelected !== maxPages - 1
-                      ? 'text-goodreads-mybooks-green hover:underline'
-                      : ''
-                  }
+                  >
+                    2
+                  </button>
+                </li>
+                <span>...</span>
+              </>
+            )}
+            {createPages()}
+            {maxPages < 100 && isSelected < maxPages - 5 && (
+              <>
+                <span>...</span>
+                <li>
+                  <button
+                    onClick={handleGoToPage}
+                    value={maxPages - 1}
+                    disabled={isSelected === maxPages - 1}
+                    className={`${
+                      isSelected !== maxPages - 1
+                        ? 'text-goodreads-mybooks-green hover:underline'
+                        : ''
+                    }
         `}
-                >
-                  {maxPages - 1}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={handleGoToPage}
-                  value={maxPages}
-                  disabled={isSelected === maxPages}
-                  className={`${
-                    isSelected !== maxPages
-                      ? 'text-goodreads-mybooks-green hover:underline'
-                      : ''
-                  }
+                  >
+                    {maxPages - 1}
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={handleGoToPage}
+                    value={maxPages}
+                    disabled={isSelected === maxPages}
+                    className={`${
+                      isSelected !== maxPages
+                        ? 'text-goodreads-mybooks-green hover:underline'
+                        : ''
+                    }
         `}
-                >
-                  {maxPages}
-                </button>
-              </li>
-            </>
-          )}
-          {maxPages >= 100 && isSelected < 93 && (
-            <>
-              <span>...</span>
-              <li>
-                <button
-                  onClick={handleGoToPage}
-                  value={99}
-                  disabled={isSelected === 99}
-                  className={`${
-                    isSelected !== maxPages - 99
-                      ? 'text-goodreads-mybooks-green hover:underline'
-                      : ''
-                  }
+                  >
+                    {maxPages}
+                  </button>
+                </li>
+              </>
+            )}
+            {maxPages >= 100 && isSelected < 93 && (
+              <>
+                <span>...</span>
+                <li>
+                  <button
+                    onClick={handleGoToPage}
+                    value={99}
+                    disabled={isSelected === 99}
+                    className={`${
+                      isSelected !== maxPages - 99
+                        ? 'text-goodreads-mybooks-green hover:underline'
+                        : ''
+                    }
         `}
-                >
-                  99
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={handleGoToPage}
-                  value={100}
-                  disabled={isSelected === 100}
-                  className={`${
-                    isSelected !== 100
-                      ? 'text-goodreads-mybooks-green hover:underline'
-                      : ''
-                  }
+                  >
+                    99
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={handleGoToPage}
+                    value={100}
+                    disabled={isSelected === 100}
+                    className={`${
+                      isSelected !== 100
+                        ? 'text-goodreads-mybooks-green hover:underline'
+                        : ''
+                    }
         `}
-                >
-                  100
-                </button>
-              </li>
-            </>
-          )}
-        </ul>
-        <span>
-          <button
-            onClick={handleNextClick}
-            disabled={!hasNext}
-            className={`${
-              hasNext ? 'text-goodreads-mybooks-green hover:underline' : ''
-            }
+                  >
+                    100
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+          <span>
+            <button
+              onClick={handleNextClick}
+              disabled={!hasNext}
+              className={`${
+                hasNext ? 'text-goodreads-mybooks-green hover:underline' : ''
+              }
           `}
-          >
-            next »
-          </button>
-        </span>
-      </div>
+            >
+              next »
+            </button>
+          </span>
+        </div>
+      )}
     </div>
   );
 };
