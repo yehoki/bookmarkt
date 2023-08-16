@@ -13,6 +13,7 @@ import MobileMyBookDisplay from '@/components/Books/MyBookSection/Mobile/MobileM
 import MyBook from '@/components/Books/MyBookSection/MyBook';
 import MyBooksPaginationControls from '@/components/Books/MyBookSection/MyBooksPaginationControls';
 import DisplayStars from '@/components/Books/Ratings/DisplayStars';
+import ClientOnly from '@/components/ClientOnly';
 import BookReviewModal from '@/components/modals/BookReviewModal';
 import { UserBookData } from '@prisma/client';
 import Image from 'next/image';
@@ -51,6 +52,14 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   const loggedInUserBookshelves = await getUserBookselvesByUserId(
     currentUser ? currentUser.id : ''
   );
+
+  const currentUserBookLength = currentUserBookshelves
+    ? currentUserBookshelves.reduce(
+        (acc, val) => acc + val.googleBooks.length,
+        0
+      )
+    : 0;
+
   const currentBookshelfBooks = async () => {
     const queryShelf = searchParams.shelf;
     const books = await getUsersBooksFromBookshelf(queryShelf, userId);
@@ -309,7 +318,12 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                   ))}
                 </Suspense>
               </div>
-              <MyBooksPaginationControls userId={userId} />
+              <ClientOnly>
+                <MyBooksPaginationControls
+                  resultSize={currentUserBookLength}
+                  userId={userId}
+                />
+              </ClientOnly>
             </div>
           </div>
         </div>

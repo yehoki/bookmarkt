@@ -1,6 +1,5 @@
 'use client';
 
-import useResultsStore from '@/hooks/useResultsStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'query-string';
 import { MouseEvent, useCallback, useEffect, useState } from 'react';
@@ -14,7 +13,6 @@ const SearchPaginationControls: React.FC<SearchPaginationControlsProps> = ({
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const searchResults = useResultsStore();
   const maxPages = Math.floor(resultSize / 10);
 
   const page = searchParams?.get('page') ?? '1';

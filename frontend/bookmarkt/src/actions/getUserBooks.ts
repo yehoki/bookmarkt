@@ -12,7 +12,7 @@ export default async function getUserBooks(
       },
       select: {
         bookData: {
-          skip: page,
+          skip: page === 0 ? 0 : (page - 1) * perPage,
           take: perPage,
         },
         bookProgress: true,

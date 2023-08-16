@@ -164,7 +164,7 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
             </h2>
             <ul>
               {myBooks.map((book) => (
-                <>
+                <div key={book?.googleId}>
                   {book && (
                     <MobileMyBook
                       title={book.title}
@@ -176,7 +176,7 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
                       googleId={book.googleId}
                     />
                   )}
-                </>
+                </div>
               ))}
             </ul>
           </section>
