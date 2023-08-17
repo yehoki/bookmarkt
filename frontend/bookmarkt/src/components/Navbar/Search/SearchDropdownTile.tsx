@@ -30,24 +30,29 @@ const SearchDropdownTile: React.FC<SearchDropdownTileProps> = ({
           onClick={onClick}
           href={`/books/${id}`}
         >
-          <div className="flex flex-row">
-            <div className="p-1 pb-0 mr-2 max-h-[55px] overflow-y-hidden">
-              {imageLink ? (
-                <Image
-                  src={imageLink}
-                  alt={`${title} book cover`}
-                  height={30}
-                  width={50}
-                />
-              ) : (
-                <Image
-                  src="/images/empty-book.png"
-                  alt={`${title} book cover`}
-                  height={30}
-                  width={50}
-                />
-              )}
+          <div className="flex flex-row gap-2">
+            <div
+              className="max-h-[55px] overflow-y-hidden
+            min-w-[50px] ml-2 pt-1
+            "
+            >
+              <div
+                className="
+            relative h-[75px] w-[50px] 
+            "
+              >
+                {imageLink ? (
+                  <Image src={imageLink} alt={`${title} book cover`} fill />
+                ) : (
+                  <Image
+                    src="/images/empty-book.png"
+                    alt={`${title} book cover`}
+                    fill
+                  />
+                )}
+              </div>
             </div>
+
             <div className="flex flex-col justify-center min-w-[1%] break-words">
               <div className="overflow-hidden whitespace-nowrap text-ellipsis">
                 {title} {subtitle ? `(${subtitle})` : ''}

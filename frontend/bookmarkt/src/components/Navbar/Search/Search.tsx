@@ -31,19 +31,19 @@ const Search = () => {
     setIsSearchDropdownOpen((value) => !value);
   }, []);
 
-  const displayResults = async () => {
+  const displayResults = useCallback(async () => {
     let books = await getBooksFromSearch(searchValue);
     if (books) {
       searchResultsStore.setResultSize(books.totalItems);
       setSearchResults(books.items);
     }
-  };
+  }, [searchValue, searchResultsStore]);
 
   const ref = useRef(displayResults);
 
   useEffect(() => {
     ref.current = displayResults;
-  }, [searchValue]);
+  }, [searchValue, displayResults]);
 
   const debouncedRequest = useMemo(() => {
     const func = () => {
