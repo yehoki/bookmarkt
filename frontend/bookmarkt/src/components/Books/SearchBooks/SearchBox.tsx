@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useCallback, useState } from 'react';
 
 interface SearchBoxProps {
   query: string;
@@ -8,11 +9,20 @@ interface SearchBoxProps {
 
 const SearchBox: React.FC<SearchBoxProps> = ({ query }) => {
   const [searchQuery, setSearchQuery] = useState(query);
+  const router = useRouter();
+
+  const handleSubmit = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      return router.push(`/search?q=${searchQuery}`);
+    },
+    [router, searchQuery]
+  );
 
   return (
     <div className="w-full  bg-[#eeeeee] rounded-sm px-3 py-2">
       <div className="w-full ">
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={handleSubmit}>
           <div className="flex gap-1 pr-8 text-sm">
             <input
               type="text"
