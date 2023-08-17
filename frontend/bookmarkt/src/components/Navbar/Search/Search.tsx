@@ -37,7 +37,6 @@ const Search = () => {
       searchResultsStore.setResultSize(books.totalItems);
       setSearchResults(books.items);
     }
-    return;
   };
 
   const ref = useRef(displayResults);
@@ -70,11 +69,12 @@ const Search = () => {
         return router.push(`/books/${bookFromISBN.id}`);
       }
     }
-    let books = await getBooksFromSearch(searchValue);
-    if (books) {
-      searchResultsStore.setResultSize(books.totalItems);
-      setSearchResults(books.items);
-    }
+    await displayResults();
+    router.push(`/search?q=${searchValue}`);
+    setIsSearchDropdownOpen(false);
+    setSearchValue('');
+    searchResultsStore.setResults(searchResults);
+    return;
   };
 
   const handleSeeMoreResults = async () => {
