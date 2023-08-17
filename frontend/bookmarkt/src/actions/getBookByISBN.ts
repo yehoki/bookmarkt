@@ -1,4 +1,7 @@
-import { GoogleBookItemInterface, GoogleSearchBooksInterface } from './getBooksFromSearch';
+import {
+  GoogleBookItemInterface,
+  GoogleSearchBooksInterface,
+} from './getBooksFromSearch';
 import { GOOGLE_API_KEY } from '@/utils/config';
 
 const googleAPIISBNSearchUrl =
@@ -14,5 +17,8 @@ export async function getBookByISBN(ISBN: string) {
     return null;
   }
   const bookData: GoogleSearchBooksInterface = await res.json();
+  if(!bookData.items) {
+    return null;
+  }
   return bookData.items[0];
 }
