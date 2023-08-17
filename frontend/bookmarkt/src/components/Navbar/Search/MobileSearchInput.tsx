@@ -19,6 +19,8 @@ import {
 } from 'react';
 import { BiLoaderAlt } from 'react-icons/bi';
 import SearchDropdownTile from './SearchDropdownTile';
+import { getBookByISBN } from '@/actions/getBookByISBN';
+import { useRouter } from 'next/navigation';
 
 const MobileSearchInput = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -28,6 +30,7 @@ const MobileSearchInput = () => {
   );
   const mobileSearch = useMobileSearch();
   const searchResultsStore = useResultsStore();
+  const router = useRouter();
 
   const displayResults = useCallback(async () => {
     setIsLoading(true);
@@ -35,7 +38,6 @@ const MobileSearchInput = () => {
     if (books) {
       searchResultsStore.setResultSize(books.totalItems);
       setSearchResults(books.items);
-      console.log(books);
     }
     setIsLoading(false);
   }, [searchValue, searchResultsStore]);
@@ -64,11 +66,18 @@ const MobileSearchInput = () => {
 
   const handleSearchSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const googleBookSearchResults = await getBooksFromSearch(searchValue, 5);
-    if (googleBookSearchResults) {
-      setSearchResults(googleBookSearchResults.items);
+    if (searchValue.length === 13) {
+      const bookFromISBN = await getBookByISBN(searchValue);
+      if (bookFromISBN) {
+        return router.push(`/books/${bookFromISBN.id}`);
+      }
     }
+    await displayResults();
+    router.push(`/search?q=${searchValue}`);
+    mobileSearch.onClose();
+    setSearchValue('');
+    searchResultsStore.setResults(searchResults);
+    return;
   };
 
   return (

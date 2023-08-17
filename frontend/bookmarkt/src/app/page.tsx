@@ -208,7 +208,6 @@ export default async function Page() {
             </div>
           </div>
           <div className="flex flex-col gap-2 mx-auto">
-            Review tab
             {mostRecentReviews.length === 0 ? (
               <div className="text-sm text-center">No more updates</div>
             ) : (
