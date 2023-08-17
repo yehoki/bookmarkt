@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { BiSearch } from 'react-icons/bi';
+import { BiLoaderAlt, BiSearch } from 'react-icons/bi';
 import SearchDropdownTile from './SearchDropdownTile';
 import useResultsStore from '@/hooks/useResultsStore';
 import { getBookByISBN } from '@/actions/getBookByISBN';
@@ -24,6 +24,7 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState<GoogleBookItemInterface[]>(
     []
   );
+  const [isLoading, setIsLoading] = useState(false);
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const searchResultsStore = useResultsStore();
   const router = useRouter();
@@ -32,11 +33,13 @@ const Search = () => {
   }, []);
 
   const displayResults = useCallback(async () => {
+    setIsLoading(true);
     let books = await getBooksFromSearch(searchValue);
     if (books) {
       searchResultsStore.setResultSize(books.totalItems);
       setSearchResults(books.items);
     }
+    setIsLoading(false);
   }, [searchValue, searchResultsStore]);
 
   const ref = useRef(displayResults);
@@ -134,8 +137,12 @@ const Search = () => {
             placeholder="Search books"
             onFocus={toggleSearchDropdown}
           />
-          <button type="submit">
-            <BiSearch size={18} />
+          <button type="submit" className=" flex items-center pr-1">
+            {isLoading ? (
+              <BiLoaderAlt size={18} className="animate-spin w-fit h-fit" />
+            ) : (
+              <BiSearch size={18} />
+            )}
           </button>
         </form>
         <div

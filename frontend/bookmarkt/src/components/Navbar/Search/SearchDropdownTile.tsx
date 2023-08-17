@@ -19,7 +19,6 @@ const SearchDropdownTile: React.FC<SearchDropdownTileProps> = ({
   author,
   id,
   imageLink,
-  onClick,
   searchValue,
 }) => {
   return (
@@ -27,7 +26,6 @@ const SearchDropdownTile: React.FC<SearchDropdownTileProps> = ({
       {id ? (
         <Link
           className="hover:bg-goodreads-beige bg-white border-y-[1px] border-[#D8D8D8]"
-          onClick={onClick}
           href={`/books/${id}`}
         >
           <div className="flex flex-row gap-2">
@@ -62,7 +60,7 @@ const SearchDropdownTile: React.FC<SearchDropdownTileProps> = ({
           </div>
         </Link>
       ) : (
-        <Link onClick={onClick} href={`/search?q=${searchValue}`}>
+        <Link href={`/search?q=${searchValue}`}>
           <div className="bg-white border-[1px] w-full leading-8"></div>
           <>{title}</>
         </Link>
