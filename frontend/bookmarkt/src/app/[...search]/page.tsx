@@ -6,6 +6,7 @@ import SearchBookDisplay from '@/components/Books/SearchBooks/SearchBookDisplay'
 import SearchBox from '@/components/Books/SearchBooks/SearchBox';
 import { getBooksFromSearch } from '@/actions/getBooksFromSearch';
 import Footer from '@/components/Footer';
+import EmptyBookState from '@/components/Books/EmptyBookState';
 
 interface PageProps {
   params: { search: string };
@@ -24,6 +25,17 @@ const Page: React.FC<PageProps> = async ({ params, searchParams }) => {
       ? searchParams.q
       : '';
   const userId = currentUser ? currentUser.id : '';
+
+  if (query === '') {
+    return (
+      <main
+        className="pt-[100px] navOne:pt-[50px] mx-auto max-w-[970px] text-left px-2
+      pb-[100px]"
+      >
+        <EmptyBookState id="" />
+      </main>
+    );
+  }
 
   if (!currentUser) {
     const booksFromSearch = await getBooksFromSearch(
