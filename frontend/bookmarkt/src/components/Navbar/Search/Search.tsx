@@ -1,6 +1,13 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { BiSearch } from 'react-icons/bi';
 import SearchDropdownTile from './SearchDropdownTile';
 import useResultsStore from '@/hooks/useResultsStore';
@@ -10,6 +17,7 @@ import {
   GoogleBookItemInterface,
   getBooksFromSearch,
 } from '@/actions/getBooksFromSearch';
+import { debounce } from 'lodash';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -22,6 +30,37 @@ const Search = () => {
   const toggleSearchDropdown = useCallback(() => {
     setIsSearchDropdownOpen((value) => !value);
   }, []);
+
+  const displayResults = async () => {
+    let books = await getBooksFromSearch(searchValue);
+    if (books) {
+      searchResultsStore.setResultSize(books.totalItems);
+      setSearchResults(books.items);
+    }
+    return;
+  };
+
+  const ref = useRef(displayResults);
+
+  useEffect(() => {
+    ref.current = displayResults;
+  }, [searchValue]);
+
+  const debouncedRequest = useMemo(() => {
+    const func = () => {
+      ref.current?.();
+    };
+    return debounce(func, 1000);
+  }, []);
+
+  const handleSearchChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const currentValue = e.currentTarget.value;
+      setSearchValue(currentValue);
+      debouncedRequest();
+    },
+    [debouncedRequest]
+  );
 
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,7 +130,7 @@ const Search = () => {
             className="w-full outline-none py-1 pr-[26px] pl-2 rounded-[4px]"
             type="text"
             value={searchValue}
-            onChange={(e) => setSearchValue(e.currentTarget.value)}
+            onChange={handleSearchChange}
             placeholder="Search books"
             onFocus={toggleSearchDropdown}
           />
