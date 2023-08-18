@@ -41,6 +41,24 @@ const BookReviewModal = () => {
     bookReviewModal.clearBookDetails();
   };
 
+  const handleRemoveFromBooks = useCallback(async () => {
+    setIsLoading(true);
+    if (bookReviewModal.bookDetails.googleBookId !== '') {
+      const res = await fetch(
+        `/api/users/books/${bookReviewModal.bookDetails.googleBookId}`,
+        {
+          method: 'DELETE',
+        }
+      );
+      if (!res.ok) {
+        console.log('Could not remove book');
+      }
+      setIsLoading(false);
+      bookReviewModal.onClose();
+      return router.refresh();
+    }
+  }, [bookReviewModal, router]);
+
   const handleClearRating = useCallback(
     async (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -168,7 +186,7 @@ const BookReviewModal = () => {
                 onChange={(e) => setTextAreaValue(e.currentTarget.value)}
               />
             </div>
-            <div>
+            <div className="relative">
               <input
                 disabled={isLoading}
                 type="submit"
@@ -177,6 +195,16 @@ const BookReviewModal = () => {
                 hover:bg-goodreads-beige border-[1px] cursor-pointer
                 disabled:cursor-not-allowed disabled:opacity-50"
               />
+              <button
+                className="absolute right-0 top-0
+              font-semibold text-xs
+              hover:underline text-neutral-400
+              "
+                disabled={isLoading}
+                onClick={handleRemoveFromBooks}
+              >
+                Remove from my books
+              </button>
             </div>
           </form>
         </div>

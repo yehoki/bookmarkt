@@ -1,7 +1,7 @@
 import getCurrentUser from '@/actions/getCurrentUser';
 import prisma from '@/lib/prismadb';
-import { BookshelfBooks } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import { BookshelfBooks } from '@prisma/client';
 
 // Gets the currentUser's bookList
 export async function GET(req: Request) {
