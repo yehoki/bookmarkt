@@ -2,13 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { FormEvent, MouseEvent, useCallback, useMemo, useState } from 'react';
 import RatingAndPublish from '../Ratings/RatingAndPublish';
 import SingleBookReviews from '../SingleBook/SingleBookReviews';
 import useBookReviewModal from '@/hooks/useBookReviewModal';
 import { Bookshelf } from '@prisma/client';
 import AddBookButton from '../SearchBooks/AddBookButton';
 import { extractYearFromDate } from '@/utils/helper';
+import { useRouter } from 'next/navigation';
 
 interface MyBookProps {
   bookshelves: Bookshelf[];
@@ -25,6 +26,7 @@ interface MyBookProps {
   userReview: {
     rating: number;
     review?: string;
+    reviewId: string;
   };
   description: string;
   isCurrentUser: boolean;
@@ -45,8 +47,10 @@ const MyBook: React.FC<MyBookProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isBookShowing, setIsBookShowing] = useState(false);
+  const [isRatingHovering, setIsRatingHovering] = useState(false);
   const bookReviewModal = useBookReviewModal();
 
+  const router = useRouter();
   const handleEditReview = () => {
     bookReviewModal.setBookDetails({
       googleBookId: googleId,
@@ -81,6 +85,39 @@ const MyBook: React.FC<MyBookProps> = ({
     0,
     200
   );
+
+  const handleClearRating = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (userReview.reviewId !== '') {
+        const res = await fetch(`/api/review/${userReview.reviewId}/rating`, {
+          method: 'DELETE',
+        });
+        console.log(res);
+        if (!res.ok) {
+          console.log('Could not clear book rating');
+        }
+        return router.refresh();
+      }
+    },
+    [userReview, router]
+  );
+
+  const myRatingComponent = useCallback(() => {
+    if (isRatingHovering) {
+      return (
+        <form onSubmit={handleClearRating}>
+          <button
+            className="text-goodreads-mybooks-green cursor-pointer"
+            type="submit"
+          >
+            Clear rating
+          </button>
+        </form>
+      );
+    }
+    return <p>My rating:</p>;
+  }, [isRatingHovering, handleClearRating]);
 
   return (
     <div
@@ -168,7 +205,12 @@ const MyBook: React.FC<MyBookProps> = ({
           </div>
           <div className="flex gap-4 items-center text-xs  whitespace-nowrap">
             {userReview.rating ? (
-              <span className="">My rating:</span>
+              <span
+                onMouseOver={() => setIsRatingHovering(true)}
+                onMouseLeave={() => setIsRatingHovering(false)}
+              >
+                {myRatingComponent()}
+              </span>
             ) : (
               <span>Rate this book</span>
             )}

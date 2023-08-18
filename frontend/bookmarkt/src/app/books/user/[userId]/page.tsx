@@ -130,6 +130,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               userReview = {
                 rating: findUserReview.rating,
                 review: findUserReview.description,
+                id: findUserReview.id,
               };
             }
           }
@@ -155,10 +156,12 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               ? {
                   rating: userReview.rating,
                   review: userReview.review ? userReview.review : undefined,
+                  reviewId: userReview.id,
                 }
               : {
                   rating: 0,
                   review: undefined,
+                  reviewId: '',
                 },
             description: book.volumeInfo.description
               ? book.volumeInfo.description
@@ -184,6 +187,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               userReview = {
                 rating: findUserReview.rating,
                 review: findUserReview.description,
+                id: findUserReview.id,
               };
             }
           }
@@ -211,10 +215,12 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
               ? {
                   rating: userReview.rating,
                   review: userReview.review ? userReview.review : undefined,
+                  reviewId: userReview.id,
                 }
               : {
                   rating: 0,
                   review: undefined,
+                  reviewId: '',
                 },
             description: bookshelfBook.volumeInfo.description
               ? bookshelfBook.volumeInfo.description
