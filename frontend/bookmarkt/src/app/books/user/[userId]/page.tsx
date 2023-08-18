@@ -47,7 +47,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
 
   const page = searchParams['page'] ?? '1';
   const perPage = searchParams['perPage'] ?? '20';
-  const currentBookshelf = searchParams['shelf'] ?? 'All';
+  const currentBookshelf = searchParams['shelf'] ?? '';
   const userBooks = await getUserBooks(userId, Number(page), Number(perPage));
   const currentUserBookshelves = await getUserBookselvesByUserId(userId);
   const loggedInUserBookshelves = await getUserBookselvesByUserId(
@@ -79,7 +79,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
   const bookshelfBooks = await currentBookshelfBooks();
 
   const currentUserBookLength = currentUserBookshelves
-    ? currentBookshelf === ''
+    ? currentBookshelf === '' || currentBookshelf === 'All'
       ? currentUserBookshelves.reduce(
           (acc, val) => acc + val.googleBooks.length,
           0
