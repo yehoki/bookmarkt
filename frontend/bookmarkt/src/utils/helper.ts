@@ -43,6 +43,9 @@ export const handleDeleteReview = (
   ratingDeleted: number,
 ) => {
   const revisedSum = currentTotal - 1;
+  if(revisedSum < 1){
+    return 0;
+  }
   const revisedAverage =
     (currentAverage * currentTotal - ratingDeleted) / revisedSum;
   return parseFloat(revisedAverage.toFixed(2));

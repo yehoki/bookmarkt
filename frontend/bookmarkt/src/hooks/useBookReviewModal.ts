@@ -8,6 +8,7 @@ export type BookDetails = {
   thumbnailUrl?: string;
   userRating: number;
   userReview?: string;
+  userReviewId: string;
 };
 
 interface BookReviewModalStore {
@@ -30,6 +31,7 @@ const useBookReviewModal = create<BookReviewModalStore>((set) => ({
     authors: [],
     thumbnailUrl: '',
     userRating: 0,
+    userReviewId: ''
   },
   setBookDetails: (bookDetails:BookDetails) => set({bookDetails: bookDetails}),
   clearBookDetails: () => set({bookDetails:{
@@ -39,6 +41,7 @@ const useBookReviewModal = create<BookReviewModalStore>((set) => ({
     authors: [],
     thumbnailUrl: '',
     userRating: 0, 
+    userReviewId: ''
   }})
 }));
 

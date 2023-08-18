@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { RxCross1 } from 'react-icons/rx';
 import SingleBookReviews from '../Books/SingleBook/SingleBookReviews';
 import Link from 'next/link';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, MouseEvent, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { SITE_URL } from '@/utils/config';
 
@@ -19,14 +19,16 @@ const BookReviewModal = () => {
     thumbnailUrl,
     userRating,
     userReview,
+    userReviewId,
   } = bookReviewModal.bookDetails;
   const [textAreaValue, setTextAreaValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
     setTextAreaValue(userReview ? userReview : '');
-  }, [bookReviewModal]);
+  }, [bookReviewModal, userReview]);
 
   useEffect(() => {
     if (bookReviewModal.isOpen) {
@@ -38,6 +40,32 @@ const BookReviewModal = () => {
     bookReviewModal.onClose();
     bookReviewModal.clearBookDetails();
   };
+
+  const handleClearRating = useCallback(
+    async (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      setIsLoading(true);
+      if (bookReviewModal.bookDetails.userRating === 0) {
+        setIsLoading(false);
+        return;
+      }
+      if (bookReviewModal.bookDetails.userReviewId !== '') {
+        const res = await fetch(
+          `/api/review/${bookReviewModal.bookDetails.userReviewId}/rating`,
+          {
+            method: 'DELETE',
+          }
+        );
+        if (!res.ok) {
+          console.log('Could not clear book rating');
+        }
+        setIsLoading(false);
+        bookReviewModal.onClose();
+        return router.refresh();
+      }
+    },
+    [bookReviewModal, router]
+  );
 
   if (!bookReviewModal.isOpen) {
     return null;
@@ -112,15 +140,22 @@ const BookReviewModal = () => {
             <div className="border-b-[1px] border-neutral-200 py-1">
               <div className="flex justify-start">
                 My rating:
-                <div className="flex justify-start items-center pl-1">
+                <div className="flex justify-start items-center pl-1 gap-2">
                   <SingleBookReviews
                     bookId={googleBookId}
                     reviewRating={userRating}
                     size={18}
+                    backgroundGray
                   />
+                  <button
+                    className="text-xs cursor-pointer text-neutral-400"
+                    onClick={handleClearRating}
+                    disabled={isLoading}
+                  >
+                    Clear
+                  </button>
                 </div>
               </div>
-              <div></div>
             </div>
             <div className="border-b-[1px] border-neutral-200">
               <div className="py-1">What do you think?</div>
@@ -132,9 +167,6 @@ const BookReviewModal = () => {
                 value={textAreaValue}
                 onChange={(e) => setTextAreaValue(e.currentTarget.value)}
               />
-            </div>
-            <div>
-              <div></div>
             </div>
             <div>
               <input

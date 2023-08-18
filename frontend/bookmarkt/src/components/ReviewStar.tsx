@@ -8,6 +8,7 @@ interface ReviewStarProps {
   setRating: Dispatch<SetStateAction<number>>;
   currentRating: number;
   size?: number;
+  backgroundGray?: boolean;
 }
 
 const ReviewStar: React.FC<ReviewStarProps> = ({
@@ -15,6 +16,7 @@ const ReviewStar: React.FC<ReviewStarProps> = ({
   setRating,
   currentRating,
   size,
+  backgroundGray,
 }) => {
   return (
     <div
@@ -27,6 +29,8 @@ const ReviewStar: React.FC<ReviewStarProps> = ({
         ${
           rating <= currentRating
             ? 'fill-yellow-500 opacity-80'
+            : backgroundGray
+            ? 'fill-[#d6d6d6]'
             : 'fill-neutral-500'
         }
         
@@ -35,7 +39,11 @@ const ReviewStar: React.FC<ReviewStarProps> = ({
       <AiFillStar
         size={size ? size - 4 : 24}
         className={`${
-          rating <= currentRating ? 'fill-yellow-500 opacity-80' : 'fill-white'
+          rating <= currentRating
+            ? 'fill-yellow-500 opacity-80'
+            : backgroundGray
+            ? 'fill-[#d6d6d6]'
+            : 'fill-white'
         }`}
       />
     </div>

@@ -73,6 +73,7 @@ const MyBook: React.FC<MyBookProps> = ({
       thumbnailUrl: thumbnailUrl,
       userRating: userRating,
       userReview: userReview.review,
+      userReviewId: userReview.reviewId,
     });
     bookReviewModal.onOpen();
   };
@@ -100,7 +101,7 @@ const MyBook: React.FC<MyBookProps> = ({
   );
 
   const handleClearRating = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
+    async (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (userReview.reviewId !== '') {
         const res = await fetch(`/api/review/${userReview.reviewId}/rating`, {
@@ -119,14 +120,12 @@ const MyBook: React.FC<MyBookProps> = ({
   const myRatingComponent = useCallback(() => {
     if (isRatingHovering) {
       return (
-        <form onSubmit={handleClearRating}>
-          <button
-            className="text-goodreads-mybooks-green cursor-pointer"
-            type="submit"
-          >
-            Clear rating
-          </button>
-        </form>
+        <button
+          className="text-goodreads-mybooks-green cursor-pointer"
+          onClick={handleClearRating}
+        >
+          Clear rating
+        </button>
       );
     }
     return <p>My rating:</p>;
@@ -231,6 +230,7 @@ const MyBook: React.FC<MyBookProps> = ({
               bookId={googleId}
               reviewRating={userRating}
               size={18}
+              backgroundGray
             />
           </div>
         </div>

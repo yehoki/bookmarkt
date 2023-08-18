@@ -13,6 +13,7 @@ interface SingleBookReviewsProps {
   reviewRating: number;
   size?: number;
   gap?: boolean;
+  backgroundGray?: boolean;
 }
 
 const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
@@ -20,6 +21,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
   reviewRating,
   size,
   gap,
+  backgroundGray,
 }) => {
   const [stars, setStars] = useState(reviewRating);
   const [currentStars, setCurrentStars] = useState(reviewRating);
@@ -131,30 +133,35 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
             setRating={setStars}
             rating={1}
             currentRating={stars}
+            backgroundGray={backgroundGray}
           />
           <ReviewStar
             size={size}
             setRating={setStars}
             rating={2}
             currentRating={stars}
+            backgroundGray={backgroundGray}
           />
           <ReviewStar
             size={size}
             setRating={setStars}
             rating={3}
             currentRating={stars}
+            backgroundGray={backgroundGray}
           />
           <ReviewStar
             size={size}
             setRating={setStars}
             rating={4}
             currentRating={stars}
+            backgroundGray={backgroundGray}
           />
           <ReviewStar
             size={size}
             setRating={setStars}
             rating={5}
             currentRating={stars}
+            backgroundGray={backgroundGray}
           />
         </div>
       )}
