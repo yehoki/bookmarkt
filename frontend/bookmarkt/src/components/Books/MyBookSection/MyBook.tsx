@@ -2,7 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { FormEvent, MouseEvent, useCallback, useMemo, useState } from 'react';
+import {
+  FormEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import RatingAndPublish from '../Ratings/RatingAndPublish';
 import SingleBookReviews from '../SingleBook/SingleBookReviews';
 import useBookReviewModal from '@/hooks/useBookReviewModal';
@@ -48,9 +55,15 @@ const MyBook: React.FC<MyBookProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isBookShowing, setIsBookShowing] = useState(false);
   const [isRatingHovering, setIsRatingHovering] = useState(false);
+  const [userRating, setUserRating] = useState(userReview.rating);
   const bookReviewModal = useBookReviewModal();
 
   const router = useRouter();
+
+  useEffect(() => {
+    setUserRating(userReview.rating);
+  }, [userReview, router]);
+
   const handleEditReview = () => {
     bookReviewModal.setBookDetails({
       googleBookId: googleId,
@@ -58,7 +71,7 @@ const MyBook: React.FC<MyBookProps> = ({
       authors: authors,
       bookTitle: title,
       thumbnailUrl: thumbnailUrl,
-      userRating: userReview.rating,
+      userRating: userRating,
       userReview: userReview.review,
     });
     bookReviewModal.onOpen();
@@ -216,7 +229,7 @@ const MyBook: React.FC<MyBookProps> = ({
             )}
             <SingleBookReviews
               bookId={googleId}
-              reviewRating={userReview ? userReview.rating : 0}
+              reviewRating={userRating}
               size={18}
             />
           </div>

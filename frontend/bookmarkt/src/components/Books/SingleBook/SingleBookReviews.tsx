@@ -5,7 +5,7 @@ import ReviewStar from '@/components/ReviewStar';
 import useBookReviewModal from '@/hooks/useBookReviewModal';
 import { BookData, Review } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SITE_URL } from '@/utils/config';
 
 interface SingleBookReviewsProps {
@@ -24,8 +24,15 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
   const [stars, setStars] = useState(reviewRating);
   const [currentStars, setCurrentStars] = useState(reviewRating);
   const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
   const bookReviewModal = useBookReviewModal();
+
+  useEffect(() => {
+    setCurrentStars(reviewRating);
+    setStars(reviewRating);
+  }, [router, reviewRating]);
+
   const handleAddRating = async () => {
     setIsLoading(true);
     const getBooks = await fetch(`${SITE_URL}/api/users/books`);
@@ -112,7 +119,8 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
         <div className="text-sm text-neutral-400">saving...</div>
       ) : (
         <div
-          className={`w-full flex justify-center gap-[2px]`}
+          className={`w-full flex justify-center 
+          ${gap ? 'gap-[2px]' : ''}`}
           onMouseLeave={() =>
             setStars(currentStars ? currentStars : reviewRating)
           }
