@@ -37,20 +37,29 @@ export const handleChangeReview = (
   return parseFloat((revisedSum / currentTotal).toFixed(2));
 };
 
+export const handleDeleteReview = (
+  currentTotal: number,
+  currentAverage: number,
+  ratingDeleted: number,
+) => {
+  const revisedSum = currentTotal - 1;
+  const revisedAverage =
+    (currentAverage * currentTotal - ratingDeleted) / revisedSum;
+  return parseFloat(revisedAverage.toFixed(2));
+};
+
 export const extractTextFromDescription = (description: string) => {
   const extractedDescription = description.replace(/<[^>]+>/g, '');
   return extractedDescription;
 };
 
-
 export const extractYearFromDate = (stringDate: string) => {
   const year = stringDate.split('-', 1)[0];
   return year;
-}
-
+};
 
 export const getTimeDifference = (timeNow: number, timeThen: number) => {
-  const timeDifference = (timeNow - timeThen)/1000;
+  const timeDifference = (timeNow - timeThen) / 1000;
   if (timeDifference / 60 < 1) {
     return 'Just now';
   }
@@ -62,9 +71,9 @@ export const getTimeDifference = (timeNow: number, timeThen: number) => {
   } else {
     return `Over a day ago`;
   }
-}
+};
 
-export const parseBookshelfName = (bookshelfName: string):string => {
-  const firstParse = bookshelfName.replaceAll(' ','-');
+export const parseBookshelfName = (bookshelfName: string): string => {
+  const firstParse = bookshelfName.replaceAll(' ', '-');
   return firstParse.toLowerCase();
-}
+};
