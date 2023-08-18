@@ -166,10 +166,16 @@ const MyBook: React.FC<MyBookProps> = ({
               currentBookshelf={currentBookshelf()}
             />
           </div>
-          <div>
+          <div className="flex gap-4 items-center text-xs  whitespace-nowrap">
+            {userReview.rating ? (
+              <span className="">My rating:</span>
+            ) : (
+              <span>Rate this book</span>
+            )}
             <SingleBookReviews
               bookId={googleId}
               reviewRating={userReview ? userReview.rating : 0}
+              size={18}
             />
           </div>
         </div>

@@ -12,12 +12,14 @@ interface SingleBookReviewsProps {
   bookId: string;
   reviewRating: number;
   size?: number;
+  gap?: boolean;
 }
 
 const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
   bookId,
   reviewRating,
   size,
+  gap,
 }) => {
   const [stars, setStars] = useState(reviewRating);
   const [currentStars, setCurrentStars] = useState(reviewRating);
@@ -110,7 +112,7 @@ const SingleBookReviews: React.FC<SingleBookReviewsProps> = ({
         <div className="text-sm text-neutral-400">saving...</div>
       ) : (
         <div
-          className="w-full flex justify-center"
+          className={`w-full flex justify-center gap-[2px]`}
           onMouseLeave={() =>
             setStars(currentStars ? currentStars : reviewRating)
           }
