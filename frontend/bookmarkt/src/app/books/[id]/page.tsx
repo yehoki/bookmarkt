@@ -8,6 +8,7 @@ import AddBookButton from '@/components/Books/SearchBooks/AddBookButton';
 import { getImageSize } from '@/utils/helper';
 import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import BookDisplayButton from '@/components/Books/SingleBook/BookDisplayButton';
+import SingleBookDisplayModal from '@/components/modals/SingleBookDisplayModal';
 
 interface PageProps {
   params: { id: string };
@@ -45,49 +46,50 @@ const SingleBookPage: React.FC<PageProps> = async ({
     : '';
 
   return (
-    <main>
-      {/* Right Col */}
-      <div className="px-6 pt-4">
-        <div
-          className="
+    <>
+      <main>
+        {/* Right Col */}
+        <div className="px-6 pt-4">
+          <div
+            className="
       relative w-[35%] max-w-[33%] md:max-w-[210px] aspect-[2/3] shadow-lg rounded-tr-md rounded-br-md
       mx-auto"
-        >
-          <Image
-            src={getImageSize(bookInfo)}
-            fill
-            sizes="(max-width: 768px) 40vw, 220px"
-            className="rounded-tr-lg rounded-br-lg"
-            alt={`${bookInfo.volumeInfo.title} cover`}
-            placeholder="blur"
-            blurDataURL="/images/empty-book.png"
-          />
-        </div>
-        <div className="text-center font-bold text-xl text-neutral-900 pt-2">
-          {bookInfo.volumeInfo.title}
-          {bookInfo.volumeInfo.subtitle
-            ? `: ${bookInfo.volumeInfo.subtitle}`
-            : ''}
-        </div>
-        <div className="pt-2 text-center text-neutral-500 italic mb-4">
-          {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
-        </div>
-        <div className="mx-auto max-w-[260px]">
-          <BookDisplayButton
-            label="Bookshelf"
-            leftAction="AddToBookshelf"
-            background
-          />
-          <BookDisplayButton
-            leftAction="Amazon"
-            ISBN={
-              bookInfo.volumeInfo.industryIdentifiers
-                ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
-                : '/'
-            }
-            label="Buy on Amazon UK"
-          />
-          {/* <button
+          >
+            <Image
+              src={getImageSize(bookInfo)}
+              fill
+              sizes="(max-width: 768px) 40vw, 220px"
+              className="rounded-tr-lg rounded-br-lg"
+              alt={`${bookInfo.volumeInfo.title} cover`}
+              placeholder="blur"
+              blurDataURL="/images/empty-book.png"
+            />
+          </div>
+          <div className="text-center font-semibold text-2xl text-neutral-900 pt-2">
+            {bookInfo.volumeInfo.title}
+            {bookInfo.volumeInfo.subtitle
+              ? `: ${bookInfo.volumeInfo.subtitle}`
+              : ''}
+          </div>
+          <div className="pt-2 text-center text-neutral-500 italic mb-4">
+            {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
+          </div>
+          <div className="mx-auto max-w-[260px]">
+            <BookDisplayButton
+              label="Bookshelf"
+              leftAction="AddToBookshelf"
+              background="bg-[#377458] text-white"
+            />
+            <BookDisplayButton
+              leftAction="Amazon"
+              ISBN={
+                bookInfo.volumeInfo.industryIdentifiers
+                  ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
+                  : '/'
+              }
+              label="Buy on Amazon UK"
+            />
+            {/* <button
             className="rounded-[3rem] border-[0.15rem] border-[#409970] px-6 py-2
           text-[#271c14] text-opacity-90 font-semibold 
           "
@@ -100,34 +102,37 @@ const SingleBookPage: React.FC<PageProps> = async ({
               Buy on Amazon UK
             </a>
           </button> */}
-        </div>
-        <div className="flex gap-4 items-center">
-          <SingleBookReviews
-            bookId={bookInfo.id}
-            reviewRating={
-              userReviewInfo && userReviewInfo[0] ? userReviewInfo[0].rating : 0
-            }
-          />
-          <div className="text-xl font-semibold">
-            {reviewData.averageReview}
+          </div>
+          <div className="flex gap-4 items-center">
+            <SingleBookReviews
+              bookId={bookInfo.id}
+              reviewRating={
+                userReviewInfo && userReviewInfo[0]
+                  ? userReviewInfo[0].rating
+                  : 0
+              }
+            />
+            <div className="text-xl font-semibold">
+              {reviewData.averageReview}
+            </div>
+          </div>
+          <div>Rate this book</div>
+
+          <div>
+            {bookInfo.volumeInfo.description ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bookInfo.volumeInfo.description,
+                }}
+                className="max-w-[95%]"
+              ></div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
-        <div>Rate this book</div>
-
-        <div>
-          {bookInfo.volumeInfo.description ? (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: bookInfo.volumeInfo.description,
-              }}
-              className="max-w-[95%]"
-            ></div>
-          ) : (
-            ''
-          )}
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 };
 
