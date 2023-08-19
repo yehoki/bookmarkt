@@ -1,3 +1,5 @@
+import { GoogleBookItemInterface } from '@/actions/getBooksFromSearch';
+
 export const parseQuery = (query: string): string => {
   return query.toLowerCase().replaceAll(' ', '+');
 };
@@ -40,10 +42,10 @@ export const handleChangeReview = (
 export const handleDeleteReview = (
   currentTotal: number,
   currentAverage: number,
-  ratingDeleted: number,
+  ratingDeleted: number
 ) => {
   const revisedSum = currentTotal - 1;
-  if(revisedSum < 1){
+  if (revisedSum < 1) {
     return 0;
   }
   const revisedAverage =
@@ -79,4 +81,27 @@ export const getTimeDifference = (timeNow: number, timeThen: number) => {
 export const parseBookshelfName = (bookshelfName: string): string => {
   const firstParse = bookshelfName.replaceAll(' ', '-');
   return firstParse.toLowerCase();
+};
+
+export const getImageSize = (bookInfo: GoogleBookItemInterface | null) => {
+  if (!bookInfo) {
+    return '/images/empty-book.png';
+  }
+  if (
+    !bookInfo.volumeInfo.imageLinks ||
+    !bookInfo.volumeInfo ||
+    !bookInfo.volumeInfo.imageLinks.thumbnail
+  ) {
+    return '/images/empty-book.png';
+  }
+  if (bookInfo.volumeInfo.imageLinks.extraLarge) {
+    return bookInfo.volumeInfo.imageLinks.extraLarge;
+  }
+  if (bookInfo.volumeInfo.imageLinks.large) {
+    return bookInfo.volumeInfo.imageLinks.large;
+  }
+  if (bookInfo.volumeInfo.imageLinks.medium) {
+    return bookInfo.volumeInfo.imageLinks.medium;
+  }
+  return bookInfo.volumeInfo.imageLinks.thumbnail;
 };

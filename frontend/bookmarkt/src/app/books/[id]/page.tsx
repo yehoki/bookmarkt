@@ -4,6 +4,10 @@ import { getSingleBookFromDb } from '@/actions/getSingleBookFromDB';
 import EmptyBookState from '@/components/Books/EmptyBookState';
 import SingleBookReviews from '@/components/Books/SingleBook/SingleBookReviews';
 import Image from 'next/image';
+import AddBookButton from '@/components/Books/SearchBooks/AddBookButton';
+import { getImageSize } from '@/utils/helper';
+import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
+import BookDisplayButton from '@/components/Books/SingleBook/BookDisplayButton';
 
 interface PageProps {
   params: { id: string };
@@ -31,36 +35,26 @@ const SingleBookPage: React.FC<PageProps> = async ({
     return <EmptyBookState id={params.id} />;
   }
 
-  const getImageSize = () => {
-    if (
-      !bookInfo.volumeInfo.imageLinks ||
-      !bookInfo.volumeInfo ||
-      !bookInfo.volumeInfo.imageLinks.thumbnail
-    ) {
-      return '/images/empty-book.png';
-    }
-    if (bookInfo.volumeInfo.imageLinks.extraLarge) {
-      return bookInfo.volumeInfo.imageLinks.extraLarge;
-    }
-    if (bookInfo.volumeInfo.imageLinks.large) {
-      return bookInfo.volumeInfo.imageLinks.large;
-    }
-    if (bookInfo.volumeInfo.imageLinks.medium) {
-      return bookInfo.volumeInfo.imageLinks.medium;
-    }
-    return bookInfo.volumeInfo.imageLinks.thumbnail;
-  };
+  const currentUserBookshelves = await getCurrentUserBookshelves();
+  const findBookshelf = currentUserBookshelves
+    ? currentUserBookshelves.find((bookshelf) =>
+        bookshelf.googleBooks.find(
+          (googleBook) => googleBook.googleBookId === bookId
+        )
+      )
+    : '';
 
   return (
     <main>
       {/* Right Col */}
-      <div className="flex flex-col items-center mx-auto px-6 pt-4">
+      <div className="px-6 pt-4">
         <div
           className="
-      relative w-[35%] max-w-[33%] md:max-w-[210px] aspect-[2/3] shadow-lg rounded-tr-md rounded-br-md"
+      relative w-[35%] max-w-[33%] md:max-w-[210px] aspect-[2/3] shadow-lg rounded-tr-md rounded-br-md
+      mx-auto"
         >
           <Image
-            src={getImageSize()}
+            src={getImageSize(bookInfo)}
             fill
             sizes="(max-width: 768px) 40vw, 220px"
             className="rounded-tr-lg rounded-br-lg"
@@ -75,8 +69,33 @@ const SingleBookPage: React.FC<PageProps> = async ({
             ? `: ${bookInfo.volumeInfo.subtitle}`
             : ''}
         </div>
-        <div className="pt-2 text-center text-neutral-500 italic">
+        <div className="pt-2 text-center text-neutral-500 italic mb-4">
           {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
+        </div>
+        <div className="mx-auto max-w-[260px]">
+          <BookDisplayButton label="Bookshelf" />
+          <AddBookButton
+            bookId={bookId}
+            bookshelves={currentUserBookshelves ? currentUserBookshelves : []}
+            currentBookshelf={findBookshelf ? findBookshelf.name : ''}
+          />
+          <BookDisplayButton label="Buy on Amazon UK" />
+          <button
+            className="rounded-[3rem] border-[0.15rem] border-[#409970] px-6 py-2
+          text-[#271c14] text-opacity-90 font-semibold 
+          "
+          >
+            <a
+              href={`https://www.amazon.co.uk/s?k=${
+                bookInfo.volumeInfo.industryIdentifiers
+                  ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
+                  : '/'
+              }`}
+              target="_blank"
+            >
+              Buy on Amazon UK
+            </a>
+          </button>
         </div>
         <div className="flex gap-4 items-center">
           <SingleBookReviews
@@ -89,21 +108,8 @@ const SingleBookPage: React.FC<PageProps> = async ({
             {reviewData.averageReview}
           </div>
         </div>
+        <div>Rate this book</div>
 
-        <div className="flex flex-col gap-2">
-          <div>
-            <a
-              href={`https://www.amazon.co.uk/s?k=${
-                bookInfo.volumeInfo.industryIdentifiers
-                  ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
-                  : '/'
-              }`}
-              target="_blank"
-            >
-              Buy on Amazon
-            </a>
-          </div>
-        </div>
         <div>
           {bookInfo.volumeInfo.description ? (
             <div
