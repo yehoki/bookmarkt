@@ -15,6 +15,11 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
       singleBookModal.onDisable();
     }, 300);
   }, [singleBookModal]);
+
+  const handleWebsiteRoute = (url: string, ISBN: string) => {
+    return window.open(`${url}${ISBN}`, '_blank');
+  };
+
   return (
     <>
       {singleBookModal.isOn && (
@@ -37,36 +42,61 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
           >
             <button
               onClick={handleModalClose}
-              className="absolute top-5 right-4 rounded-full hover:bg-[#f4f4f4] transition p-2"
+              className="absolute top-5 right-4 rounded-full 
+              hover:bg-[#f4f4f4] transition p-2
+              outline-black"
             >
               <RxCross1 size={18} />
             </button>
             <h3 className="pl-6 pr-4 pb-4 text-lg">
               Choose a shelf for this book
             </h3>
-            <div className="pl-6 pr-4 pt-2 ">
+            <div className="pl-6 pr-4 pt-2">
               <ul>
-                <li className="">
-                  <Button border="border-[#271c14]/75 border-[0.15rem]">
-                    <button
-                      className="h-9 text-center w-full hover:bg-[#f4f4f4] 
-                    rounded-[3rem] transition font-semibold text-[#271c14]/90"
-                    >
-                      Bookshelf
-                    </button>
-                  </Button>
-                </li>
-
-                <li className="">
-                  <Button border="border-[#271c14]/75 border-[0.15rem]">
-                    <button className="h-9 text-center">Bookshelf</button>
-                  </Button>
-                </li>
-                <li className="">
-                  <Button border="border-[#271c14]/75 border-[0.15rem]">
-                    <button className="h-9 text-center">Bookshelf</button>
-                  </Button>
-                </li>
+                {singleBookModal.decideOption === 'bookshelf' && (
+                  <>
+                    {singleBookModal.bookshelfOptions.bookshelves.map(
+                      (bookshelf) => {
+                        return (
+                          <li key={bookshelf.id} className="">
+                            <Button border="border-[#271c14]/75 border-[0.15rem]">
+                              <button
+                                className="h-9 text-center w-full hover:bg-[#f4f4f4] 
+        rounded-[3rem] transition font-semibold text-[#271c14]/90"
+                              >
+                                {bookshelf.name}
+                              </button>
+                            </Button>
+                          </li>
+                        );
+                      }
+                    )}
+                  </>
+                )}
+                {singleBookModal.decideOption === 'buy' && (
+                  <>
+                    {singleBookModal.websiteOptions.websites.map((website) => {
+                      return (
+                        <li key={website.name} className="">
+                          <Button border="border-[#271c14]/75 border-[0.15rem]">
+                            <button
+                              onClick={() =>
+                                handleWebsiteRoute(
+                                  website.url,
+                                  singleBookModal.websiteOptions.ISBN
+                                )
+                              }
+                              className="h-9 text-center w-full hover:bg-[#f4f4f4] 
+rounded-[3rem] transition font-semibold text-[#271c14]/90"
+                            >
+                              {website.name}
+                            </button>
+                          </Button>
+                        </li>
+                      );
+                    })}
+                  </>
+                )}
               </ul>
             </div>
           </div>

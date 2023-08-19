@@ -9,6 +9,7 @@ import { getImageSize } from '@/utils/helper';
 import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import BookDisplayButton from '@/components/Books/SingleBook/BookDisplayButton';
 import SingleBookDisplayModal from '@/components/modals/SingleBookDisplayModal';
+import { useMemo } from 'react';
 
 interface PageProps {
   params: { id: string };
@@ -74,20 +75,30 @@ const SingleBookPage: React.FC<PageProps> = async ({
           <div className="pt-2 text-center text-neutral-500 italic mb-4">
             {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
           </div>
-          <div className="mx-auto max-w-[260px]">
+          <div className="mx-auto max-w-[260px] mb-4">
             <BookDisplayButton
-              label="Bookshelf"
+              label={findBookshelf ? findBookshelf.name : 'Want to read'}
               leftAction="AddToBookshelf"
               background="bg-[#377458] text-white"
+              bookId={bookId}
+              bookshelves={currentUserBookshelves ? currentUserBookshelves : []}
+              currentBookshelf={findBookshelf ? findBookshelf.name : ''}
             />
             <BookDisplayButton
+              label="Buy on Amazon UK"
               leftAction="Amazon"
               ISBN={
                 bookInfo.volumeInfo.industryIdentifiers
                   ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
                   : '/'
               }
-              label="Buy on Amazon UK"
+              websites={[
+                { url: 'https://www.amazon.co.uk/s?k=', name: 'Amazon UK' },
+                {
+                  url: 'https://www.waterstones.com/books/search/term/',
+                  name: 'Waterstones',
+                },
+              ]}
             />
             {/* <button
             className="rounded-[3rem] border-[0.15rem] border-[#409970] px-6 py-2
@@ -103,7 +114,7 @@ const SingleBookPage: React.FC<PageProps> = async ({
             </a>
           </button> */}
           </div>
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center justify-start mb-2">
             <SingleBookReviews
               bookId={bookInfo.id}
               reviewRating={
@@ -112,11 +123,11 @@ const SingleBookPage: React.FC<PageProps> = async ({
                   : 0
               }
             />
-            <div className="text-xl font-semibold">
+            {/* <div className="text-xl font-semibold">
               {reviewData.averageReview}
-            </div>
+            </div> */}
           </div>
-          <div>Rate this book</div>
+          <div className="mx-auto w-fit text-[#1e1915]">Rate this book</div>
 
           <div>
             {bookInfo.volumeInfo.description ? (

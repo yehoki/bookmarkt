@@ -2,8 +2,7 @@
 import Button from '@/components/Button';
 import useSingleBookDisplayModal from '@/hooks/useSingleBookDisplayModal';
 import { Bookshelf } from '@prisma/client';
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { PiCaretDownBold } from 'react-icons/pi';
 interface BookDisplayButtonProps {
   label: string;
@@ -13,6 +12,10 @@ interface BookDisplayButtonProps {
   bookId?: string;
   bookshelves?: Bookshelf[];
   currentBookshelf?: string;
+  websites?: {
+    url: string;
+    name: string;
+  }[];
 }
 
 const BookDisplayButton: React.FC<BookDisplayButtonProps> = ({
@@ -20,17 +23,44 @@ const BookDisplayButton: React.FC<BookDisplayButtonProps> = ({
   ISBN,
   leftAction,
   background = '',
+  bookId,
+  bookshelves,
+  currentBookshelf,
+  websites,
 }) => {
   const singleBookModal = useSingleBookDisplayModal();
 
   const handleOpenBookModal = useCallback(() => {
+    if (leftAction === 'AddToBookshelf') {
+      singleBookModal.setDecideOption('bookshelf');
+      singleBookModal.setBookshelfOptions({
+        bookId: bookId ? bookId : '',
+        bookshelves: bookshelves ? bookshelves : [],
+        currentBookshelf: currentBookshelf ? currentBookshelf : '',
+      });
+    } else {
+      singleBookModal.setDecideOption('buy');
+      singleBookModal.setWebsiteOptions({
+        ISBN: ISBN ? ISBN : '',
+        websites: websites ? websites : [],
+      });
+    }
     singleBookModal.onEnable();
     setTimeout(() => {
       singleBookModal.enableAnimate();
     }, 50);
-  }, [singleBookModal]);
+  }, [
+    singleBookModal,
+    ISBN,
+    leftAction,
+    bookId,
+    bookshelves,
+    currentBookshelf,
+    websites,
+  ]);
+
   const openAmazon = useCallback(() => {
-    return window.open(`https://www.amazon.co.uk/s?k=${ISBN} `, '_blank');
+    return window.open(`https://www.amazon.co.uk/s?k=${ISBN}`, '_blank');
   }, [ISBN]);
 
   return (
@@ -50,9 +80,10 @@ const BookDisplayButton: React.FC<BookDisplayButtonProps> = ({
       rounded-[3rem]
       rounded-r-none border-r-[0.1rem]`}
       >
-        {label}
+        {currentBookshelf && currentBookshelf !== '' ? currentBookshelf : label}
       </button>
       <button
+        onClick={handleOpenBookModal}
         className={`w-9 border-l-0 rounded-l-none border-[0.15rem] rounded-[3rem]
       border-[#409970] h-9 flex items-center justify-center transition
       ${
