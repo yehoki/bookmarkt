@@ -73,29 +73,33 @@ const SingleBookPage: React.FC<PageProps> = async ({
           {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
         </div>
         <div className="mx-auto max-w-[260px]">
-          <BookDisplayButton label="Bookshelf" />
-          <AddBookButton
-            bookId={bookId}
-            bookshelves={currentUserBookshelves ? currentUserBookshelves : []}
-            currentBookshelf={findBookshelf ? findBookshelf.name : ''}
+          <BookDisplayButton
+            label="Bookshelf"
+            leftAction="AddToBookshelf"
+            background
           />
-          <BookDisplayButton label="Buy on Amazon UK" />
-          <button
+          <BookDisplayButton
+            leftAction="Amazon"
+            ISBN={
+              bookInfo.volumeInfo.industryIdentifiers
+                ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
+                : '/'
+            }
+            label="Buy on Amazon UK"
+          />
+          {/* <button
             className="rounded-[3rem] border-[0.15rem] border-[#409970] px-6 py-2
           text-[#271c14] text-opacity-90 font-semibold 
           "
           >
             <a
-              href={`https://www.amazon.co.uk/s?k=${
-                bookInfo.volumeInfo.industryIdentifiers
-                  ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
-                  : '/'
+              href={`
               }`}
               target="_blank"
             >
               Buy on Amazon UK
             </a>
-          </button>
+          </button> */}
         </div>
         <div className="flex gap-4 items-center">
           <SingleBookReviews
