@@ -12,6 +12,7 @@ import SingleBookDisplayModal from '@/components/modals/SingleBookDisplayModal';
 import { useMemo } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SingleBookRatingDisplay from '@/components/Books/SingleBook/SingleBookRatingDisplay';
 
 interface PageProps {
   params: { id: string };
@@ -58,7 +59,6 @@ const SingleBookPage: React.FC<PageProps> = async ({
         pauseOnHover
       />
       <main>
-        {/* Right Col */}
         <div className="px-6 pt-4">
           <div
             className="
@@ -84,6 +84,7 @@ const SingleBookPage: React.FC<PageProps> = async ({
           <div className="pt-2 text-center text-neutral-500 italic mb-4">
             {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
           </div>
+          <SingleBookRatingDisplay />
           <div className="mx-auto max-w-[260px] mb-4">
             <BookDisplayButton
               label={findBookshelf ? findBookshelf.name : 'Want to read'}
@@ -137,7 +138,9 @@ const SingleBookPage: React.FC<PageProps> = async ({
               {reviewData.averageReview}
             </div> */}
           </div>
-          <div className="mx-auto w-fit text-[#1e1915]">Rate this book</div>
+          <div className="mx-auto w-fit text-[#1e1915] mb-8">
+            Rate this book
+          </div>
 
           <div>
             {bookInfo.volumeInfo.description ? (
@@ -151,6 +154,11 @@ const SingleBookPage: React.FC<PageProps> = async ({
               ''
             )}
           </div>
+          <section id="community-reviews">
+            <h3>Community reviews</h3>
+            <SingleBookRatingDisplay />
+            <div>Rating spread</div>
+          </section>
         </div>
       </main>
     </>

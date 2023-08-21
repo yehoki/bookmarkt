@@ -19,7 +19,7 @@ interface Props {
 
 export default async function RootLayout({ children }: Props) {
   return (
-    <html lang="en" className={`${lato.variable}`}>
+    <html lang="en" className={`${lato.variable} scroll-smooth`}>
       <body className="relative">
         <div className="relative">{children}</div>
       </body>
