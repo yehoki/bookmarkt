@@ -30,6 +30,15 @@ const SingleBookPage: React.FC<PageProps> = async ({
   const bookInDbInfo = await getSingleBookFromDb(bookId);
   const userReviewInfo = await getBookReview(bookId);
 
+  const reviewSpread = {
+    five: 17,
+    four: 22,
+    three: 43,
+    two: 5,
+    one: 3,
+    total: 90,
+  };
+
   const reviewData =
     bookInDbInfo && bookInDbInfo?.reviewData
       ? bookInDbInfo.reviewData
@@ -157,7 +166,31 @@ const SingleBookPage: React.FC<PageProps> = async ({
           <section id="community-reviews">
             <h3>Community reviews</h3>
             <SingleBookRatingDisplay />
-            <div>Rating spread</div>
+            <div>
+              <div className="grid grid-cols-9 items-center gap-2">
+                <div
+                  className="col-span-1 underline 
+                font-semibold underline-offset-2 decoration-2"
+                >
+                  5 stars
+                </div>
+                <div className="col-span-6">
+                  <div className="h-3 bg-[#f4f4f4] rounded-xl">
+                    <div
+                      style={{ width: `${((17 * 100) / 90).toFixed(0)}%` }}
+                      className="h-3 bg-[#e87400] rounded-xl"
+                    ></div>
+                  </div>
+                </div>
+                <div className="col-span-2 text-neutral-400 text-sm">
+                  17 ({((17 / 90) * 100).toFixed(0)})%
+                </div>
+              </div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </section>
         </div>
       </main>
