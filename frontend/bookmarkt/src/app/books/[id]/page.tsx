@@ -50,7 +50,13 @@ const SingleBookPage: React.FC<PageProps> = async ({
 
   return (
     <>
-      <ToastContainer position="bottom-left" theme="dark" autoClose={5000} />
+      <ToastContainer
+        position="bottom-left"
+        theme="dark"
+        autoClose={5000}
+        closeOnClick
+        pauseOnHover
+      />
       <main>
         {/* Right Col */}
         <div className="px-6 pt-4">
@@ -74,7 +80,6 @@ const SingleBookPage: React.FC<PageProps> = async ({
             {bookInfo.volumeInfo.subtitle
               ? `: ${bookInfo.volumeInfo.subtitle}`
               : ''}
-            {findBookshelf ? findBookshelf.name : 'Nope'}
           </div>
           <div className="pt-2 text-center text-neutral-500 italic mb-4">
             {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}

@@ -34,13 +34,11 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
 
   // TODO: Add bookshelf changing functionality from AddBookButton component
   const handleChangeBookshelf = async (newBookshelfName: string) => {
-    console.log(currentShelf, singleBookModal.bookshelfOptions);
     if (isLoading) {
       return;
     }
     setIsLoading(true);
     if (currentShelf !== '') {
-      console.log('PUT');
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -59,7 +57,6 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
         return router.push('/user/sign_up');
       }
     } else {
-      console.log('POST');
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'POST',
         body: JSON.stringify({

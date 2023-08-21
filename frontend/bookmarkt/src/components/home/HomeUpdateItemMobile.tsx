@@ -72,7 +72,7 @@ const HomeUpdateItemMobile: React.FC<HomeUpdateItemMobileProps> = ({
       </Suspense>
       <div className="flex items-center mt-2">
         <div className="relative w-[55px] h-[85px] aspect-[11/17] mr-1">
-          <Link href={`/book/${googleBookId}`}>
+          <Link href={`/books/${googleBookId}`}>
             <Image
               src={imageUrl !== '' ? imageUrl : '/images/empty-book.png'}
               fill
