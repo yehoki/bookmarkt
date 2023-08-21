@@ -78,7 +78,9 @@ const BookDisplayButton: React.FC<BookDisplayButtonProps> = ({
       leading-none
       font-semibold
       rounded-[3rem]
-      rounded-r-none border-r-[0.1rem]`}
+      rounded-r-none border-r-[0.1rem]
+      whitespace-nowrap
+      `}
       >
         {currentBookshelf && currentBookshelf !== '' ? currentBookshelf : label}
       </button>

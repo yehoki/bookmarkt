@@ -8,6 +8,7 @@ interface SingleBookRatingDisplayProps {
   averageRating: number;
   reviewCount: number;
   ratingCount: number;
+  hrefLg?: boolean;
 }
 
 const SingleBookRatingDisplay: React.FC<SingleBookRatingDisplayProps> = ({
@@ -15,6 +16,7 @@ const SingleBookRatingDisplay: React.FC<SingleBookRatingDisplayProps> = ({
   averageRating,
   ratingCount,
   reviewCount,
+  hrefLg,
 }) => {
   return (
     <div
@@ -24,12 +26,15 @@ const SingleBookRatingDisplay: React.FC<SingleBookRatingDisplayProps> = ({
     ${!margin ? 'mx-auto px-4 py-4' : 'px-2 py-2'}
     `}
     >
-      <a href="#community-reviews" className="flex flex-col items-center">
+      <a
+        href={`${hrefLg ? '#communityReviews' : '#community-reviews'}`}
+        className="flex flex-col"
+      >
         <div className="flex items-center gap-4">
           <DisplayStars averageRating={averageRating} size={32} lightOrange />
           <span className="text-3xl">{averageRating}</span>
         </div>
-        <div className="text-sm text-neutral-400">
+        <div className="text-sm text-neutral-400 pl-2">
           {ratingCount} ratings · {reviewCount} reviews
         </div>
       </a>
