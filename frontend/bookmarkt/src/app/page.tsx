@@ -239,7 +239,7 @@ export default async function Page() {
               </div>
               <div className="flex gap-[2px] text-xs py-2">
                 <Link
-                  href={`/books/user/${currentUser.id}`}
+                  href={`/books/user/${currentUser.id}?shelf=Currently reading`}
                   className="text-goodreads-mybooks-green hover:underline"
                 >
                   View all books
@@ -262,7 +262,7 @@ export default async function Page() {
             <HomeBox heading="Want to read" bottomBorder>
               <div>
                 {wantToReadGoogleBooks && wantToReadGoogleBooks.length !== 0 ? (
-                  <div className="grid grid-cols-3 grid-rows-2 gap-1">
+                  <div className="grid grid-cols-3 gap-1">
                     {wantToReadGoogleBooks.slice(0, 6).map((book) => {
                       return (
                         book && (
@@ -308,7 +308,7 @@ export default async function Page() {
                 <Link
                   className="hover:underline 
                 text-goodreads-mybooks-green cursor-pointer"
-                  href={`/books/user/${currentUser.id}`}
+                  href={`/books/user/${currentUser.id}?shelf=Want to read`}
                 >
                   View all books
                 </Link>

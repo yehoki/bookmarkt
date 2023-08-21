@@ -56,7 +56,12 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
 
   const currentBookshelfBooks = async () => {
     const queryShelf = searchParams.shelf;
-    const books = await getUsersBooksFromBookshelf(queryShelf, userId);
+    const books = await getUsersBooksFromBookshelf(
+      queryShelf,
+      userId,
+      Number(page),
+      Number(perPage)
+    );
     return books;
   };
 
@@ -89,10 +94,14 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
       : 0
     : 0;
 
+  // Implement pagination on bookIds for bookshelves
   const currentBookshelfGoogleIds = bookshelfBooks
-    ? bookshelfBooks.googleBooks.map(
-        (bookshelfBook) => bookshelfBook.googleBookId
-      )
+    ? bookshelfBooks.googleBooks
+        .map((bookshelfBook) => bookshelfBook.googleBookId)
+        .slice(
+          Number(page) === 0 ? 0 : (Number(page) - 1) * Number(perPage),
+          Number(page) * Number(perPage)
+        )
     : [];
   const currentBookshelfBooksWithReviewData = combineBookIdsAndReviewData(
     currentBookshelfGoogleIds

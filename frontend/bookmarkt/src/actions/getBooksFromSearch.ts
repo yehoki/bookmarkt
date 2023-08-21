@@ -60,7 +60,7 @@ export async function getBooksFromSearch(
   const res = await fetch(
     `${googleAPIBaseUrl}/volumes/?q=${parseQuery(
       query
-    )}&fields=${partialResponse}&key=${GOOGLE_API_KEY}&startIndex=${startIndex}&maxResults=${maxResults}`,
+    )}&fields=${partialResponse}&key=${GOOGLE_API_KEY}&startIndex=${startIndex  * maxResults}&maxResults=${maxResults}`,
     {
       method: 'GET',
       headers: {

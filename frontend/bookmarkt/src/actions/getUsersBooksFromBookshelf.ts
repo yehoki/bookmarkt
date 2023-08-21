@@ -2,7 +2,9 @@ import prisma from '@/lib/prismadb';
 
 export async function getUsersBooksFromBookshelf(
   bookshelfName: string,
-  userId: string
+  userId: string,
+  page = 0,
+  perPage = 20
 ) {
   try {
     const userBookshelfBooks = await prisma.bookshelf.findFirst({
@@ -11,11 +13,7 @@ export async function getUsersBooksFromBookshelf(
         name: bookshelfName,
       },
       select: {
-        googleBooks: {
-          select: {
-            googleBookId: true,
-          },
-        },
+        googleBooks: true,
       },
     });
 
