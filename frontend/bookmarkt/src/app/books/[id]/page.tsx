@@ -88,7 +88,8 @@ const SingleBookPage: React.FC<PageProps> = async ({
               label="Buy on Amazon UK"
               leftAction="Amazon"
               ISBN={
-                bookInfo.volumeInfo.industryIdentifiers
+                bookInfo.volumeInfo.industryIdentifiers &&
+                bookInfo.volumeInfo.industryIdentifiers[1]
                   ? bookInfo.volumeInfo.industryIdentifiers[1].identifier
                   : '/'
               }

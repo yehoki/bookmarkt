@@ -3,11 +3,20 @@
 import useSingleBookDisplayModal from '@/hooks/useSingleBookDisplayModal';
 import { RxCross1 } from 'react-icons/rx';
 import Button from '../Button';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { SITE_URL } from '@/utils/config';
+import { useRouter } from 'next/navigation';
 interface SingleBookDisplayModalProps {}
 
 const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
+  const [currentShelf, setCurrentShelf] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const singleBookModal = useSingleBookDisplayModal();
+  const router = useRouter();
+
+  useEffect(() => {
+    setCurrentShelf(singleBookModal.bookshelfOptions.currentBookshelf);
+  }, []);
 
   const handleModalClose = useCallback(() => {
     singleBookModal.disableAnimate();
@@ -18,6 +27,49 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
 
   const handleWebsiteRoute = (url: string, ISBN: string) => {
     return window.open(`${url}${ISBN}`, '_blank');
+  };
+
+  // TODO: Add bookshelf changing functionality from AddBookButton component
+  const handleChangeBookshelf = async (newBookshelfName: string) => {
+    if (currentShelf === '') {
+      const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          currentBookshelf: singleBookModal.bookshelfOptions.currentBookshelf,
+          nextBookshelf: newBookshelfName,
+          bookId: singleBookModal.bookshelfOptions.bookId,
+        }),
+      });
+      const checkReroute = await res.json();
+      if (
+        checkReroute &&
+        checkReroute.message &&
+        checkReroute.message === 'Need to login'
+      ) {
+        setIsLoading(false);
+        return router.push('/user/sign_up');
+      }
+    } else {
+      const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
+        method: 'POST',
+        body: JSON.stringify({
+          googleId: singleBookModal.bookshelfOptions.bookId,
+          newBookshelf: newBookshelfName,
+        }),
+      });
+      const checkReroute = await res.json();
+      if (
+        checkReroute &&
+        checkReroute.message &&
+        checkReroute.message === 'Need to login'
+      ) {
+        setIsLoading(false);
+        return router.push('/user/sign_up');
+      }
+      setCurrentShelf(newBookshelfName);
+      router.refresh();
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,6 +113,9 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
                           <li key={bookshelf.id} className="">
                             <Button border="border-[#271c14]/75 border-[0.15rem]">
                               <button
+                                onClick={() =>
+                                  handleChangeBookshelf(bookshelf.name)
+                                }
                                 className="h-9 text-center w-full hover:bg-[#f4f4f4] 
         rounded-[3rem] transition font-semibold text-[#271c14]/90"
                               >
