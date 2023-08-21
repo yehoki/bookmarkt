@@ -14,6 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SingleBookRatingDisplay from '@/components/Books/SingleBook/SingleBookRatingDisplay';
 import CommunityReviews from '@/components/Books/SingleBook/CommunityReviews';
+import getAllReviewsForBookId from '@/actions/getAllReviewsForBookId';
 
 interface PageProps {
   params: { id: string };
@@ -31,13 +32,72 @@ const SingleBookPage: React.FC<PageProps> = async ({
   const bookInDbInfo = await getSingleBookFromDb(bookId);
   const userReviewInfo = await getBookReview(bookId);
 
-  const reviewSpread = {
-    five: 17,
-    four: 22,
-    three: 43,
-    two: 5,
-    one: 3,
-    total: 90,
+  const allBookReviews = await getAllReviewsForBookId(bookId);
+
+  const reviewCount = allBookReviews?.filter(
+    (review) => review.description !== null
+  ).length;
+
+  const ratingClassification = () => {
+    const classification = {
+      total: 0,
+      one: 0,
+      two: 0,
+      three: 0,
+      four: 0,
+      five: 0,
+    };
+    if (!allBookReviews) {
+      return classification;
+    }
+    allBookReviews.forEach((review) => {
+      switch (review.rating) {
+        case 1:
+          classification.total++;
+          classification.one++;
+          break;
+        case 2:
+          classification.total++;
+          classification.two++;
+          break;
+        case 3:
+          classification.total++;
+          classification.three++;
+          break;
+        case 4:
+          classification.total++;
+          classification.four++;
+          break;
+        case 5:
+          classification.total++;
+          classification.five++;
+          break;
+        default:
+          break;
+      }
+    });
+    return classification;
+  };
+
+  const chooseRatingClassification = () => {
+    if (ratingClassification().total !== 0) {
+      return ratingClassification();
+    }
+
+    const one = Math.floor(Math.random() * 100);
+    const two = Math.floor(Math.random() * 100);
+    const three = Math.floor(Math.random() * 100);
+    const four = Math.floor(Math.random() * 100);
+    const five = Math.floor(Math.random() * 100);
+    const total = one + two + three + four + five;
+    return {
+      one: one,
+      two: two,
+      three: three,
+      four: four,
+      five: five,
+      total: total,
+    };
   };
 
   const reviewData =
@@ -94,7 +154,11 @@ const SingleBookPage: React.FC<PageProps> = async ({
           <div className="pt-2 text-center text-neutral-500 italic mb-4">
             {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
           </div>
-          <SingleBookRatingDisplay averageRating={reviewData.averageReview} />
+          <SingleBookRatingDisplay
+            reviewCount={reviewCount ? reviewCount : 0}
+            ratingCount={reviewData.totalReviews}
+            averageRating={reviewData.averageReview}
+          />
           <div className="mx-auto max-w-[260px] mb-4">
             <BookDisplayButton
               label={findBookshelf ? findBookshelf.name : 'Want to read'}
@@ -169,10 +233,18 @@ const SingleBookPage: React.FC<PageProps> = async ({
               Community reviews
             </h3>
             <SingleBookRatingDisplay
+              reviewCount={reviewCount ? reviewCount : 0}
+              ratingCount={reviewData.totalReviews}
               averageRating={reviewData.averageReview}
               margin
             />
-            <CommunityReviews reviewInfo={reviewSpread} />
+            {ratingClassification().total === 0 && (
+              <>
+                Since this book does not have any reviews yet we have generated
+                some random reviews to make this look nicer
+              </>
+            )}
+            <CommunityReviews reviewInfo={chooseRatingClassification()} />
           </section>
         </div>
       </main>

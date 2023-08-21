@@ -81,6 +81,7 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
     setCurrentShelf(newBookshelfName);
     setIsLoading(false);
     toast.success(`Shelved as ${newBookshelfName}`);
+    handleModalClose();
     router.refresh();
   };
 

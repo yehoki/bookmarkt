@@ -6,11 +6,15 @@ import DisplayStars from '../Ratings/DisplayStars';
 interface SingleBookRatingDisplayProps {
   margin?: boolean;
   averageRating: number;
+  reviewCount: number;
+  ratingCount: number;
 }
 
 const SingleBookRatingDisplay: React.FC<SingleBookRatingDisplayProps> = ({
   margin,
   averageRating,
+  ratingCount,
+  reviewCount,
 }) => {
   return (
     <div
@@ -26,7 +30,7 @@ const SingleBookRatingDisplay: React.FC<SingleBookRatingDisplayProps> = ({
           <span className="text-3xl">{averageRating}</span>
         </div>
         <div className="text-sm text-neutral-400">
-          XXX ratings · XXX reviews
+          {ratingCount} ratings · {reviewCount} reviews
         </div>
       </a>
     </div>
