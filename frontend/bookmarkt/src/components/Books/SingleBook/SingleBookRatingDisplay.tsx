@@ -17,7 +17,7 @@ const SingleBookRatingDisplay: React.FC<
     >
       <a href="#community-reviews" className="flex flex-col items-center">
         <div className="flex items-center gap-4">
-          <DisplayStars averageRating={4} size={32} />
+          <DisplayStars averageRating={4} size={32} lightOrange />
           <span className="text-3xl">4</span>
         </div>
         <div className="text-sm text-neutral-400">

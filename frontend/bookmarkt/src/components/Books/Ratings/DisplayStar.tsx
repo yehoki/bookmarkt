@@ -5,19 +5,27 @@ interface DisplayStarProps {
   currentRating: number;
   starRating: number;
   size?: number;
+  lightOrange?: boolean;
 }
 
 const DisplayStar: React.FC<DisplayStarProps> = ({
   currentRating,
   starRating,
   size = 14,
+  lightOrange,
 }) => {
   return (
     <div className="relative">
       <AiFillStar
         size={size}
         className={`
-      ${currentRating >= starRating ? 'fill-orange-600' : 'fill-gray-400'}`}
+      ${
+        currentRating >= starRating
+          ? lightOrange
+            ? 'fill-[#e87400]'
+            : 'fill-orange-600'
+          : 'fill-gray-400'
+      }`}
       />
     </div>
   );
