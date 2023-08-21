@@ -10,6 +10,8 @@ import getCurrentUserBookshelves from '@/actions/getCurrentUserBookshelves';
 import BookDisplayButton from '@/components/Books/SingleBook/BookDisplayButton';
 import SingleBookDisplayModal from '@/components/modals/SingleBookDisplayModal';
 import { useMemo } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface PageProps {
   params: { id: string };
@@ -48,6 +50,7 @@ const SingleBookPage: React.FC<PageProps> = async ({
 
   return (
     <>
+      <ToastContainer position="bottom-left" theme="dark" autoClose={5000} />
       <main>
         {/* Right Col */}
         <div className="px-6 pt-4">

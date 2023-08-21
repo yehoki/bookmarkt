@@ -6,6 +6,7 @@ import Button from '../Button';
 import { useCallback, useEffect, useState } from 'react';
 import { SITE_URL } from '@/utils/config';
 import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
 interface SingleBookDisplayModalProps {}
 
 const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
@@ -31,7 +32,11 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
 
   // TODO: Add bookshelf changing functionality from AddBookButton component
   const handleChangeBookshelf = async (newBookshelfName: string) => {
-    if (currentShelf === '') {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+    if (currentShelf !== '') {
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -66,10 +71,11 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
         setIsLoading(false);
         return router.push('/user/sign_up');
       }
-      setCurrentShelf(newBookshelfName);
-      router.refresh();
-      setIsLoading(false);
     }
+    setCurrentShelf(newBookshelfName);
+    setIsLoading(false);
+    toast.success(`Shelved as ${newBookshelfName}`);
+    router.refresh();
   };
 
   return (
