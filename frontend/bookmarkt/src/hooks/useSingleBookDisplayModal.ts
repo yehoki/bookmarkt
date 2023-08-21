@@ -50,7 +50,15 @@ const useSingleBookDisplayModal = create<SingleBookDisplayModalStore>(
       set({ websiteOptions: websiteOptions }),
     setDecideOption: (option) => set({ decideOption: option }),
     onEnable: () => set({ isOn: true }),
-    onDisable: () => set({ isOn: false }),
+    onDisable: () =>
+      set({
+        isOn: false,
+        bookshelfOptions: {
+          bookId: '',
+          bookshelves: [],
+          currentBookshelf: '',
+        },
+      }),
     enableAnimate: () => set({ isAnimate: true }),
     disableAnimate: () => set({ isAnimate: false }),
   })

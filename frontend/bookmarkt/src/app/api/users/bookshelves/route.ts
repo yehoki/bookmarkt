@@ -6,6 +6,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser();
+  // First check if there is a current user otherwise reroute to login
   if (!currentUser) {
     console.log('No current user');
     return NextResponse.json({
@@ -23,6 +24,7 @@ export async function POST(req: Request) {
     return NextResponse.error();
   }
 
+  // For storing review data
   const checkIfBookExists = await prisma.bookData.findFirst({
     where: {
       googleId: googleId,
@@ -49,6 +51,7 @@ export async function POST(req: Request) {
         name: newBookshelf,
       },
     });
+
     if (!getNewBookshelf) {
       return NextResponse.error();
     }
@@ -167,6 +170,15 @@ export async function PUT(req: Request) {
     return NextResponse.error();
   }
 
+  if (newBookshelf.googleBooks.find((book) => book.googleBookId === bookId)) {
+    {
+      console.log(`Book already exists in ${newBookshelf.name}`);
+      return NextResponse.json({
+        message: 'Book already exists'
+      });
+    }
+  }
+
   const oldBookshelfBookIdsPostRemoval: BookshelfBooks[] =
     oldBookshelf.googleBooks.filter(
       (bookshelfBook) =>
@@ -177,6 +189,7 @@ export async function PUT(req: Request) {
     googleBookId: bookFromGoogleId.googleId,
     addedToBookShelfAt: new Date(),
   };
+
   const newBookshelfBookIdsPostAppend: BookshelfBooks[] = [
     ...newBookshelf.googleBooks,
     newBook,

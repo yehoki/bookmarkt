@@ -10,14 +10,16 @@ import { ToastContainer, toast } from 'react-toastify';
 interface SingleBookDisplayModalProps {}
 
 const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
-  const [currentShelf, setCurrentShelf] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const singleBookModal = useSingleBookDisplayModal();
+  const [currentShelf, setCurrentShelf] = useState(
+    singleBookModal.bookshelfOptions.currentBookshelf
+  );
   const router = useRouter();
 
   useEffect(() => {
     setCurrentShelf(singleBookModal.bookshelfOptions.currentBookshelf);
-  }, []);
+  }, [router, singleBookModal]);
 
   const handleModalClose = useCallback(() => {
     singleBookModal.disableAnimate();
@@ -32,15 +34,17 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
 
   // TODO: Add bookshelf changing functionality from AddBookButton component
   const handleChangeBookshelf = async (newBookshelfName: string) => {
+    console.log(currentShelf, singleBookModal.bookshelfOptions);
     if (isLoading) {
       return;
     }
     setIsLoading(true);
     if (currentShelf !== '') {
+      console.log('PUT');
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'PUT',
         body: JSON.stringify({
-          currentBookshelf: singleBookModal.bookshelfOptions.currentBookshelf,
+          currentBookshelf: currentShelf,
           nextBookshelf: newBookshelfName,
           bookId: singleBookModal.bookshelfOptions.bookId,
         }),
@@ -55,6 +59,7 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
         return router.push('/user/sign_up');
       }
     } else {
+      console.log('POST');
       const res = await fetch(`${SITE_URL}/api/users/bookshelves`, {
         method: 'POST',
         body: JSON.stringify({
@@ -72,6 +77,10 @@ const SingleBookDisplayModal: React.FC<SingleBookDisplayModalProps> = ({}) => {
         return router.push('/user/sign_up');
       }
     }
+    singleBookModal.setBookshelfOptions({
+      ...singleBookModal.bookshelfOptions,
+      currentBookshelf: newBookshelfName,
+    });
     setCurrentShelf(newBookshelfName);
     setIsLoading(false);
     toast.success(`Shelved as ${newBookshelfName}`);
