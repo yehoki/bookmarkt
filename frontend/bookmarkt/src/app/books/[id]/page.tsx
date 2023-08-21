@@ -94,7 +94,7 @@ const SingleBookPage: React.FC<PageProps> = async ({
           <div className="pt-2 text-center text-neutral-500 italic mb-4">
             {bookInfo.volumeInfo.authors ? bookInfo.volumeInfo.authors[0] : ''}
           </div>
-          <SingleBookRatingDisplay />
+          <SingleBookRatingDisplay averageRating={reviewData.averageReview} />
           <div className="mx-auto max-w-[260px] mb-4">
             <BookDisplayButton
               label={findBookshelf ? findBookshelf.name : 'Want to read'}
@@ -164,10 +164,15 @@ const SingleBookPage: React.FC<PageProps> = async ({
               ''
             )}
           </div>
-          <section id="community-reviews">
-            <h3>Community reviews</h3>
-            <SingleBookRatingDisplay />
-            <CommunityReviews />
+          <section id="community-reviews" className="my-4">
+            <h3 className="text-lg font-semibold mb-2 px-2">
+              Community reviews
+            </h3>
+            <SingleBookRatingDisplay
+              averageRating={reviewData.averageReview}
+              margin
+            />
+            <CommunityReviews reviewInfo={reviewSpread} />
           </section>
         </div>
       </main>
