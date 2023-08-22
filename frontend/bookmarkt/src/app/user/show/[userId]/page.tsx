@@ -15,6 +15,8 @@ import { getGoogleBooksFromList } from '@/actions/getGoogleBooksFromList';
 import { getSingleBook } from '@/actions/getSingleBook';
 import AddBookButton from '@/components/Books/SearchBooks/AddBookButton';
 import { Bookshelf } from '@prisma/client';
+import SingleBookReviews from '@/components/Books/SingleBook/SingleBookReviews';
+import getReviewsByUserId from '@/actions/getReviewsByUserId';
 
 interface UserProfilePageProps {
   params: { userId: string };
@@ -79,6 +81,15 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
       )
     )?.name;
   };
+
+  const userReviews = currentUser
+    ? await getReviewsByUserId(currentUser.id)
+    : [];
+  const findLoggedInUserBookRating = (bookId: string) => {
+    return userReviews?.find((review) => review.googleBookId === bookId)
+      ?.rating;
+  };
+
   const currentUserBookshelves = await getUserBookselvesByUserId(userId);
 
   const currentlyReadingBookshelf = currentUserBookshelves?.find(
@@ -197,26 +208,29 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                 currentlyReadingGoogleBooks[0] && (
                   <div className="flex gap-4 py-6">
                     <div className="relative w-[65px] aspect-[2/3] border">
-                      <Image
-                        src={
-                          currentlyReadingGoogleBooks[0] &&
-                          currentlyReadingGoogleBooks[0].volumeInfo
-                            .imageLinks &&
-                          currentlyReadingGoogleBooks[0].volumeInfo.imageLinks
-                            .thumbnail
-                            ? currentlyReadingGoogleBooks[0].volumeInfo
-                                .imageLinks.thumbnail
-                            : '/images/empty-book.png'
-                        }
-                        fill
-                        alt="Currently reading book"
-                      />
+                      <Link
+                        href={`/books/${currentlyReadingGoogleBooks[0].id}`}
+                      >
+                        <Image
+                          src={
+                            currentlyReadingGoogleBooks[0].volumeInfo
+                              .imageLinks &&
+                            currentlyReadingGoogleBooks[0].volumeInfo.imageLinks
+                              .thumbnail
+                              ? currentlyReadingGoogleBooks[0].volumeInfo
+                                  .imageLinks.thumbnail
+                              : '/images/empty-book.png'
+                          }
+                          fill
+                          alt="Currently reading book"
+                        />
+                      </Link>
                     </div>
                     <div className="flex-1 flex justify-between">
                       <div className="text-xs">
                         <h4>
                           <Link
-                            className="text-goodreads-mybooks-green hover:underline font-semibold"
+                            className="text-goodreads-mybooks-green hover:underline font-semibold mb-1"
                             href={`/user/show/${userData.id}`}
                           >
                             {userData.name}
@@ -226,7 +240,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                         <h5 className="text-base font-semibold">
                           {currentlyReadingGoogleBooks[0].volumeInfo.title}
                         </h5>
-                        <div>
+                        <div className="mb-1">
                           by{' '}
                           {currentlyReadingGoogleBooks[0].volumeInfo.authors &&
                           currentlyReadingGoogleBooks[0].volumeInfo.authors[0]
@@ -234,7 +248,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                                 .authors[0]
                             : ''}
                         </div>
-                        <div>
+                        <div className="mb-1">
                           bookshelves:{' '}
                           <Link
                             className="text-goodreads-mybooks-green hover:underline"
@@ -257,6 +271,18 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                             ) || ''
                           }
                         />
+                        <div className="text-xs text-[#999999] flex flex-col justify-start items-center mt-2">
+                          Rate this book
+                          <SingleBookReviews
+                            bookId={currentlyReadingGoogleBooks[0].id}
+                            reviewRating={
+                              findLoggedInUserBookRating(
+                                currentlyReadingGoogleBooks[0].id
+                              ) || 0
+                            }
+                            size={18}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
