@@ -10,6 +10,11 @@ import MobileBox from '@/components/User/Mobile/MobileBox';
 import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
 import FriendButton from '@/components/User/FriendButton';
 import Link from 'next/link';
+import { getUsersBooksFromBookshelf } from '@/actions/getUsersBooksFromBookshelf';
+import { getGoogleBooksFromList } from '@/actions/getGoogleBooksFromList';
+import { getSingleBook } from '@/actions/getSingleBook';
+import AddBookButton from '@/components/Books/SearchBooks/AddBookButton';
+import { Bookshelf } from '@prisma/client';
 
 interface UserProfilePageProps {
   params: { userId: string };
@@ -65,14 +70,40 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
     return false;
   };
 
+  const loggedInUserBookshelves = currentUser ? currentUser.bookshelves : [];
+
+  const findBookshelfForBookId = (bookId: string, bookshelves: Bookshelf[]) => {
+    return bookshelves.find((bookshelf) =>
+      bookshelf.googleBooks.find(
+        (bookshelfBook) => bookshelfBook.googleBookId === bookId
+      )
+    )?.name;
+  };
   const currentUserBookshelves = await getUserBookselvesByUserId(userId);
 
-  // const currentlyReadingBookshelf = currentUserBookshelves?.find(
-  //   (bookshelf) => bookshelf.name === 'Currently reading'
-  // );
+  const currentlyReadingBookshelf = currentUserBookshelves?.find(
+    (bookshelf) => bookshelf.name === 'Currently reading'
+  );
 
-  // const currentlReadingGoogleBookIds =
-  //   currentlyReadingBookshelf?.googleBooks.map((book) => book.googleBookId);
+  const currentlReadingGoogleBookIds =
+    currentlyReadingBookshelf?.googleBooks.map((book) => book.googleBookId);
+
+  const currentlyReadingBooks = await getUsersBooksFromBookshelf(
+    'Currently reading',
+    userId
+  );
+
+  const currentlyReadingGoogleBooks = currentlyReadingBooks
+    ? await Promise.all(
+        currentlyReadingBooks.googleBooks.map(async (book) => {
+          const res = await getSingleBook(book.googleBookId);
+          if (res) {
+            return res;
+          }
+          return null;
+        })
+      )
+    : [];
 
   const numberOfRatings = userData.reviewIds.length;
   const numberOfReviews = userData.reviews.filter(
@@ -138,9 +169,8 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                 </div> */}
               </div>
             </div>
-            {/* <div>Users Fav books</div> */}
             <div className="mt-4 ">
-              <h3 className="uppercase font-semibold text-sm border-b-[1px]">
+              <h3 className="uppercase font-semibold text-sm border-b-[1px] py-1">
                 {userData.name}&apos;s Bookshelves
               </h3>
               <div className="flex gap-4 py-2">
@@ -159,8 +189,81 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                 )}
               </div>
             </div>
+            <div className="mt-6">
+              <h3 className="uppercase font-semibold text-sm border-b-[1px] py-1">
+                Currently Reading
+              </h3>
+              {currentlyReadingGoogleBooks &&
+                currentlyReadingGoogleBooks[0] && (
+                  <div className="flex gap-4 py-6">
+                    <div className="relative w-[65px] aspect-[2/3] border">
+                      <Image
+                        src={
+                          currentlyReadingGoogleBooks[0] &&
+                          currentlyReadingGoogleBooks[0].volumeInfo
+                            .imageLinks &&
+                          currentlyReadingGoogleBooks[0].volumeInfo.imageLinks
+                            .thumbnail
+                            ? currentlyReadingGoogleBooks[0].volumeInfo
+                                .imageLinks.thumbnail
+                            : '/images/empty-book.png'
+                        }
+                        fill
+                        alt="Currently reading book"
+                      />
+                    </div>
+                    <div className="flex-1 flex justify-between">
+                      <div className="text-xs">
+                        <h4>
+                          <Link
+                            className="text-goodreads-mybooks-green hover:underline font-semibold"
+                            href={`/user/show/${userData.id}`}
+                          >
+                            {userData.name}
+                          </Link>{' '}
+                          is currently reading
+                        </h4>
+                        <h5 className="text-base font-semibold">
+                          {currentlyReadingGoogleBooks[0].volumeInfo.title}
+                        </h5>
+                        <div>
+                          by{' '}
+                          {currentlyReadingGoogleBooks[0].volumeInfo.authors &&
+                          currentlyReadingGoogleBooks[0].volumeInfo.authors[0]
+                            ? currentlyReadingGoogleBooks[0].volumeInfo
+                                .authors[0]
+                            : ''}
+                        </div>
+                        <div>
+                          bookshelves:{' '}
+                          <Link
+                            className="text-goodreads-mybooks-green hover:underline"
+                            href={`/books/user/${
+                              userData.id
+                            }?shelf=${'Currently reading'}`}
+                          >
+                            Currently reading
+                          </Link>
+                        </div>
+                      </div>
+                      <div className="">
+                        <AddBookButton
+                          bookId={currentlyReadingGoogleBooks[0].id}
+                          bookshelves={loggedInUserBookshelves}
+                          currentBookshelf={
+                            findBookshelfForBookId(
+                              currentlyReadingGoogleBooks[0].id,
+                              loggedInUserBookshelves
+                            ) || ''
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+            </div>
           </div>
-          <div className=" ">
+          <div className="">
             <div>Reading Challenge</div>
           </div>
         </div>
