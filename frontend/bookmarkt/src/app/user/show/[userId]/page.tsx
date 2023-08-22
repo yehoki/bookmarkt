@@ -289,9 +289,6 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                 )}
             </div>
           </div>
-          <div className="">
-            <div>Reading Challenge</div>
-          </div>
         </div>
 
         <div className="md:hidden">
