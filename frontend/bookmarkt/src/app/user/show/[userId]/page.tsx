@@ -9,6 +9,7 @@ import UserReviews from '@/components/User/UserReviews';
 import MobileBox from '@/components/User/Mobile/MobileBox';
 import { getUserBookselvesByUserId } from '@/actions/getUserBookshelvesByUserId';
 import FriendButton from '@/components/User/FriendButton';
+import Link from 'next/link';
 
 interface UserProfilePageProps {
   params: { userId: string };
@@ -64,7 +65,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
     return false;
   };
 
-  // const currentUserBookshelves = await getUserBookselvesByUserId(userId);
+  const currentUserBookshelves = await getUserBookselvesByUserId(userId);
 
   // const currentlyReadingBookshelf = currentUserBookshelves?.find(
   //   (bookshelf) => bookshelf.name === 'Currently reading'
@@ -137,8 +138,27 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
                 </div> */}
               </div>
             </div>
-            <div>Users Fav books</div>
-            <div>Bookshelves</div>
+            {/* <div>Users Fav books</div> */}
+            <div className="mt-4 ">
+              <h3 className="uppercase font-semibold text-sm border-b-[1px]">
+                {userData.name}&apos;s Bookshelves
+              </h3>
+              <div className="flex gap-4 py-2">
+                {currentUserBookshelves ? (
+                  currentUserBookshelves.map((bookshelf) => (
+                    <Link
+                      href={`/books/user/${bookshelf.userId}?shelf=${bookshelf.name}`}
+                      key={bookshelf.id}
+                      className="text-xs text-goodreads-mybooks-green hover:underline"
+                    >
+                      {bookshelf.name} ({bookshelf.googleBooks.length})
+                    </Link>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
           </div>
           <div className=" ">
             <div>Reading Challenge</div>
