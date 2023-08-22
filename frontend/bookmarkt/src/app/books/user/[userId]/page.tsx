@@ -271,7 +271,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
             >
               My Books
             </h2>
-            <div>Search</div>
+            {/* <div>Search</div> */}
           </div>
           {/* below header */}
           <div>
@@ -287,7 +287,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                     }
                   />
                 </div>
-                <div>
+                {/* <div>
                   <h3>Your reading activity</h3>
                 </div>
                 <div>
@@ -295,7 +295,7 @@ const UserBooksPage: React.FC<UserBooksPageProps> = async ({
                 </div>
                 <div>
                   <h3>Tools</h3>
-                </div>
+                </div> */}
               </div>
               {/* Right col */}
               <div className="flex-1 max-w-[700px] mx-auto">

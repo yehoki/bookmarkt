@@ -244,10 +244,10 @@ export default async function Page() {
                 >
                   View all books
                 </Link>
-                <div className="text-goodreads-mybooks-green"> · </div>
+                {/* <div className="text-goodreads-mybooks-green"> · </div>
                 <div>Add a book</div>
                 <div className="text-goodreads-mybooks-green"> · </div>
-                <div>General update</div>
+                <div>General update</div> */}
               </div>
             </HomeBox>
             <HomeBox heading="News & Interviews" onlyTwoRows bottomBorder>

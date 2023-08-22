@@ -91,7 +91,7 @@ const DesktopFriendListDisplay: React.FC<DesktopFriendListDisplayProps> = ({
           <></>
         )}
       </div>
-      <div className="flex-1"> Compare books</div>
+      {/* <div className="flex-1"> Compare books</div> */}
     </div>
   );
 };

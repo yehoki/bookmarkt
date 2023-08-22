@@ -131,7 +131,7 @@ const UserFriendPage: React.FC<UserFriendPageProps> = async ({ params }) => {
                   })}
                 </div>
               </div>
-              <div className="w-[300px]">Right</div>
+              {/* <div className="w-[300px]">Right</div> */}
             </div>
           </div>
         </div>

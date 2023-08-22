@@ -180,7 +180,7 @@ const MobileMyBookDisplay: React.FC<MobileMyBookDisplayProps> = ({
               ))}
             </ul>
           </section>
-          <section>Bookshelves</section>
+          {/* <section>Bookshelves</section> */}
         </>
       )}
     </>
