@@ -19,6 +19,7 @@ import Link from 'next/link';
 import FooterGithubLink from '@/components/FooterGithubLink';
 import getUserById from '@/actions/getUserById';
 import HomeReadingChallenge from '@/components/home/HomeReadingChallenge';
+import Search from '@/components/Navbar/Search/Search';
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
@@ -235,15 +236,23 @@ export default async function Page() {
                       }
                     />
                   )}
+                  {firstCurrentlyReadingBook === null && (
+                    <>
+                      <div className="text-sm">What are you reading?</div>
+                      <Search />
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex gap-[2px] text-xs py-2">
-                <Link
-                  href={`/books/user/${currentUser.id}?shelf=Currently reading`}
-                  className="text-goodreads-mybooks-green hover:underline"
-                >
-                  View all books
-                </Link>
+                {firstCurrentlyReadingBook !== null && (
+                  <Link
+                    href={`/books/user/${currentUser.id}?shelf=Currently reading`}
+                    className="text-goodreads-mybooks-green hover:underline"
+                  >
+                    View all books
+                  </Link>
+                )}
                 {/* <div className="text-goodreads-mybooks-green"> · </div>
                 <div>Add a book</div>
                 <div className="text-goodreads-mybooks-green"> · </div>
@@ -307,7 +316,7 @@ export default async function Page() {
               <div>
                 <Link
                   className="hover:underline 
-                text-goodreads-mybooks-green cursor-pointer"
+                text-goodreads-mybooks-green cursor-pointer text-sm"
                   href={`/books/user/${currentUser.id}?shelf=Want to read`}
                 >
                   View all books

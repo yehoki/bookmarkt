@@ -148,7 +148,7 @@ const Search = () => {
         <div
           className={`
         ${searchValue === '' || !isSearchDropdownOpen ? 'hidden' : 'block'}
-        absolute top-10 bg-white w-full`}
+        absolute top-10 bg-white w-full z-[200]`}
         >
           <div className="flex flex-col w-full">
             {searchResults.length === 0 ? <></> : <>{displayBookObjects()}</>}
